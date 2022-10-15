@@ -8,6 +8,12 @@
     "test": "nx test"
   },
   "private": true,
+  "lint-staged": {
+    "**/*.{js,jsx,ts,tsx}":[
+        "npx prettier --write",
+        "npx eslint --fix"
+    ]
+  },
   "dependencies": {
     "@emotion/react": "11.10.4",
     "@emotion/server": "11.10.0",
@@ -48,8 +54,10 @@
     "eslint-plugin-jsx-a11y": "6.6.1",
     "eslint-plugin-react": "7.31.8",
     "eslint-plugin-react-hooks": "4.6.0",
+    "husky": "^8.0.1",
     "jest": "28.1.1",
     "jest-environment-jsdom": "28.1.1",
+    "lint-staged": "^13.0.3",
     "nx": "15.0.0",
     "prettier": "^2.6.2",
     "react-test-renderer": "18.2.0",
