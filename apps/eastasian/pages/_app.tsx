@@ -3,6 +3,7 @@ import Head from 'next/head';
 import { Global, css } from '@emotion/react';
 
 // NOTE(eastasian) reset css
+import 'reset-css';
 import 'sanitize.css';
 import 'sanitize.css/typography.css';
 import 'sanitize.css/forms.css';
@@ -15,6 +16,10 @@ const baseCss = css`
     font-family: '"Noto Sans JP", sans-serif';
     color: ${COLOR['text']};
   }
+  a {
+    color: inherit;
+    text-decoration: inherit;
+  }
 `;
 
 function Eastasian({ Component, pageProps }: AppProps) {
@@ -26,7 +31,6 @@ function Eastasian({ Component, pageProps }: AppProps) {
       <Global styles={baseCss} />
       <main>
         <Component {...pageProps} />
-        <input type="text" />
       </main>
     </>
   );
