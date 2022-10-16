@@ -15,7 +15,10 @@
     "types": ["jest", "node"],
     "baseUrl": ".",
     "paths": {
-      "@resume/libs/styles": ["libs/styles/index.ts"]
+      "@resume/libs/styles": ["libs/styles/index.ts"],
+      "@resume/components/common": ["components/common/index.ts"],
+      "@resume/components/layout": ["components/layout/index.ts"],
+      "@resume/components/stack": ["components/stack/index.ts"]
     }
   },
   "include": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "next-env.d.ts"],
