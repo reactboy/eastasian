@@ -13,7 +13,7 @@ import { COLOR } from '@resume/libs/styles';
 
 const baseCss = css`
   body {
-    font-family: '"Noto Sans JP", sans-serif';
+    font-family: 'futura pt', sans-serif;
     color: ${COLOR['text']};
   }
   a {
@@ -27,6 +27,7 @@ function Eastasian({ Component, pageProps }: AppProps) {
     <>
       <Head>
         <title>Jun Aida / eastasian</title>
+        <link rel="stylesheet" href="https://use.typekit.net/ume0fnv.css" />
       </Head>
       <Global styles={baseCss} />
       <main>

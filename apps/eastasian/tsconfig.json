@@ -18,7 +18,8 @@
       "@resume/libs/styles": ["libs/styles/index.ts"],
       "@resume/components/common": ["components/common/index.ts"],
       "@resume/components/layout": ["components/layout/index.ts"],
-      "@resume/components/stack": ["components/stack/index.ts"]
+      "@resume/components/stack/resume": ["components/stack/resume/index.ts"],
+      "@resume/components/stack/coding": ["components/stack/coding/index.ts"]
     }
   },
   "include": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "next-env.d.ts"],
