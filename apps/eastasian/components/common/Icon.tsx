@@ -4,8 +4,10 @@ import Image from 'next/image';
 const ICON = {
   //Dark
   githubDark: '/assets/icons/dark/github.svg',
+  linkDark: '/assets/icons/dark/link.svg',
   //Light
   githubLight: '/assets/icons/light/github.svg',
+  linkLight: '/assets/icons/light/link.svg',
 };
 
 type IconName = keyof typeof ICON;
