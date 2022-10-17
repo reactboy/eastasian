@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 
-import { Header } from '@resume/components/layout';
+import { Header, Footer } from '@resume/components/layout';
 import {
   AboutMe,
   WorkExperience,
@@ -33,6 +33,7 @@ export function Index() {
         <Works />
         <ExperiencedStacks />
       </div>
+      <Footer />
     </StyledPage>
   );
 }
