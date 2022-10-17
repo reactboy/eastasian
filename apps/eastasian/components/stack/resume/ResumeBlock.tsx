@@ -1,6 +1,7 @@
-import { FC, ReactNode } from 'react';
+import { FC, ReactNode, ComponentProps } from 'react';
 import styled from '@emotion/styled';
 
+import { Stack } from '@resume/components/common';
 import { COLOR } from '@resume/libs/styles';
 
 //TODO(eastasian) 内容を直打ちじゃなくてDBから取得するようにする
@@ -207,23 +208,208 @@ export const Education = () => {
   );
 };
 
+const StyledWorksCard = styled.div`
+  padding: 8px;
+
+  .works-card__title {
+    font-size: 18px;
+    font-weight: 500;
+  }
+
+  .works-card__link {
+  }
+
+  .works-card__body {
+    margin-top: 8px;
+    font-weight: 100;
+  }
+  .works-card__stacks {
+    display: flex;
+    padding-top: 8px;
+    margin-left: -12px;
+  }
+
+  .works-card__stack {
+    margin-left: 12px;
+  }
+`;
+
+type Stack = ComponentProps<typeof Stack>;
+
+type WorksCardProps = {
+  title: string;
+  link?: string;
+  stacks: Stack[];
+  children: ReactNode;
+};
+
+const WorksCard: FC<WorksCardProps> = (props) => {
+  const { title, link, stacks, children } = props;
+  return (
+    <StyledWorksCard>
+      <p className="works-card__title">
+        {title}
+        {!!link && <span className="works-card__link">link</span>}
+      </p>
+      <div className="works-card__body">{children}</div>
+      <ul className="works-card__stacks">
+        {stacks.map((stack, i) => {
+          return (
+            <li key={i} className="works-card__stack">
+              {stack.link ? (
+                <a href={stack.link} target="_blunk" rel="noopener noreferrer">
+                  <Stack name={stack.name} displayName={stack.displayName} />
+                </a>
+              ) : (
+                <Stack name={stack.name} displayName={stack.displayName} />
+              )}
+            </li>
+          );
+        })}
+      </ul>
+    </StyledWorksCard>
+  );
+};
+
+const works = [
+  {
+    title: 'Chat App',
+    body: 'Start Career as a web developer',
+    url: '',
+    stacks: [
+      { name: 'next', displayName: 'Next', link: '' },
+      { name: 'firebase', displayName: 'Firebase', link: '' },
+      { name: 'materialUi', displayName: 'MUI', link: '' },
+    ],
+  },
+  {
+    title: 'Dialy App',
+    body: 'Start Career as a web developer',
+    url: 'https://kabchi.vercel.app/',
+    stacks: [
+      { name: 'next', displayName: 'Next', link: '' },
+      { name: 'supabase', displayName: 'Supabase', link: '' },
+      { name: 'chakra', displayName: 'Chakra', link: '' },
+    ],
+  },
+];
+
 export const Works = () => {
   return (
     <ResumeBlock heading="Works">
       <>
-        <div>block</div>
-        <div>block</div>
+        {works.map((work, i) => {
+          return (
+            <WorksCard key={i} title={work.title} stacks={work.stacks}>
+              <p>{work.body}</p>
+            </WorksCard>
+          );
+        })}
       </>
     </ResumeBlock>
   );
 };
 
+const StyledStacksCard = styled.div`
+  .stacks-card__heading {
+    font-size: 24px;
+    font-style: italic;
+  }
+
+  .stacks-card__stacks {
+    display: flex;
+    flex-wrap: wrap;
+    padding-top: 8px;
+    margin-top: -8px;
+  }
+  .stacks-card__stack {
+    margin-left: 12px;
+    margin-top: 8px;
+  }
+`;
+
+type StacksCardProps = {
+  heading: string;
+  stacks: Stack[];
+};
+
+const StacksCard: FC<StacksCardProps> = (props) => {
+  const { heading, stacks } = props;
+  return (
+    <StyledStacksCard>
+      <p className="stacks-card__heading">{heading}</p>
+      <ul className="stacks-card__stacks">
+        {stacks.map((stack, i) => {
+          return (
+            <li key={i} className="stacks-card__stack">
+              {stack.link ? (
+                <a href={stack.link} target="_blunk" rel="noopener noreferrer">
+                  <Stack name={stack.name} displayName={stack.displayName} />
+                </a>
+              ) : (
+                <Stack name={stack.name} displayName={stack.displayName} />
+              )}
+            </li>
+          );
+        })}
+      </ul>
+    </StyledStacksCard>
+  );
+};
+
+const producationStacks = [
+  { name: 'next', displayName: 'Next', link: '' },
+  { name: 'lerna', displayName: 'lerna', link: '' },
+  { name: 'react', displayName: 'React', link: '' },
+  { name: 'vue', displayName: 'Vue', link: '' },
+  { name: 'typescript', displayName: 'TypeScript', link: '' },
+  { name: 'javascript', displayName: 'javaScript', link: '' },
+  { name: 'jquery', displayName: 'jquery', link: '' },
+  { name: 'node', displayName: 'node', link: '' },
+  { name: 'mongodb', displayName: 'mongodb', link: '' },
+  { name: 'capacitor', displayName: 'capacitor', link: '' },
+  { name: 'graphql', displayName: 'graphql', link: '' },
+  { name: 'apollo', displayName: 'apollo', link: '' },
+  { name: 'materialUi', displayName: 'MUI', link: '' },
+  { name: 'firebase', displayName: 'Firebase', link: '' },
+  { name: 'html', displayName: 'html', link: '' },
+  { name: 'css', displayName: 'css', link: '' },
+  { name: 'sass', displayName: 'sass', link: '' },
+  { name: 'git', displayName: 'git', link: '' },
+  { name: 'gcp', displayName: 'GCP', link: '' },
+  { name: 'figma', displayName: 'figma', link: '' },
+  { name: 'xd', displayName: 'xd', link: '' },
+  { name: 'photoshop', displayName: 'photoshop', link: '' },
+  { name: 'illustrator', displayName: 'illustrator', link: '' },
+  { name: 'jira', displayName: 'jira', link: '' },
+  { name: 'tailwind', displayName: 'tailwind', link: '' },
+  { name: 'semanticUi', displayName: 'semantic-ui', link: '' },
+];
+
+const sideProjectStacks = [
+  { name: 'nx', displayName: 'Nx', link: '' },
+  { name: 'blitz', displayName: 'blitz.js', link: '' },
+  { name: 'socketio', displayName: 'socket.io', link: 'https://socket.io/' },
+  { name: 'django', displayName: 'Django', link: '' },
+  { name: 'python', displayName: 'python', link: '' },
+  { name: 'ruby', displayName: 'ruby', link: '' },
+  { name: 'redis', displayName: 'redis', link: '' },
+  { name: 'wordpress', displayName: 'wordpress', link: '' },
+  { name: 'meteor', displayName: 'meteor', link: '' },
+  { name: 'remix', displayName: 'Remix', link: '' },
+  { name: 'fastify', displayName: 'fastify', link: '' },
+  { name: 'gatsby', displayName: 'gatsby', link: '' },
+  { name: 'deno', displayName: 'deno', link: '' },
+  { name: 'prisma', displayName: 'prisma', link: '' },
+  { name: 'supabase', displayName: 'Supabase', link: '' },
+];
+
 export const ExperiencedStacks = () => {
   return (
     <ResumeBlock heading="Experienced Stacks">
       <>
-        <div>block</div>
-        <div>block</div>
+        <StacksCard heading="Production" stacks={producationStacks} />
+        <StacksCard heading="Side Project" stacks={sideProjectStacks} />
       </>
     </ResumeBlock>
   );
