@@ -86,6 +86,8 @@ const StyledExperiendCard = styled.div`
   .experience-card__date {
     margin-top: 8px;
     font-size: 16px;
+    font-weight: 500;
+    color: ${COLOR['sedondary']};
   }
   .experience-card__startDate {
   }
