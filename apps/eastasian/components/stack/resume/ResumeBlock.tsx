@@ -1,7 +1,7 @@
 import { FC, ReactNode, ComponentProps } from 'react';
 import styled from '@emotion/styled';
 
-import { Stack } from '@resume/components/common';
+import { Stack, Icon } from '@resume/components/common';
 import { COLOR } from '@resume/libs/styles';
 
 //TODO(eastasian) 内容を直打ちじゃなくてDBから取得するようにする
@@ -216,9 +216,14 @@ const StyledWorksCard = styled.div`
   .works-card__title {
     font-size: 18px;
     font-weight: 500;
+    display: flex;
+    align-items: center;
   }
 
   .works-card__link {
+    margin-left: 2px;
+    display: flex;
+    align-items: center;
   }
 
   .works-card__body {
@@ -250,8 +255,17 @@ const WorksCard: FC<WorksCardProps> = (props) => {
   return (
     <StyledWorksCard>
       <p className="works-card__title">
-        {title}
-        {!!link && <span className="works-card__link">link</span>}
+        <span>{title}</span>
+        {!!link && (
+          <a
+            className="works-card__link"
+            href={link}
+            target="_blunk"
+            rel="noopener norefferer"
+          >
+            <Icon name="linkDark" width="16px" height="16px" />
+          </a>
+        )}
       </p>
       <div className="works-card__body">{children}</div>
       <ul className="works-card__stacks">
@@ -277,7 +291,7 @@ const works = [
   {
     title: 'Chat App',
     body: 'Start Career as a web developer',
-    url: '',
+    link: '',
     stacks: [
       { name: 'next', displayName: 'Next', link: '' },
       { name: 'firebase', displayName: 'Firebase', link: '' },
@@ -287,7 +301,7 @@ const works = [
   {
     title: 'Dialy App',
     body: 'Start Career as a web developer',
-    url: 'https://kabchi.vercel.app/',
+    link: 'https://kabchi.vercel.app/',
     stacks: [
       { name: 'next', displayName: 'Next', link: '' },
       { name: 'supabase', displayName: 'Supabase', link: '' },
@@ -302,7 +316,12 @@ export const Works = () => {
       <>
         {works.map((work, i) => {
           return (
-            <WorksCard key={i} title={work.title} stacks={work.stacks}>
+            <WorksCard
+              key={i}
+              title={work.title}
+              stacks={work.stacks}
+              link={work.link}
+            >
               <p>{work.body}</p>
             </WorksCard>
           );
