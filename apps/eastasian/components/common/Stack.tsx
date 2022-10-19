@@ -7,6 +7,7 @@ const getStackIconPath = (name: string) => {
 };
 
 const STACKS = {
+  amplify: getStackIconPath('amplify'),
   angular: getStackIconPath('angular'),
   apollo: getStackIconPath('apollo'),
   aws: getStackIconPath('aws'),
@@ -14,6 +15,7 @@ const STACKS = {
   css: getStackIconPath('css'),
   deno: getStackIconPath('deno'),
   django: getStackIconPath('django'),
+  excel: getStackIconPath('excel'),
   fastify: getStackIconPath('fastify'),
   figma: getStackIconPath('figma'),
   firebase: getStackIconPath('firebase'),
@@ -22,6 +24,7 @@ const STACKS = {
   git: getStackIconPath('git'),
   go: getStackIconPath('go'),
   graphql: getStackIconPath('graphql'),
+  hasura: getStackIconPath('hasura'),
   html: getStackIconPath('html'),
   illustrator: getStackIconPath('illustrator'),
   javascript: getStackIconPath('javascript'),
@@ -41,12 +44,14 @@ const STACKS = {
   python: getStackIconPath('python'),
   react: getStackIconPath('react'),
   redis: getStackIconPath('redis'),
+  redux: getStackIconPath('redux'),
   ruby: getStackIconPath('ruby'),
   sass: getStackIconPath('sass'),
   semanticUi: getStackIconPath('semantic-ui'),
   solidity: getStackIconPath('solidity'),
   socketio: getStackIconPath('socket-io'),
   supabase: getStackIconPath('supabase'),
+  spreadsheet: getStackIconPath('spreadsheet'),
   tailwind: getStackIconPath('tailwind'),
   threejs: getStackIconPath('threejs'),
   typescript: getStackIconPath('typescript'),
