@@ -122,7 +122,7 @@ const StyledExperiendCard = styled.div`
   .experience-card__body {
     margin-top: 8px;
     font-weight: 100;
-    font-size: 18px;
+    font-size: 16px;
     & > p:not(:first-child) {
       margin-top: 8px;
     }
@@ -285,17 +285,21 @@ const StyledWorksCard = styled.div`
   }
 
   .works-card__body {
+    font-size: 16px;
     margin-top: 8px;
     font-weight: 100;
   }
   .works-card__stacks {
     display: flex;
+    flex-wrap: wrap;
     padding-top: 8px;
     margin-left: -12px;
+    margin-top: -8px;
   }
 
   .works-card__stack {
     margin-left: 12px;
+    margin-top: 8px;
   }
 `;
 
