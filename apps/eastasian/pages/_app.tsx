@@ -1,6 +1,9 @@
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { Global, css } from '@emotion/react';
+import { Provider as ReduxProvider } from 'react-redux';
+
+import { store } from '@resume/redux/app';
 
 // NOTE(eastasian) reset css
 import 'reset-css';
@@ -24,16 +27,17 @@ const baseCss = css`
 
 function Eastasian({ Component, pageProps }: AppProps) {
   return (
-    <>
+    <ReduxProvider store={store}>
       <Head>
         <title>Jun Aida / eastasian</title>
         <link rel="stylesheet" href="https://use.typekit.net/ume0fnv.css" />
+        <link rel="icon" href="/favicon.ico" />
       </Head>
       <Global styles={baseCss} />
       <main>
         <Component {...pageProps} />
       </main>
-    </>
+    </ReduxProvider>
   );
 }
 
