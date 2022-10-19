@@ -3,9 +3,9 @@ import styled from '@emotion/styled';
 
 import { Stack, Icon } from '@resume/components/common';
 import { COLOR } from '@resume/libs/styles';
+import { useSelectLanguage } from '@resume/redux/selector';
 
 //TODO(eastasian) 内容を直打ちじゃなくてDBから取得するようにする
-
 const StyledResumeBlock = styled.section`
   .resume-block__heading {
     font-family: futura;
@@ -47,39 +47,47 @@ const StyledAboutMe = styled.div`
 `;
 
 export const AboutMe = () => {
+  const ln = useSelectLanguage();
   return (
     <ResumeBlock heading="About Me">
       <StyledAboutMe>
-        <p>
-          東京出身のWebエンジニア。
-          <br />
-          2019年よりフロントエンドエンジニアとして多くのプロジェクトに参画し、主にUIの実装や機能実装を担当。
-        </p>
-        <p>
-          フロント領域が専門だが、 API実装やDB設計など
-          <br />
-          Webアプリケーションを動かすのに必要なことは何でもやる。
-        </p>
-        <p>
-          現在はエンジニア以外の仕事に挑戦してみたいと思い、
-          <br />
-          マニラにて日本語を教えている
-        </p>
-
-        <p>
-          Web developer from Tokyo, Japan, participated in a lot of project as a
-          front-end developer since 2019. mainly responsible for UI
-          implementation and feature implementation.
-        </p>
-        <p>
-          Specializes in frontend field, but also able to work with API
-          implementation, DB design, etc... I will do whatever it takes to make
-          a web application work.
-        </p>
-        <p>
-          Currently, trying something other than web development, now teaching
-          Japanese in Manila.
-        </p>
+        {ln === 'ja' && (
+          <>
+            <p>
+              東京出身のWebエンジニア。
+              <br />
+              2019年よりフロントエンドエンジニアとして多くのプロジェクトに参画し、主にUIの実装や機能実装を担当。
+            </p>
+            <p>
+              フロント領域が専門だが、 API実装やDB設計など
+              <br />
+              Webアプリケーションを動かすのに必要なことは何でもやる。
+            </p>
+            <p>
+              現在はエンジニア以外の仕事に挑戦してみたいと思い、
+              <br />
+              マニラにて日本語を教えている
+            </p>
+          </>
+        )}
+        {ln === 'en' && (
+          <>
+            <p>
+              Web developer from Tokyo, Japan, participated in a lot of project
+              as a front-end developer since 2019. mainly responsible for UI
+              implementation and feature implementation.
+            </p>
+            <p>
+              Specializes in frontend field, but also able to work with API
+              implementation, DB design, etc... I will do whatever it takes to
+              make a web application work.
+            </p>
+            <p>
+              Currently, trying something other than web development, now
+              teaching Japanese in Manila.
+            </p>
+          </>
+        )}
       </StyledAboutMe>
     </ResumeBlock>
   );
@@ -161,10 +169,14 @@ const experiences = [
     location: 'BGC, Philippines',
     startDate: '2022',
     endDate: '',
-    body: [
-      `主に知り合いの個人事業主を中心に、事業を前進させるのに必要なWebアプリケーションの開発やWeb関連の相談、対応を請け負う。`,
-      `undertakes the development of web applications and web-related consultation and correspondence necessary to move a business forward, primarily for individual business owners around me.`,
-    ],
+    body: {
+      en: [
+        `undertakes the development of web applications and web-related consultation and correspondence necessary to move a business forward, primarily for individual business owners around me.`,
+      ],
+      ja: [
+        `主に知り合いの個人事業主を中心に、事業を前進させるのに必要なWebアプリケーションの開発やWeb関連の相談、対応を請け負う。`,
+      ],
+    },
   },
   {
     title: 'Frontend Developer',
@@ -172,27 +184,32 @@ const experiences = [
     location: 'Tokyo, Japan',
     startDate: '2019',
     endDate: '2021',
-    body: [
-      `フロントエンドエンジニアとして複数のプロジェクトの開発に携わる。
-        プロジェクトではフロントエンドリードとしてクライアントサイドの技術選定から環境構築、
-        プロジェクト毎にメンバーのレベルに合わせたコーディングルールの整備、コードレビューや機能実装を担当。一定水準の品質を維持した状態でプロジェクトを前進させるための役割を担う。`,
-      `プロジェクトと並行して新卒の技術研修も担当。2ヶ月で未経験の状態からモダンフロントエンドのフレームワークとBaaSを使用してCRUDを実装できることを目的とした研修プログラムを考案。`,
-      `Worked as a front-end developer for several projects. As front-end
-        developer, I was responsible for selecting client-side technologies,
-        building the environment, developing coding rules for each project
-        according to the level of each project member, code reviews, and
-        function implementation. I always try to be responsible, play role
-        to moving projects forward while maintaining a certain level of
-        quality.`,
-      `Beside the projects, I was also in charge of technical training for
-        new graduates, devising a training program aimed at enabling them to
-        implement CRUD using modern front-end frameworks and BaaS in two
-        months from no prior experience.`,
-    ],
+    body: {
+      en: [
+        `Worked as a front-end developer for several projects. As front-end
+          developer, I was responsible for selecting client-side technologies,
+          building the environment, developing coding rules for each project
+          according to the level of each project member, code reviews, and
+          function implementation. I always try to be responsible, play role
+          to moving projects forward while maintaining a certain level of
+          quality.`,
+        `Beside the projects, I was also in charge of technical training for
+          new graduates, devising a training program aimed at enabling them to
+          implement CRUD using modern front-end frameworks and BaaS in two
+          months from no prior experience.`,
+      ],
+      ja: [
+        `フロントエンドエンジニアとして複数のプロジェクトの開発に携わる。
+          プロジェクトではフロントエンドリードとしてクライアントサイドの技術選定から環境構築、
+          プロジェクト毎にメンバーのレベルに合わせたコーディングルールの整備、コードレビューや機能実装を担当。一定水準の品質を維持した状態でプロジェクトを前進させるための役割を担う。`,
+        `プロジェクトと並行して新卒の技術研修も担当。2ヶ月で未経験の状態からモダンフロントエンドのフレームワークとBaaSを使用してCRUDを実装できることを目的とした研修プログラムを考案。`,
+      ],
+    },
   },
 ];
 
 export const WorkExperience = () => {
+  const ln = useSelectLanguage();
   return (
     <ResumeBlock heading="Work Experience">
       <>
@@ -206,7 +223,7 @@ export const WorkExperience = () => {
               startDate={experience.startDate}
               endDate={experience.endDate}
             >
-              {experience.body.map((p, i) => (
+              {experience.body[ln].map((p, i) => (
                 <p key={i}>{p}</p>
               ))}
             </ExperienceCard>
@@ -218,6 +235,7 @@ export const WorkExperience = () => {
 };
 
 export const Education = () => {
+  const ln = useSelectLanguage();
   return (
     <ResumeBlock heading="Education">
       <>
@@ -228,18 +246,22 @@ export const Education = () => {
           startDate="2015"
           endDate="2019"
         >
-          <p>
-            機械系の研究室に所属し、4脚歩行ロボットの高速歩行を目的とした脚機構を研究。
-            大学3年次より長期休暇を利用しフィリピン・セブの貧困区域にて炊き出しを実施し、約2年間で計2000人の子どもにカレーやラーメンを配る。
-          </p>
-          <p>
-            I belonged to a mechanical engineering laboratory, where I
-            researched a leg mechanisms for high-speed walking of quadruped
-            robots. In my third year of college, I started a soup kitchen in a
-            poverty area in Cebu, Philippines during my long vacations. I go
-            back to Cebu every long vacation and distributed curry and ramen
-            noodles to a total of 2,000 children over a period of two years.
-          </p>
+          {ln === 'ja' && (
+            <p>
+              機械系の研究室に所属し、4脚歩行ロボットの高速歩行を目的とした脚機構を研究。
+              大学3年次より長期休暇を利用しフィリピン・セブの貧困区域にて炊き出しを実施し、約2年間で計2000人の子どもにカレーやラーメンを配る。
+            </p>
+          )}
+          {ln === 'en' && (
+            <p>
+              I belonged to a mechanical engineering laboratory, where I
+              researched a leg mechanisms for high-speed walking of quadruped
+              robots. In my third year of college, I started a soup kitchen in a
+              poverty area in Cebu, Philippines during my long vacations. I go
+              back to Cebu every long vacation and distributed curry and ramen
+              noodles to a total of 2,000 children over a period of two years.
+            </p>
+          )}
         </ExperienceCard>
       </>
     </ResumeBlock>
@@ -349,7 +371,10 @@ const works = [
   //   },
   {
     title: 'kabchi',
-    body: 'kabchi is a kind of diary app which allow you to manage your goals and daily progress of each goals easily and also it will help you review your actions toward goals by visualizing your actions by day.',
+    body: {
+      ja: '',
+      en: 'kabchi is a kind of diary app which allow you to manage your goals and daily progress of each goals easily and also it will help you review your actions toward goals by visualizing your actions by day.',
+    },
     link: 'https://kabchi.vercel.app/',
     stacks: [
       { name: 'next', displayName: 'Next', link: '' },
@@ -364,6 +389,7 @@ const works = [
 ];
 
 export const Works = () => {
+  const ln = useSelectLanguage();
   return (
     <ResumeBlock heading="Works">
       <>
@@ -375,7 +401,7 @@ export const Works = () => {
               stacks={work.stacks}
               link={work.link}
             >
-              <p>{work.body}</p>
+              <p>{work.body[ln]}</p>
             </WorksCard>
           );
         })}

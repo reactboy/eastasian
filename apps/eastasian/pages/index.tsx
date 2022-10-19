@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 
+import { LanguageSwitch } from '@resume/components/common';
 import { Header, Footer } from '@resume/components/layout';
 import {
   AboutMe,
@@ -20,12 +21,20 @@ const StyledPage = styled.div`
       margin-top: 24px;
     }
   }
+  .language-switch-wrapper {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+  }
 `;
 
 export function Index() {
   return (
     <StyledPage>
       <Header />
+      <div className="language-switch-wrapper">
+        <LanguageSwitch />
+      </div>
       <div className="resume-content">
         <AboutMe />
         <WorkExperience />
