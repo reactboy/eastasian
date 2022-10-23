@@ -1,10 +1,7 @@
 import { useState } from 'react';
-import axios from 'axios';
 import styled from '@emotion/styled';
 
-const axiosInstance = axios.create({
-  baseURL: process.env['NEXT_PUBLIC_API_HOST'],
-});
+import { axios } from '@admin/libs/axios';
 
 const StyledPage = styled.div`
   .page {
@@ -43,7 +40,7 @@ export const Index = (props) => {
     e.preventDefault();
     const {
       data: { stack },
-    } = await axiosInstance.post(`/stacks`, {
+    } = await axios.post(`/stacks`, {
       ...stackInput,
     });
     setStacks([...stacks, stack]);
@@ -53,7 +50,7 @@ export const Index = (props) => {
     e.preventDefault();
     const {
       data: { profile },
-    } = await axiosInstance.post(`/profiles`, {
+    } = await axios.post(`/profiles`, {
       ...profileInput,
     });
     setProifles([...profiles, profile]);
@@ -142,10 +139,10 @@ export default Index;
 export const getServerSideProps = async (_context) => {
   const {
     data: { profiles },
-  } = await axiosInstance.get(`/profiles`);
+  } = await axios.get(`/profiles`);
   const {
     data: { stacks },
-  } = await axiosInstance.get(`/stacks`);
+  } = await axios.get(`/stacks`);
   return {
     props: { profiles, stacks },
   };

@@ -33,7 +33,6 @@ router.get('/stacks/:stackId', async (req, res) => {
 
 router.post('/stacks', async (req, res) => {
   try {
-    console.log(req, req.body);
     const { name, displayName, link = '' } = req.body;
     const stack = await prisma.stack.create({
       data: {
@@ -42,7 +41,6 @@ router.post('/stacks', async (req, res) => {
         link,
       },
     });
-    console.log(stack);
     return res.send({
       stack,
     });
