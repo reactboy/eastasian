@@ -13,7 +13,7 @@
       "npx prettier --write",
       "npx eslint --fix"
     ],
-    "**/*.{json}": [
+    "**/*.json": [
       "npx prettier --write"
     ]
   },
