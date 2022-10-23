@@ -8,7 +8,7 @@ router.get('/stacks', async (_req, res) => {
   try {
     const stacks = await prisma.stack.findMany({});
     return res.send({
-      data: stacks,
+      stacks,
     });
   } catch (e) {
     return res.status(500).send({ e });
@@ -24,7 +24,7 @@ router.get('/stacks/:stackId', async (req, res) => {
       },
     });
     return res.send({
-      data: stack,
+      stack,
     });
   } catch (e) {
     return res.status(500).send({ e });
@@ -33,6 +33,7 @@ router.get('/stacks/:stackId', async (req, res) => {
 
 router.post('/stacks', async (req, res) => {
   try {
+    console.log(req, req.body);
     const { name, displayName, link = '' } = req.body;
     const stack = await prisma.stack.create({
       data: {
@@ -41,8 +42,9 @@ router.post('/stacks', async (req, res) => {
         link,
       },
     });
+    console.log(stack);
     return res.send({
-      data: stack,
+      stack,
     });
   } catch (e) {
     return res.status(500).send({ e });
@@ -63,7 +65,7 @@ router.put('/stacks/:stackId', async (req, res) => {
         link,
       },
     });
-    return res.send({ data: stack });
+    return res.send({ stack });
   } catch (e) {
     return res.status(500).send({ e });
   }
@@ -77,7 +79,7 @@ router.delete('/stacks/:stackId', async (req, res) => {
         id: stackId,
       },
     });
-    return res.send({ data: stack });
+    return res.send({ stack });
   } catch (e) {
     return res.status(500).send({ e });
   }
@@ -87,7 +89,7 @@ router.get('/profiles', async (_req, res) => {
   try {
     const profiles = await prisma.profile.findMany();
     return res.send({
-      data: profiles,
+      profiles,
     });
   } catch (e) {
     return res.status(500).send({ e });
@@ -103,7 +105,7 @@ router.get('/profiles/:profileId', async (req, res) => {
       },
     });
     return res.send({
-      data: profile,
+      profile,
     });
   } catch (e) {
     return res.status(500).send({ e });
@@ -121,7 +123,7 @@ router.post('/profiles', async (req, res) => {
       },
     });
     return res.send({
-      data: profile,
+      profile,
     });
   } catch (e) {
     return res.status(500).send({ e });
@@ -143,7 +145,7 @@ router.put('/profiles/:profileId', async (req, res) => {
       },
     });
     return res.send({
-      data: profile,
+      profile,
     });
   } catch (e) {
     return res.status(500).send({ e });
@@ -158,7 +160,7 @@ router.delete('/profiles/:profileId', async (req, res) => {
         id: profileId,
       },
     });
-    return res.send({ data: stack });
+    return res.send({ stack });
   } catch (e) {
     return res.status(500).send({ e });
   }
