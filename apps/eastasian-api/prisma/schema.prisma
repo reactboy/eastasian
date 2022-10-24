@@ -11,19 +11,68 @@ datasource db {
 }
 
 model Profile {
-    id String @id @default(dbgenerated("uuid_generate_v4()"))
+    id String @id @default(uuid())
     name String
     nameJp String
     profileImage String? @default("")
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+    experiences Experience[]
+    education Education[]
+    works Work[]
+    projects Project[]
 }
 
 model Stack {
-    id String @id @default(dbgenerated("uuid_generate_v4()"))
+    id String @id @default(uuid())
     name String
     displayName String
     link String? @default("")
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    works Work[]
+    projects Project[]
+}
+model Experience {
+    id String @id @default(uuid())
+    title String
+    body String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    profile Profile @relation(fields: [profileId], references: [id])
+    profileId String
+}
+model Education {
+    id String @id @default(uuid())
+    title String
+    body String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    profile Profile @relation(fields: [profileId], references: [id])
+    profileId String
+}
+model Work {
+    id String @id @default(uuid())
+    title String
+    body String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    profile Profile @relation(fields: [profileId], references: [id])
+    profileId String
+    stacks Stack[]
+}
+model Project {
+    id String @id @default(uuid())
+    title String
+    body String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    profile Profile @relation(fields: [profileId], references: [id])
+    profileId String
+    stacks Stack[]
+}
+model Coding {
+    id String @id @default(uuid())
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 }
