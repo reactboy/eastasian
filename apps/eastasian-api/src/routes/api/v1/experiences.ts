@@ -1,6 +1,7 @@
 import * as express from 'express';
 
 import { prisma } from '@api/configs/db';
+import { verifyToken } from '@api/middleware';
 
 const router = express.Router();
 
@@ -27,7 +28,7 @@ router.get('/experiences/:experienceId', async (req, res) => {
   }
 });
 
-router.post('/experiences', async (req, res) => {
+router.post('/experiences', verifyToken, async (req, res) => {
   try {
     const { title, body, profileId } = req.body;
     const experience = await prisma.experience.create({
@@ -43,7 +44,7 @@ router.post('/experiences', async (req, res) => {
   }
 });
 
-router.put('/experiences/:experienceId', async (req, res) => {
+router.put('/experiences/:experienceId', verifyToken, async (req, res) => {
   try {
     const { experienceId } = req.params;
     const { title, body, profileId } = req.body;
@@ -63,7 +64,7 @@ router.put('/experiences/:experienceId', async (req, res) => {
   }
 });
 
-router.delete('/experiences/:experienceId', async (req, res) => {
+router.delete('/experiences/:experienceId', verifyToken, async (req, res) => {
   try {
     const { experienceId } = req.params;
     const experience = await prisma.experience.delete({

@@ -1,6 +1,7 @@
 import * as express from 'express';
 
 import { prisma } from '@api/configs/db';
+import { verifyToken } from '@api/middleware';
 
 const router = express.Router();
 
@@ -31,7 +32,7 @@ router.get('/profiles/:profileId', async (req, res) => {
   }
 });
 
-router.post('/profiles', async (req, res) => {
+router.post('/profiles', verifyToken, async (req, res) => {
   try {
     const { name, nameJp, profileImage = '' } = req.body;
     const profile = await prisma.profile.create({
@@ -49,7 +50,7 @@ router.post('/profiles', async (req, res) => {
   }
 });
 
-router.put('/profiles/:profileId', async (req, res) => {
+router.put('/profiles/:profileId', verifyToken, async (req, res) => {
   try {
     const { profileId } = req.params;
     const { name, nameJp, profileImage = '' } = req.body;
@@ -71,7 +72,7 @@ router.put('/profiles/:profileId', async (req, res) => {
   }
 });
 
-router.delete('/profiles/:profileId', async (req, res) => {
+router.delete('/profiles/:profileId', verifyToken, async (req, res) => {
   try {
     const { profileId } = req.params;
     const stack = await prisma.profile.delete({

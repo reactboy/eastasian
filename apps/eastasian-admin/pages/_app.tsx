@@ -1,5 +1,6 @@
 import { AppProps } from 'next/app';
 import Head from 'next/head';
+import { CookiesProvider } from 'react-cookie';
 
 function EastasianAdmin({ Component, pageProps }: AppProps) {
   return (
@@ -8,7 +9,9 @@ function EastasianAdmin({ Component, pageProps }: AppProps) {
         <title>Welcome to eastasian-admin!</title>
       </Head>
       <main className="app">
-        <Component {...pageProps} />
+        <CookiesProvider>
+          <Component {...pageProps} />
+        </CookiesProvider>
       </main>
     </>
   );

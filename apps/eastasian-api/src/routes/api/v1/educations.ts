@@ -1,6 +1,7 @@
 import * as express from 'express';
 
 import { prisma } from '@api/configs/db';
+import { verifyToken } from '@api/middleware';
 
 const router = express.Router();
 
@@ -27,7 +28,7 @@ router.get('/educations/:educationId', async (req, res) => {
   }
 });
 
-router.post('/educations', async (req, res) => {
+router.post('/educations', verifyToken, async (req, res) => {
   try {
     const { title, body, profileId } = req.body;
     const education = await prisma.education.create({
@@ -43,7 +44,7 @@ router.post('/educations', async (req, res) => {
   }
 });
 
-router.put('/educations/:educationId', async (req, res) => {
+router.put('/educations/:educationId', verifyToken, async (req, res) => {
   try {
     const { educationId } = req.params;
     const { title, body } = req.body;
@@ -63,7 +64,7 @@ router.put('/educations/:educationId', async (req, res) => {
   }
 });
 
-router.delete('/educations/:educationId', async (req, res) => {
+router.delete('/educations/:educationId', verifyToken, async (req, res) => {
   try {
     const { educationId } = req.params;
     const education = await prisma.education.delete({

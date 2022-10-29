@@ -1,6 +1,6 @@
 import * as express from 'express';
-import * as path from 'path';
 import * as cors from 'cors';
+import * as cookieParser from 'cookie-parser';
 
 import {
   stacks,
@@ -9,25 +9,29 @@ import {
   works,
   educations,
   experiences,
+  auth,
 } from '@api/routes/api/v1';
 
 const app = express();
 
 app.use(express.json());
+app.use(cookieParser());
 
-app.use('/assets', express.static(path.join(__dirname, 'assets')));
-app.use(cors());
+app.use(
+  cors({
+    origin: ['http://localhost:4200', 'https://localhost:4200'],
+    credentials: true,
+  })
+);
 
-app.get('/api', (req, res) => {
-  res.send({ message: 'Welcome to eastasian-api!' });
-});
-
-app.use('/api', stacks);
-app.use('/api', profiles);
-app.use('/api', projects);
-app.use('/api', works);
-app.use('/api', educations);
-app.use('/api', experiences);
+const API_ROOT = '/api';
+app.use(API_ROOT, stacks);
+app.use(API_ROOT, profiles);
+app.use(API_ROOT, projects);
+app.use(API_ROOT, works);
+app.use(API_ROOT, educations);
+app.use(API_ROOT, experiences);
+app.use(API_ROOT, auth);
 
 const port = process.env.port || 3333;
 const server = app.listen(port, () => {

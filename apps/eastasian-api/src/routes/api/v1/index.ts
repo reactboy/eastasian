@@ -4,3 +4,4 @@ export * from './projects';
 export * from './works';
 export * from './educations';
 export * from './experiences';
+export * from './auth';

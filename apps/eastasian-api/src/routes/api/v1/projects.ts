@@ -1,6 +1,7 @@
 import * as express from 'express';
 
 import { prisma } from '@api/configs/db';
+import { verifyToken } from '@api/middleware';
 
 const router = express.Router();
 
@@ -27,7 +28,7 @@ router.get('/projects/:projectId', async (req, res) => {
   }
 });
 
-router.post('/projects', async (req, res) => {
+router.post('/projects', verifyToken, async (req, res) => {
   try {
     const { title, body, profileId, stackIds } = req.body;
     const project = await prisma.project.create({
@@ -46,7 +47,7 @@ router.post('/projects', async (req, res) => {
   }
 });
 
-router.put('/projects/:projectId', async (req, res) => {
+router.put('/projects/:projectId', verifyToken, async (req, res) => {
   try {
     const { projectId } = req.params;
     const { title, body, profileId, stackIds } = req.body;
@@ -69,7 +70,7 @@ router.put('/projects/:projectId', async (req, res) => {
   }
 });
 
-router.delete('/projects/:projectId', async (req, res) => {
+router.delete('/projects/:projectId', verifyToken, async (req, res) => {
   try {
     const { projectId } = req.params;
     const project = await prisma.project.delete({
