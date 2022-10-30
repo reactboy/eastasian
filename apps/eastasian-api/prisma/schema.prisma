@@ -36,7 +36,11 @@ model Stack {
 model Experience {
     id String @id @default(uuid())
     title String
+    titleJp String
     body String
+    bodyJp String
+    organization String
+    location String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
     profile Profile @relation(fields: [profileId], references: [id])
@@ -45,7 +49,11 @@ model Experience {
 model Education {
     id String @id @default(uuid())
     title String
+    titleJp String
     body String
+    bodyJp String
+    organization String
+    location String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
     profile Profile @relation(fields: [profileId], references: [id])
@@ -54,7 +62,9 @@ model Education {
 model Work {
     id String @id @default(uuid())
     title String
+    titleJp String
     body String
+    bodyJp String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
     profile Profile @relation(fields: [profileId], references: [id])
@@ -64,7 +74,9 @@ model Work {
 model Project {
     id String @id @default(uuid())
     title String
+    titleJp String
     body String
+    bodyJp String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
     profile Profile @relation(fields: [profileId], references: [id])
