@@ -1,11 +1,10 @@
 import { useState } from 'react';
-import { useRouter } from 'next/router';
 import styled from '@emotion/styled';
+import { Box } from '@mantine/core';
 
 import { axios } from '@admin/libs/axios';
-import { AppLayout } from '@admin/components/layouts';
-import { useUserStore } from 'store/user.store';
-import { deleteCookie } from 'cookies-next';
+import { AppLayout, Header } from '@admin/components/layouts';
+import { ResumePanel } from 'components/stacks';
 
 const StyledPage = styled.div`
   .page {
@@ -13,8 +12,6 @@ const StyledPage = styled.div`
 `;
 
 export const Index = (props) => {
-  const router = useRouter();
-  const userStore = useUserStore((store) => store);
   const [profiles, _setProifles] = useState(props.profiles);
 
   const onClickRequestProfiles = async () => {
@@ -24,38 +21,21 @@ export const Index = (props) => {
     console.log(profiles);
   };
 
-  const onClickAuthorize = async () => {
-    const response = await axios.post('/auth/authorize');
-    console.log(response);
-  };
-
-  const onClickSignout = async () => {
-    deleteCookie('access');
-    deleteCookie('refresh');
-    const response = await axios.post('/auth/signout');
-    console.log(response);
-    userStore.setUser({ id: '' });
-    router.push('/auth/signin');
-  };
-
   return (
     <AppLayout>
       <StyledPage>
-        <h1>eastasian admin</h1>
-        <div>
-          <button onClick={onClickRequestProfiles}>get profiles</button>
-        </div>
-        <div>
-          <button onClick={onClickAuthorize}>authorized</button>
-        </div>
-        <div>
-          <button onClick={onClickSignout}>signout</button>
-        </div>
-        <ul>
-          {profiles.map((profile, i) => {
-            return <li key={i}>{profile.name}</li>;
-          })}
-        </ul>
+        <Header />
+        <ResumePanel />
+        <Box sx={{ marginTop: '10px' }}>
+          <div>
+            <button onClick={onClickRequestProfiles}>get profiles</button>
+          </div>
+          <ul>
+            {profiles.map((profile, i) => {
+              return <li key={i}>{profile.name}</li>;
+            })}
+          </ul>
+        </Box>
       </StyledPage>
     </AppLayout>
   );

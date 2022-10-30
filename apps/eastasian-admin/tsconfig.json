@@ -18,6 +18,7 @@
       "@admin/libs/*": ["libs/*"],
       "@admin/components/common": ["components/common/index.ts"],
       "@admin/components/layouts": ["components/layouts/index.ts"],
+      "@admin/components/stacks": ["components/stacks/index.ts"],
       "@admin/api": ["api/index.ts"],
       "@admin/utils/*": ["utils/*"],
       "@admin/store": ["store/index.ts"]
