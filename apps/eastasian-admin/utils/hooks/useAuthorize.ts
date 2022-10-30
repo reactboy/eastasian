@@ -3,14 +3,19 @@ import { useRouter } from 'next/router';
 
 import { authorizeUser } from '@admin/api';
 import { useUserStore } from '@admin/store';
+import { useCookiesToken } from './useAccessToken';
 
 export const useRedirectUnauthorize = (path) => {
+  const cookieToken = useCookiesToken();
   const userStore = useUserStore((store) => store);
   const router = useRouter();
   useEffect(() => {
     const check = async () => {
       const user = await authorizeUser();
-      if (!user) return router.push(path);
+      if (!user) {
+        cookieToken.remove.access();
+        return router.push(path);
+      }
       userStore.setUser({ id: user.id });
     };
     check();
