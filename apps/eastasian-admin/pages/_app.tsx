@@ -1,5 +1,6 @@
 import { AppProps } from 'next/app';
 import Head from 'next/head';
+import { MantineProvider } from '@mantine/core';
 
 function EastasianAdmin({ Component, pageProps }: AppProps) {
   return (
@@ -7,9 +8,11 @@ function EastasianAdmin({ Component, pageProps }: AppProps) {
       <Head>
         <title>Welcome to eastasian-admin!</title>
       </Head>
-      <main className="app">
-        <Component {...pageProps} />
-      </main>
+      <MantineProvider>
+        <main className="app">
+          <Component {...pageProps} />
+        </main>
+      </MantineProvider>
     </>
   );
 }

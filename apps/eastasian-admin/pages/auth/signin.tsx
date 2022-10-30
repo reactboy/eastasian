@@ -1,66 +1,107 @@
+import { useRouter } from 'next/router';
 import { NextPage } from 'next';
 import { useState } from 'react';
-import { axios } from '@admin/libs/axios';
-import { useCookiesToken } from '@admin/utils/hooks';
+import {
+  Button,
+  TextInput,
+  Title,
+  Center,
+  Box,
+  LoadingOverlay,
+} from '@mantine/core';
+import * as yup from 'yup';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 import { AuthLayout } from '@admin/components/layouts';
 import { useUserStore } from '@admin/store';
-import { useRouter } from 'next/router';
+import { useCookiesToken } from '@admin/utils/hooks';
+import { axios } from '@admin/libs/axios';
+
+const schema = yup
+  .object()
+  .shape({
+    email: yup.string().required(),
+    password: yup.string().required(),
+  })
+  .required();
+
+type Inputs = {
+  email: string;
+  password: string;
+};
 
 const Signin: NextPage = () => {
   const { set } = useCookiesToken();
   const { setUser } = useUserStore((store) => store);
   const router = useRouter();
-  const [signinInput, setSigninInput] = useState({
-    email: '',
-    password: '',
+  const [loading, setLoading] = useState<boolean>(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Inputs>({
+    resolver: yupResolver(schema),
   });
 
-  const onChangeSigninInput = (key: keyof typeof signinInput) => (e) => {
-    setSigninInput({
-      ...signinInput,
-      [key]: e.target.value,
-    });
-  };
-
-  const onSubmitSignin = async (e) => {
-    e.preventDefault();
-    const {
-      data: { profile, authUser },
-    } = await axios.post('/auth/signin', {
-      ...signinInput,
-    });
-    //TODO(eastasian) ログインユーザのプロフィールもここでstoreに保存するか検討する
-    console.log(profile, authUser);
-    setUser({ id: authUser.user.id });
-    set.access(authUser.session['access_token']);
-    router.push('/');
+  const onSubmitSignin = async (d) => {
+    try {
+      setLoading(true);
+      const {
+        data: { profile, authUser },
+      } = await axios.post('/auth/signin', {
+        ...d,
+      });
+      //TODO(eastasian) ログインユーザのプロフィールもここでstoreに保存するか検討する
+      console.log(profile, authUser);
+      setUser({ id: authUser.user.id });
+      set.access(authUser.session['access_token']);
+      router.push('/');
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <AuthLayout>
-      <div>
-        <form onSubmit={onSubmitSignin}>
-          <h2>sign in</h2>
-          <div>
-            <input
+      <Center>
+        <form
+          style={{ width: '320px', position: 'relative' }}
+          onSubmit={handleSubmit(onSubmitSignin)}
+        >
+          <LoadingOverlay visible={loading} />
+          <Title>eastasian-admin</Title>
+          <Title order={2}>signin</Title>
+          <Box mt="xs">
+            <TextInput
               placeholder="email"
-              value={signinInput.email}
-              type="text"
-              onChange={onChangeSigninInput('email')}
+              error={errors?.email?.message}
+              {...register('email')}
             />
-          </div>
-          <div>
-            <input
+          </Box>
+          <Box mt="xs">
+            <TextInput
               placeholder="password"
-              value={signinInput.password}
               type="password"
-              onChange={onChangeSigninInput('password')}
+              error={errors?.password?.message}
+              {...register('password')}
             />
-          </div>
-          <button type="submit">submit</button>
+          </Box>
+          <Button
+            sx={{
+              width: '96px',
+              marginTop: '10px',
+              marginLeft: 'auto',
+              display: 'block',
+            }}
+            type="submit"
+          >
+            signin
+          </Button>
         </form>
-      </div>
+      </Center>
     </AuthLayout>
   );
 };

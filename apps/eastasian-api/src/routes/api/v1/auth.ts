@@ -42,7 +42,7 @@ router.post('/auth/signin', async (req, res) => {
         password,
       });
 
-    if (error) res.status(500).send({ error });
+    if (error) return res.status(500).send({ error });
 
     const profile = await prisma.profile.findUnique({
       where: {
