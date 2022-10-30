@@ -15,7 +15,12 @@
     "types": ["jest", "node"],
     "baseUrl": ".",
     "paths": {
-      "@admin/libs/*": ["libs/*"]
+      "@admin/libs/*": ["libs/*"],
+      "@admin/components/common": ["components/common/index.ts"],
+      "@admin/components/layouts": ["components/layouts/index.ts"],
+      "@admin/api": ["api/index.ts"],
+      "@admin/utils/*": ["utils/*"],
+      "@admin/store": ["store/index.ts"]
     }
   },
   "include": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "next-env.d.ts"],
