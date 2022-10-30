@@ -13,7 +13,7 @@ datasource db {
 model Profile {
     id String @id @default(uuid())
     name String
-    nameJp String
+    nameJp String @default("")
     profileImage String? @default("")
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -36,11 +36,11 @@ model Stack {
 model Experience {
     id String @id @default(uuid())
     title String
-    titleJp String
+    titleJp String @default("")
     body String
-    bodyJp String
-    organization String
-    location String
+    bodyJp String @default("")
+    organization String @default("")
+    location String @default("")
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
     profile Profile @relation(fields: [profileId], references: [id])
@@ -49,11 +49,11 @@ model Experience {
 model Education {
     id String @id @default(uuid())
     title String
-    titleJp String
+    titleJp String @default("")
     body String
-    bodyJp String
-    organization String
-    location String
+    bodyJp String @default("")
+    organization String @default("")
+    location String @default("")
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
     profile Profile @relation(fields: [profileId], references: [id])
@@ -62,9 +62,9 @@ model Education {
 model Work {
     id String @id @default(uuid())
     title String
-    titleJp String
+    titleJp String @default("")
     body String
-    bodyJp String
+    bodyJp String @default("")
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
     profile Profile @relation(fields: [profileId], references: [id])
@@ -74,9 +74,9 @@ model Work {
 model Project {
     id String @id @default(uuid())
     title String
-    titleJp String
+    titleJp String @default("")
     body String
-    bodyJp String
+    bodyJp String @default("")
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
     profile Profile @relation(fields: [profileId], references: [id])

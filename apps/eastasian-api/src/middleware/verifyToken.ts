@@ -7,16 +7,21 @@ export const verifyToken = async (
   res: Response,
   next: NextFunction
 ): Promise<void | Response> => {
-  const { access } = req.cookies;
-  if (!access) return res.status(401).send({ msg: 'Unauthorized' });
-  const isVerified = jwt.verify(access, process.env['SUPABASE_JWT_KEY']);
+  try {
+    const { authorization } = req.headers;
+    const access = authorization.split(' ')[1];
+    if (!access) return res.status(401).send({ msg: 'Unauthorized' });
+    const isVerified = jwt.verify(access, process.env['SUPABASE_JWT_KEY']);
 
-  if (!isVerified) return res.status(401).send({ msg: 'Unauthorized' });
+    if (!isVerified) return res.status(401).send({ msg: 'Unauthorized' });
 
-  const { data, error } = await supabase.auth.getUser(access);
+    const { data, error } = await supabase.auth.getUser(access);
 
-  if (error) return res.status(500).send({ msg: 'internal server error' });
+    if (error) return res.status(500).send({ msg: 'internal server error' });
 
-  req.user = data.user;
-  next();
+    req.user = data.user;
+    next();
+  } catch (e) {
+    return res.status(500).send({ e });
+  }
 };

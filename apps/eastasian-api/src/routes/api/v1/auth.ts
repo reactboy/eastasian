@@ -1,5 +1,4 @@
 import * as express from 'express';
-import * as jwt from 'jsonwebtoken';
 
 import { supabaseAdmin } from '@api/configs/supabase';
 import { prisma } from '@api/configs/db';
