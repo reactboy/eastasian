@@ -16,9 +16,7 @@ export const Header = () => {
     try {
       setLoading(true);
       token.remove.access();
-      token.remove.refresh();
-      const response = await axios.post('/auth/signout');
-      console.log(response);
+      await axios.post('/auth/signout');
       userStore.setUser({ id: '' });
       router.push('/auth/signin');
     } catch (e) {

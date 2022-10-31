@@ -1,3 +1,4 @@
+import { ReactNode, FC } from 'react';
 import { Tabs, Title, Box } from '@mantine/core';
 
 import {
@@ -7,55 +8,147 @@ import {
   WorkForm,
   ProjectForm,
   StackForm,
+  ProfileList,
+  ExperienceList,
+  EducationList,
+  WorkList,
+  ProjectList,
+  StackList,
 } from '.';
+
+const PanelLayout: FC<{ title: string; children: ReactNode }> = (props) => {
+  const { children, title } = props;
+  return (
+    <Box>
+      <Title size="h2">{title}</Title>
+      <Box>{children}</Box>
+    </Box>
+  );
+};
+
+const AboutPanel = () => {
+  return (
+    <PanelLayout title="About">
+      <AboutForm />
+      <ProfileList />
+    </PanelLayout>
+  );
+};
+
+const ExperiencePanel = () => {
+  return (
+    <PanelLayout title="Experience">
+      <ExperienceForm />
+      <ExperienceList />
+    </PanelLayout>
+  );
+};
+
+const EducationPanel = () => {
+  return (
+    <PanelLayout title="Education">
+      <EducationForm />
+      <EducationList />
+    </PanelLayout>
+  );
+};
+
+const WorksPanel = () => {
+  return (
+    <PanelLayout title="Works">
+      <WorkForm />
+      <WorkList />
+    </PanelLayout>
+  );
+};
+
+const ProjectsPanel = () => {
+  return (
+    <PanelLayout title="Projects">
+      <ProjectForm />
+      <ProjectList />
+    </PanelLayout>
+  );
+};
+
+const StacksPanel = () => {
+  return (
+    <PanelLayout title="Stacks">
+      <StackForm />
+      <StackList />
+    </PanelLayout>
+  );
+};
+
+const TAB = [
+  {
+    value: 'about',
+    content: 'About',
+  },
+  {
+    value: 'experience',
+    content: 'Experience',
+  },
+  {
+    value: 'education',
+    content: 'Education',
+  },
+  {
+    value: 'works',
+    content: 'Works',
+  },
+  {
+    value: 'projects',
+    content: 'projects',
+  },
+  {
+    value: 'stacks',
+    content: 'Stacks',
+  },
+];
+
+const PANEL = [
+  {
+    value: 'about',
+    Component: AboutPanel,
+  },
+  {
+    value: 'experience',
+    Component: ExperiencePanel,
+  },
+  {
+    value: 'education',
+    Component: EducationPanel,
+  },
+  {
+    value: 'works',
+    Component: WorksPanel,
+  },
+  {
+    value: 'projects',
+    Component: ProjectsPanel,
+  },
+  {
+    value: 'stacks',
+    Component: StacksPanel,
+  },
+];
 
 export const ResumePanel = () => {
   return (
-    <Tabs defaultValue="about" keepMounted={false}>
+    <Tabs defaultValue={TAB[0]['value']} keepMounted={false}>
       <Tabs.List>
-        <Tabs.Tab value="about">About</Tabs.Tab>
-        <Tabs.Tab value="experience">Experience</Tabs.Tab>
-        <Tabs.Tab value="education">Education</Tabs.Tab>
-        <Tabs.Tab value="works">works</Tabs.Tab>
-        <Tabs.Tab value="projects">projects</Tabs.Tab>
-        <Tabs.Tab value="stacks">stacks</Tabs.Tab>
+        {TAB.map((tab, i) => (
+          <Tabs.Tab key={i} value={tab.value}>
+            {tab.content}
+          </Tabs.Tab>
+        ))}
       </Tabs.List>
-      <Tabs.Panel value="about">
-        <Title size="h2">About</Title>
-        <Box>
-          <AboutForm />
-        </Box>
-      </Tabs.Panel>
-      <Tabs.Panel value="experience">
-        <Title size="h2">Experience</Title>
-        <Box>
-          <ExperienceForm />
-        </Box>
-      </Tabs.Panel>
-      <Tabs.Panel value="education">
-        <Title size="h2">Education</Title>
-        <Box>
-          <EducationForm />
-        </Box>
-      </Tabs.Panel>
-      <Tabs.Panel value="works">
-        <Title size="h2">Works</Title>
-        <Box>
-          <WorkForm />
-        </Box>
-      </Tabs.Panel>
-      <Tabs.Panel value="projects">
-        <Title size="h2">Projects</Title>
-        <Box>
-          <ProjectForm />
-        </Box>
-      </Tabs.Panel>
-      <Tabs.Panel value="stacks">
-        <Title size="h2">Stacks</Title>
-        <Box>
-          <StackForm />
-        </Box>
-      </Tabs.Panel>
+      {PANEL.map((panel, i) => (
+        <Tabs.Panel key={i} value={panel.value}>
+          <panel.Component />
+        </Tabs.Panel>
+      ))}
     </Tabs>
   );
 };

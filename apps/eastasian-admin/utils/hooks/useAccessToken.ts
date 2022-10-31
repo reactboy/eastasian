@@ -1,18 +1,19 @@
-import { setCookie, deleteCookie } from 'cookies-next';
+import { setCookie, deleteCookie, getCookie } from 'cookies-next';
+
 export const useCookiesToken = () => {
+  const getAccessToken = () => getCookie('access');
   const setAccessToken = (token: string) => setCookie('access', token);
-  const setRefreshToken = (token: string) => setCookie('refresh', token);
   const removeAccessToken = () => deleteCookie('access');
-  const removeRefreshToken = () => deleteCookie('refresh');
 
   return {
+    get: {
+      access: getAccessToken,
+    },
     set: {
       access: setAccessToken,
-      refresh: setRefreshToken,
     },
     remove: {
       access: removeAccessToken,
-      refresh: removeRefreshToken,
     },
   };
 };

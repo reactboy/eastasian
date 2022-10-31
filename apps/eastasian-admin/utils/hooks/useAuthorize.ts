@@ -23,10 +23,12 @@ export const useRedirectUnauthorize = (path) => {
 };
 
 export const useRedirectAuthorize = (path) => {
+  const cookieToken = useCookiesToken();
   const userStore = useUserStore((store) => store);
   const router = useRouter();
   useEffect(() => {
     const check = async () => {
+      if (!cookieToken.get.access()) return;
       const user = await authorizeUser();
       if (user) {
         userStore.setUser({ id: user.id });

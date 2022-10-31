@@ -6,7 +6,8 @@ function EastasianAdmin({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
-        <title>Welcome to eastasian-admin!</title>
+        <title>eastasian admin</title>
+        <link rel="icon" href="/favicon.ico" />
       </Head>
       <MantineProvider>
         <main className="app">
