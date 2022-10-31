@@ -1,25 +1,53 @@
-import { Table } from '@mantine/core';
+import { useEffect, useState } from 'react';
+import { Avatar, Table, LoadingOverlay } from '@mantine/core';
+
+import { listProfile } from '@admin/api';
 
 export const ProfileList = () => {
+  const [profiles, setProfiles] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        setLoading(true);
+        const { data } = await listProfile();
+        setProfiles([...profiles, ...data.profiles]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetch();
+  }, []);
+
   return (
-    <Table>
-      <thead>
-        <tr>
-          <th>profile</th>
-          <th>name</th>
-          <th>nameJp</th>
-          <th>desciption</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>profile image</td>
-          <td>name</td>
-          <td>nameJp</td>
-          <td>description</td>
-        </tr>
-      </tbody>
-    </Table>
+    <>
+      <LoadingOverlay visible={loading} />
+      <Table>
+        <thead>
+          <tr>
+            <th>profile</th>
+            <th>name</th>
+            <th>nameJp</th>
+            <th>desciption</th>
+          </tr>
+        </thead>
+        <tbody>
+          {profiles.map((profile, i) => {
+            return (
+              <tr key={i}>
+                <td>
+                  <Avatar src={profile.profileImage} />
+                </td>
+                <td>{profile.name}</td>
+                <td>{profile.nameJp}</td>
+                <td>{profile.description}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </Table>
+    </>
   );
 };
 
@@ -160,7 +188,9 @@ export const StackList = () => {
       </thead>
       <tbody>
         <tr>
-          <td>icon</td>
+          <td>
+            <Avatar />
+          </td>
           <td>name</td>
           <td>displayName</td>
           <td>link</td>
