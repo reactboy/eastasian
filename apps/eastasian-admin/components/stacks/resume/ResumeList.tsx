@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Avatar, Table, LoadingOverlay } from '@mantine/core';
 
-import { listProfile } from '@admin/api';
+import { listProfile, listStack } from '@admin/api';
 
 export const ProfileList = () => {
   const [profiles, setProfiles] = useState([]);
@@ -176,26 +176,49 @@ export const ProjectList = () => {
 };
 
 export const StackList = () => {
+  const [stacks, setStacks] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        setLoading(true);
+        const { data } = await listStack();
+        setStacks([...stacks, ...data.stacks]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetch();
+  }, []);
+
   return (
-    <Table>
-      <thead>
-        <tr>
-          <th>icon</th>
-          <th>name</th>
-          <th>displayName</th>
-          <th>link</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <Avatar />
-          </td>
-          <td>name</td>
-          <td>displayName</td>
-          <td>link</td>
-        </tr>
-      </tbody>
-    </Table>
+    <>
+      <LoadingOverlay visible={loading} />
+      <Table>
+        <thead>
+          <tr>
+            <th>icon</th>
+            <th>name</th>
+            <th>displayName</th>
+            <th>link</th>
+          </tr>
+        </thead>
+        <tbody>
+          {stacks.map((stack, i) => {
+            return (
+              <tr key={i}>
+                <td>
+                  <Avatar />
+                </td>
+                <td>{stack.name}</td>
+                <td>{stack.displayName}</td>
+                <td>{stack.link}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </Table>
+    </>
   );
 };
