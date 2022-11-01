@@ -99,7 +99,7 @@ const TAB = [
   },
   {
     value: 'projects',
-    content: 'projects',
+    content: 'Projects',
   },
   {
     value: 'stacks',
