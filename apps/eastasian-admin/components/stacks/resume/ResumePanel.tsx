@@ -1,5 +1,6 @@
 import { ReactNode, FC } from 'react';
 import { Tabs, Title, Box } from '@mantine/core';
+import { createExperience } from 'api/resume.api';
 
 import {
   AboutForm,
@@ -36,9 +37,20 @@ const AboutPanel = () => {
 };
 
 const ExperiencePanel = () => {
+  const onSubmit = async (d) => {
+    try {
+      await createExperience({
+        ...d,
+        startDate: new Date(d.startDate).toISOString(),
+        endDate: new Date(d.endDate).toISOString(),
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
   return (
     <PanelLayout title="Experience">
-      <ExperienceForm />
+      <ExperienceForm onSubmit={onSubmit} />
       <ExperienceList />
     </PanelLayout>
   );

@@ -1,5 +1,7 @@
-import { Box, TextInput, Button } from '@mantine/core';
+import { FC } from 'react';
+import { Box, TextInput, Button, Textarea } from '@mantine/core';
 import { useForm } from 'react-hook-form';
+import { createExperience } from 'api/resume.api';
 
 export const AboutForm = () => {
   const { handleSubmit, register } = useForm({
@@ -50,7 +52,12 @@ export const AboutForm = () => {
   );
 };
 
-export const ExperienceForm = () => {
+type ExperienceFormProps = {
+  onSubmit: (d: any) => Promise<void>;
+};
+
+export const ExperienceForm: FC<ExperienceFormProps> = (props) => {
+  const { onSubmit } = props;
   const { handleSubmit, register } = useForm({
     defaultValues: {
       title: '',
@@ -63,9 +70,15 @@ export const ExperienceForm = () => {
       endDate: '',
     },
   });
-  const onSubmit = async (d) => {
-    console.log(d);
-  };
+  //   const onSubmit = async (d) => {
+  //     console.log(d);
+  //     try {
+  //       const res = await createExperience({ ...d });
+  //       console.log(res);
+  //     } catch (e) {
+  //       console.log(e);
+  //     }
+  //   };
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Box>
@@ -81,13 +94,13 @@ export const ExperienceForm = () => {
           placeholder="titleJp"
           {...register('titleJp')}
         />
-        <TextInput
+        <Textarea
           label="body"
           name="body"
           placeholder="body"
           {...register('body')}
         />
-        <TextInput
+        <Textarea
           label="bodyJp"
           name="bodyJp"
           placeholder="bodyJp"
@@ -108,12 +121,14 @@ export const ExperienceForm = () => {
         <TextInput
           label="startDate"
           name="startDate"
+          type="date"
           placeholder="startDate"
           {...register('startDate')}
         />
         <TextInput
           label="endDate"
           name="endDate"
+          type="date"
           placeholder="endDate"
           {...register('endDate')}
         />

@@ -30,12 +30,10 @@ router.get('/experiences/:experienceId', async (req, res) => {
 
 router.post('/experiences', verifyToken, async (req, res) => {
   try {
-    const { title, body, profileId } = req.body;
     const experience = await prisma.experience.create({
       data: {
-        title,
-        body,
-        profileId,
+        ...req.body,
+        profileId: req.user.id,
       },
     });
     return res.send({ experience });
@@ -47,15 +45,12 @@ router.post('/experiences', verifyToken, async (req, res) => {
 router.put('/experiences/:experienceId', verifyToken, async (req, res) => {
   try {
     const { experienceId } = req.params;
-    const { title, body, profileId } = req.body;
     const experience = await prisma.experience.update({
       where: {
         id: experienceId,
       },
       data: {
-        title,
-        body,
-        profileId,
+        ...req.body,
       },
     });
     return res.send({ experience });
