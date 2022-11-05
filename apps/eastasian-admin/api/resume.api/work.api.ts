@@ -16,7 +16,7 @@ export const createWork = async (paylaod) => {
 };
 
 export const updateWork = async (id: string, payload) => {
-  return await axios.post(endpointWithId(id), { ...payload });
+  return await axios.put(endpointWithId(id), { ...payload });
 };
 
 export const deleteWork = async (id: string) => {

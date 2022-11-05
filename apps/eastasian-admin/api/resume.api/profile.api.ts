@@ -16,5 +16,5 @@ export const listProfile = async () => {
 };
 
 export const updateProfile = async (id: string, payload) => {
-  return axios.get(endpointWithId(id), { ...payload });
+  return axios.put(endpointWithId(id), { ...payload });
 };

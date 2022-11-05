@@ -16,7 +16,7 @@ export const createProject = async (paylaod) => {
 };
 
 export const updateProject = async (id: string, payload) => {
-  return await axios.post(endpointWithId(id), { ...payload });
+  return await axios.put(endpointWithId(id), { ...payload });
 };
 
 export const deleteProject = async (id: string) => {
