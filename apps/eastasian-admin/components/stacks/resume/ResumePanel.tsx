@@ -1,14 +1,17 @@
 import { ReactNode, FC, useEffect, useState } from 'react';
 import { Tabs, Title, Box } from '@mantine/core';
 import {
+  listExperience,
   createExperience,
+  updateExperience,
+  deleteExperience,
   createStack,
   deleteStack,
   listStack,
   updateStack,
 } from '@admin/api';
 import { showNotification } from '@admin/libs/mantine';
-import { useStackInputStore } from '@admin/store';
+import { useStackInputStore, useExperienceInputStore } from '@admin/store';
 
 import {
   AboutForm,
@@ -45,23 +48,100 @@ const AboutPanel = () => {
 };
 
 const ExperiencePanel = () => {
-  const onSubmit = async (d) => {
+  const [experiences, setExperiences] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const { resetExperienceInput, experienceInput, setExperienceInput } =
+    useExperienceInputStore();
+
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        setLoading(true);
+        const { data } = await listExperience();
+        setExperiences([...experiences, ...data.experiences]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetch();
+  }, []);
+
+  //NOTE(eastasian) initializing stack input form
+  useEffect(() => {
+    resetExperienceInput();
+  }, []);
+
+  const onSubmitCreate = async (d) => {
     try {
-      await createExperience({
+      const { data } = await createExperience({
         ...d,
         startDate: new Date(d.startDate).toISOString(),
-        endDate: new Date(d.endDate).toISOString(),
+        endDate: d.endDate ? new Date(d.endDate).toISOString() : null,
       });
+      setExperiences((prevState) => [...prevState, data.experience]);
       showNotification({ message: 'experience created' });
+      resetExperienceInput();
     } catch (e) {
-      console.log(e);
       showNotification({ message: e.message });
     }
   };
+
+  const onSubmitEdit = async (d) => {
+    try {
+      const { data } = await updateExperience(experienceInput.id, {
+        ...d,
+        startDate: new Date(d.startDate).toISOString(),
+        endDate: d.endDate ? new Date(d.endDate).toISOString() : null,
+      });
+      setExperiences((prevExperiences) =>
+        prevExperiences.map((experience) => {
+          if (experience.id !== data.experience.id) return experience;
+          return data.experience;
+        })
+      );
+      showNotification({ message: 'experience updated' });
+      resetExperienceInput();
+    } catch (e) {
+      showNotification({ message: e.message });
+    }
+  };
+
+  const onEdit = (id: string) => () => {
+    const experience = experiences.find((experience) => experience.id === id);
+    setExperienceInput(experience);
+  };
+
+  const onSubmitDelete = (id: string) => async () => {
+    try {
+      await deleteExperience(id);
+      setExperiences((prevExperiences) =>
+        prevExperiences.filter((experience) => experience.id !== id)
+      );
+      showNotification({ message: 'experience deleted' });
+      resetExperienceInput();
+    } catch (e) {
+      showNotification({ message: e.message });
+    }
+  };
+
+  const onCancel = () => {
+    resetExperienceInput();
+  };
+
   return (
     <PanelLayout title="Experience">
-      <ExperienceForm onSubmit={onSubmit} />
-      <ExperienceList />
+      {experienceInput.id}
+      <ExperienceForm
+        experienceInput={experienceInput}
+        onSubmit={experienceInput.id ? onSubmitEdit : onSubmitCreate}
+        onCancel={onCancel}
+      />
+      <ExperienceList
+        loading={loading}
+        experiences={experiences}
+        onEdit={onEdit}
+        onDelete={onSubmitDelete}
+      />
     </PanelLayout>
   );
 };
@@ -120,8 +200,9 @@ const StacksPanel = () => {
 
   const onSubmitCreate = async (d) => {
     try {
-      await createStack({ ...d });
+      const { data } = await createStack({ ...d });
       showNotification({ message: 'stack created' });
+      setStacks((prevStacks) => [...prevStacks, data.stack]);
       resetStackInput();
     } catch (e) {
       console.log(e);
@@ -155,6 +236,7 @@ const StacksPanel = () => {
       await deleteStack(id);
       setStacks((prevStacks) => prevStacks.filter((stack) => stack.id !== id));
       showNotification({ message: 'stack deleted' });
+      resetStackInput();
     } catch (e) {
       showNotification({ message: e.message });
     }

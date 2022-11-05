@@ -1,7 +1,12 @@
 import { FC, useEffect } from 'react';
 import { Box, TextInput, Button, Textarea } from '@mantine/core';
 import { useForm } from 'react-hook-form';
-import { StackInput } from '@admin/store';
+import { format } from 'date-fns';
+import { StackInput, ExperienceInput } from '@admin/store';
+
+const getDefaultDateInput = (date: string) => {
+  return date ? format(new Date(date), 'yyyy-MM-dd') : '';
+};
 
 type BaseResumeFormProps = {
   onSubmit: (d) => Promise<void>;
@@ -58,22 +63,33 @@ export const AboutForm = () => {
   );
 };
 
-type ExperienceFormProps = BaseResumeFormProps;
+type ExperienceFormProps = {
+  experienceInput: ExperienceInput;
+} & BaseResumeFormProps;
 
 export const ExperienceForm: FC<ExperienceFormProps> = (props) => {
-  const { onSubmit } = props;
-  const { handleSubmit, register } = useForm({
-    defaultValues: {
-      title: '',
-      titleJp: '',
-      body: '',
-      bodyJp: '',
-      organization: '',
-      location: '',
-      startDate: '',
-      endDate: '',
-    },
+  const { onSubmit, experienceInput, onCancel } = props;
+
+  const defaultValues = {
+    title: experienceInput.title,
+    titleJp: experienceInput.titleJp,
+    body: experienceInput.body,
+    bodyJp: experienceInput.bodyJp,
+    organization: experienceInput.organization,
+    location: experienceInput.location,
+    startDate: getDefaultDateInput(experienceInput.startDate),
+    endDate: getDefaultDateInput(experienceInput.endDate),
+  };
+
+  const { reset, handleSubmit, register } = useForm({
+    defaultValues: defaultValues,
   });
+
+  useEffect(() => {
+    reset({
+      ...defaultValues,
+    });
+  }, [experienceInput]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -129,7 +145,8 @@ export const ExperienceForm: FC<ExperienceFormProps> = (props) => {
           {...register('endDate')}
         />
       </Box>
-      <Box sx={{ marginTop: '10px' }}>
+      <Box sx={{ marginTop: '10px', display: 'flex' }}>
+        {experienceInput.id && <Button onClick={onCancel}>cancel</Button>}
         <Button sx={{ marginLeft: 'auto', display: 'block' }} type="submit">
           submit
         </Button>

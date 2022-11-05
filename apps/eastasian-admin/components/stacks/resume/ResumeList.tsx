@@ -9,7 +9,6 @@ import {
   listEducation,
   listWork,
   listProject,
-  listStack,
 } from '@admin/api';
 
 export const ProfileList = () => {
@@ -60,22 +59,15 @@ export const ProfileList = () => {
   );
 };
 
-export const ExperienceList = () => {
-  const [experiences, setExperiences] = useState([]);
-  const [loading, setLoading] = useState(false);
+type ExperienceListProps = {
+  onDelete: (id: string) => () => void;
+  onEdit: (id: string) => () => void;
+  experiences: any[];
+  loading: boolean;
+};
 
-  useEffect(() => {
-    const fetch = async () => {
-      try {
-        setLoading(true);
-        const { data } = await listExperience();
-        setExperiences([...experiences, ...data.experiences]);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetch();
-  }, []);
+export const ExperienceList: FC<ExperienceListProps> = (props) => {
+  const { loading, experiences, onDelete, onEdit } = props;
 
   return (
     <>
@@ -91,11 +83,12 @@ export const ExperienceList = () => {
             <th>location</th>
             <th>startDate</th>
             <th>endDate</th>
+            <th />
           </tr>
         </thead>
         <tbody>
           {experiences.map((experience, i) => (
-            <tr key={i}>
+            <tr key={experience.id}>
               <td>{experience.title}</td>
               <td>{experience.titleJp}</td>
               <td>{experience.body}</td>
@@ -104,6 +97,16 @@ export const ExperienceList = () => {
               <td>{experience.location}</td>
               <td>{experience.startDate}</td>
               <td>{experience.endDate}</td>
+              <Box component="td" sx={{ width: '20px' }}>
+                <Box sx={{ display: 'flex', gap: '5px' }}>
+                  <ActionIcon onClick={onEdit(experience.id)}>
+                    <IconEdit />
+                  </ActionIcon>
+                  <ActionIcon onClick={onDelete(experience.id)} color="red">
+                    <IconTrash />
+                  </ActionIcon>
+                </Box>
+              </Box>
             </tr>
           ))}
         </tbody>
@@ -292,7 +295,7 @@ export const StackList: FC<StackListProps> = (props) => {
         <tbody>
           {stacks.map((stack, i) => {
             return (
-              <tr key={i}>
+              <tr key={stack.id}>
                 <td>
                   <Avatar />
                 </td>

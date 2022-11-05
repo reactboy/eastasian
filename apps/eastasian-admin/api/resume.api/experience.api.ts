@@ -16,7 +16,7 @@ export const createExperience = async (paylaod) => {
 };
 
 export const updateExperience = async (id: string, payload) => {
-  return await axios.post(endpointWithId(id), { ...payload });
+  return await axios.put(endpointWithId(id), { ...payload });
 };
 
 export const deleteExperience = async (id: string) => {
