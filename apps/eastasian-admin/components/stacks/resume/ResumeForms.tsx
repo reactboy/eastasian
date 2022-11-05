@@ -1,7 +1,10 @@
 import { FC } from 'react';
 import { Box, TextInput, Button, Textarea } from '@mantine/core';
 import { useForm } from 'react-hook-form';
-import { createExperience } from 'api/resume.api';
+
+type BaseResumeFormProps = {
+  onSubmit: (d) => Promise<void>;
+};
 
 export const AboutForm = () => {
   const { handleSubmit, register } = useForm({
@@ -52,9 +55,7 @@ export const AboutForm = () => {
   );
 };
 
-type ExperienceFormProps = {
-  onSubmit: (d: any) => Promise<void>;
-};
+type ExperienceFormProps = BaseResumeFormProps;
 
 export const ExperienceForm: FC<ExperienceFormProps> = (props) => {
   const { onSubmit } = props;
@@ -70,15 +71,7 @@ export const ExperienceForm: FC<ExperienceFormProps> = (props) => {
       endDate: '',
     },
   });
-  //   const onSubmit = async (d) => {
-  //     console.log(d);
-  //     try {
-  //       const res = await createExperience({ ...d });
-  //       console.log(res);
-  //     } catch (e) {
-  //       console.log(e);
-  //     }
-  //   };
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Box>
@@ -373,7 +366,10 @@ export const ProjectForm = () => {
   );
 };
 
-export const StackForm = () => {
+type StackFormProps = BaseResumeFormProps;
+
+export const StackForm: FC<StackFormProps> = (props) => {
+  const { onSubmit } = props;
   const { handleSubmit, register } = useForm({
     defaultValues: {
       name: '',
@@ -381,9 +377,6 @@ export const StackForm = () => {
       link: '',
     },
   });
-  const onSubmit = async (d) => {
-    console.log(d);
-  };
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Box>

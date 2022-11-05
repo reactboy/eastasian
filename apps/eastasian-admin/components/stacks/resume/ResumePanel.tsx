@@ -1,6 +1,7 @@
 import { ReactNode, FC } from 'react';
 import { Tabs, Title, Box } from '@mantine/core';
-import { createExperience } from 'api/resume.api';
+import { createExperience, createStack } from '@admin/api';
+import { showNotification } from '@admin/libs/mantine';
 
 import {
   AboutForm,
@@ -44,8 +45,10 @@ const ExperiencePanel = () => {
         startDate: new Date(d.startDate).toISOString(),
         endDate: new Date(d.endDate).toISOString(),
       });
+      showNotification({ message: 'experience created' });
     } catch (e) {
       console.log(e);
+      showNotification({ message: e.message });
     }
   };
   return (
@@ -84,9 +87,20 @@ const ProjectsPanel = () => {
 };
 
 const StacksPanel = () => {
+  const onSubmitCreate = async (d) => {
+    try {
+      console.log(d);
+      await createStack({ ...d });
+      showNotification({ message: 'stacks created' });
+    } catch (e) {
+      console.log(e);
+      showNotification({ message: e });
+    }
+  };
+
   return (
     <PanelLayout title="Stacks">
-      <StackForm />
+      <StackForm onSubmit={onSubmitCreate} />
       <StackList />
     </PanelLayout>
   );
