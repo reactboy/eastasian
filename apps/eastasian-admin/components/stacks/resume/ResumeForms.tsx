@@ -1,9 +1,12 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { Box, TextInput, Button, Textarea } from '@mantine/core';
 import { useForm } from 'react-hook-form';
+import { StackInput } from '@admin/store';
 
 type BaseResumeFormProps = {
   onSubmit: (d) => Promise<void>;
+  //TODO(eastasian) remove optional
+  onCancel?: () => void;
 };
 
 export const AboutForm = () => {
@@ -366,17 +369,24 @@ export const ProjectForm = () => {
   );
 };
 
-type StackFormProps = BaseResumeFormProps;
+type StackFormProps = { stackInput: StackInput } & BaseResumeFormProps;
 
 export const StackForm: FC<StackFormProps> = (props) => {
-  const { onSubmit } = props;
-  const { handleSubmit, register } = useForm({
+  const { onSubmit, stackInput, onCancel } = props;
+  const { handleSubmit, register, reset } = useForm({
     defaultValues: {
-      name: '',
-      displayName: '',
-      link: '',
+      name: stackInput.name,
+      displayName: stackInput.displayName,
+      link: stackInput.link,
     },
   });
+
+  useEffect(() => {
+    reset({
+      ...stackInput,
+    });
+  }, [stackInput]);
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Box>
@@ -399,8 +409,15 @@ export const StackForm: FC<StackFormProps> = (props) => {
           {...register('link')}
         />
       </Box>
-      <Box sx={{ marginTop: '10px' }}>
-        <Button sx={{ marginLeft: 'auto', display: 'block' }} type="submit">
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          marginTop: '10px',
+        }}
+      >
+        {stackInput.id && <Button onClick={onCancel}>cancel</Button>}
+        <Button sx={{ marginLeft: 'auto' }} type="submit">
           submit
         </Button>
       </Box>

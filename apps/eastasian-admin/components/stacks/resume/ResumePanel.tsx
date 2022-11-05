@@ -1,7 +1,14 @@
-import { ReactNode, FC } from 'react';
+import { ReactNode, FC, useEffect, useState } from 'react';
 import { Tabs, Title, Box } from '@mantine/core';
-import { createExperience, createStack } from '@admin/api';
+import {
+  createExperience,
+  createStack,
+  deleteStack,
+  listStack,
+  updateStack,
+} from '@admin/api';
 import { showNotification } from '@admin/libs/mantine';
+import { useStackInputStore } from '@admin/store';
 
 import {
   AboutForm,
@@ -87,21 +94,89 @@ const ProjectsPanel = () => {
 };
 
 const StacksPanel = () => {
+  const { setStackInput, stackInput, resetStackInput } = useStackInputStore(
+    (state) => state
+  );
+  const [stacks, setStacks] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        setLoading(true);
+        const { data } = await listStack();
+        setStacks([...data.stacks]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetch();
+  }, []);
+
+  //NOTE(eastasian) initializing stack input form
+  useEffect(() => {
+    resetStackInput();
+  }, []);
+
   const onSubmitCreate = async (d) => {
     try {
-      console.log(d);
       await createStack({ ...d });
-      showNotification({ message: 'stacks created' });
+      showNotification({ message: 'stack created' });
+      resetStackInput();
     } catch (e) {
       console.log(e);
-      showNotification({ message: e });
+      showNotification({ message: e.message });
     }
+  };
+
+  const onEdit = (id: string) => () => {
+    const stack = stacks.find((stack) => stack.id === id);
+    setStackInput(stack);
+  };
+
+  const onSubmitEdit = async (d) => {
+    try {
+      const { data } = await updateStack(stackInput.id, { ...d });
+      setStacks((prevStacks) =>
+        prevStacks.map((stack) => {
+          if (data.stack.id !== stack.id) return stack;
+          return data.stack;
+        })
+      );
+      resetStackInput();
+      showNotification({ message: 'stack updated' });
+    } catch (e) {
+      showNotification({ message: e.message });
+    }
+  };
+
+  const onSubmitDelete = (id: string) => async () => {
+    try {
+      await deleteStack(id);
+      setStacks((prevStacks) => prevStacks.filter((stack) => stack.id !== id));
+      showNotification({ message: 'stack deleted' });
+    } catch (e) {
+      showNotification({ message: e.message });
+    }
+  };
+
+  const onCancel = () => {
+    resetStackInput();
   };
 
   return (
     <PanelLayout title="Stacks">
-      <StackForm onSubmit={onSubmitCreate} />
-      <StackList />
+      <StackForm
+        stackInput={stackInput}
+        onSubmit={stackInput.id ? onSubmitEdit : onSubmitCreate}
+        onCancel={onCancel}
+      />
+      <StackList
+        onDelete={onSubmitDelete}
+        onEdit={onEdit}
+        stacks={stacks}
+        loading={loading}
+      />
     </PanelLayout>
   );
 };

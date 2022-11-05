@@ -1,5 +1,7 @@
-import { useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
+import { Box, ActionIcon } from '@mantine/core';
 import { Avatar, Table, LoadingOverlay } from '@mantine/core';
+import { IconEdit, IconTrash } from '@tabler/icons';
 
 import {
   listProfile,
@@ -126,6 +128,7 @@ export const EducationList = () => {
     };
     fetch();
   }, []);
+
   return (
     <>
       <LoadingOverlay visible={loading} />
@@ -263,22 +266,15 @@ export const ProjectList = () => {
   );
 };
 
-export const StackList = () => {
-  const [stacks, setStacks] = useState([]);
-  const [loading, setLoading] = useState(false);
+type StackListProps = {
+  onEdit: (id: string) => () => Promise<void> | void;
+  onDelete: (id: string) => () => Promise<void> | void;
+  stacks: any;
+  loading: boolean;
+};
 
-  useEffect(() => {
-    const fetch = async () => {
-      try {
-        setLoading(true);
-        const { data } = await listStack();
-        setStacks([...stacks, ...data.stacks]);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetch();
-  }, []);
+export const StackList: FC<StackListProps> = (props) => {
+  const { onEdit, onDelete, loading, stacks } = props;
 
   return (
     <>
@@ -290,6 +286,7 @@ export const StackList = () => {
             <th>name</th>
             <th>displayName</th>
             <th>link</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -302,6 +299,16 @@ export const StackList = () => {
                 <td>{stack.name}</td>
                 <td>{stack.displayName}</td>
                 <td>{stack.link}</td>
+                <Box component="td" sx={{ width: '20px' }}>
+                  <Box sx={{ display: 'flex', gap: '5px' }}>
+                    <ActionIcon onClick={onEdit(stack.id)}>
+                      <IconEdit />
+                    </ActionIcon>
+                    <ActionIcon onClick={onDelete(stack.id)} color="red">
+                      <IconTrash />
+                    </ActionIcon>
+                  </Box>
+                </Box>
               </tr>
             );
           })}
