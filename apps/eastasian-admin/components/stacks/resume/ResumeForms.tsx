@@ -2,7 +2,12 @@ import { FC, useEffect } from 'react';
 import { Box, TextInput, Button, Textarea } from '@mantine/core';
 import { useForm } from 'react-hook-form';
 import { format } from 'date-fns';
-import { StackInput, ExperienceInput, EducationInput } from '@admin/store';
+import {
+  StackInput,
+  ExperienceInput,
+  EducationInput,
+  WorkInput,
+} from '@admin/store';
 
 const getDefaultDateInput = (date: string) => {
   return date ? format(new Date(date), 'yyyy-MM-dd') : '';
@@ -247,22 +252,31 @@ export const EducationForm: FC<EducationFormProps> = (props) => {
   );
 };
 
-export const WorkForm = () => {
-  const { handleSubmit, register } = useForm({
+type WorkFormProps = {
+  workInput: WorkInput;
+} & BaseResumeFormProps;
+export const WorkForm: FC<WorkFormProps> = (props) => {
+  const { workInput, onSubmit, onCancel } = props;
+  const { handleSubmit, register, reset } = useForm({
     defaultValues: {
-      title: '',
-      titleJp: '',
-      body: '',
-      bodyJp: '',
-      organization: '',
-      location: '',
-      startDate: '',
-      endDate: '',
+      title: workInput.title,
+      titleJp: workInput.titleJp,
+      body: workInput.body,
+      bodyJp: workInput.bodyJp,
+      link: workInput.link,
     },
   });
-  const onSubmit = async (d) => {
-    console.log(d);
-  };
+
+  useEffect(() => {
+    reset({
+      title: workInput.title,
+      titleJp: workInput.titleJp,
+      body: workInput.body,
+      bodyJp: workInput.bodyJp,
+      link: workInput.link,
+    });
+  }, [workInput]);
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Box>
@@ -278,44 +292,27 @@ export const WorkForm = () => {
           placeholder="titleJp"
           {...register('titleJp')}
         />
-        <TextInput
+        <Textarea
           label="body"
           name="body"
           placeholder="body"
           {...register('body')}
         />
-        <TextInput
+        <Textarea
           label="bodyJp"
           name="bodyJp"
           placeholder="bodyJp"
           {...register('bodyJp')}
         />
         <TextInput
-          label="organization"
-          name="organization"
-          placeholder="organization"
-          {...register('organization')}
-        />
-        <TextInput
-          label="location"
-          name="location"
-          placeholder="location"
-          {...register('location')}
-        />
-        <TextInput
-          label="startDate"
-          name="startDate"
-          placeholder="startDate"
-          {...register('startDate')}
-        />
-        <TextInput
-          label="endDate"
-          name="endDate"
-          placeholder="endDate"
-          {...register('endDate')}
+          label="link"
+          name="link"
+          placeholder="link"
+          {...register('link')}
         />
       </Box>
-      <Box sx={{ marginTop: '10px' }}>
+      <Box sx={{ marginTop: '10px', display: 'flex' }}>
+        {workInput.id && <Button onClick={onCancel}>cancel</Button>}
         <Button sx={{ marginLeft: 'auto', display: 'block' }} type="submit">
           submit
         </Button>
@@ -415,7 +412,9 @@ export const StackForm: FC<StackFormProps> = (props) => {
 
   useEffect(() => {
     reset({
-      ...stackInput,
+      name: stackInput.name,
+      displayName: stackInput.displayName,
+      link: stackInput.link,
     });
   }, [stackInput]);
 

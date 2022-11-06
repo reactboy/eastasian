@@ -30,14 +30,12 @@ router.get('/works/:workId', async (req, res) => {
 
 router.post('/works', verifyToken, async (req, res) => {
   try {
-    const { title, body, profileId, stackIds } = req.body;
     const work = await prisma.work.create({
       data: {
-        title,
-        body,
-        profileId,
+        ...req.body,
+        profileId: req.user.id,
         stacks: {
-          connect: stackIds.map((stackId) => stackId),
+          connect: (req.body.stackIds || []).map((stackId) => stackId),
         },
       },
     });
@@ -50,17 +48,15 @@ router.post('/works', verifyToken, async (req, res) => {
 router.put('/works/:workId', verifyToken, async (req, res) => {
   try {
     const { workId } = req.params;
-    const { title, body, profileId, stackIds } = req.body;
     const work = await prisma.work.update({
       where: {
         id: workId,
       },
       data: {
-        title,
-        body,
-        profileId,
+        ...req.body,
+        profileId: req.user.id,
         stacks: {
-          connect: stackIds.map((stackId) => stackId),
+          connect: (req.body.stackIds || []).map((stackId) => stackId),
         },
       },
     });

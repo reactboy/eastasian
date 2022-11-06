@@ -71,6 +71,7 @@ model Work {
     bodyJp String @default("")
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+    link String @default("")
     profile Profile @relation(fields: [profileId], references: [id])
     profileId String
     stacks Stack[]
@@ -83,6 +84,7 @@ model Project {
     bodyJp String @default("")
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+    link String @default("")
     profile Profile @relation(fields: [profileId], references: [id])
     profileId String
     stacks Stack[]

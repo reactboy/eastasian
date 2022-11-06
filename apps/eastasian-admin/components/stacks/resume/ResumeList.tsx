@@ -3,13 +3,7 @@ import { Box, ActionIcon } from '@mantine/core';
 import { Avatar, Table, LoadingOverlay } from '@mantine/core';
 import { IconEdit, IconTrash } from '@tabler/icons';
 
-import {
-  listProfile,
-  listExperience,
-  listEducation,
-  listWork,
-  listProject,
-} from '@admin/api';
+import { listProfile, listProject } from '@admin/api';
 
 export const ProfileList = () => {
   const [profiles, setProfiles] = useState([]);
@@ -171,22 +165,15 @@ export const EducationList: FC<EducationListProps> = (props) => {
   );
 };
 
-export const WorkList = () => {
-  const [works, setWorks] = useState([]);
-  const [loading, setLoading] = useState(false);
+type WorkListProps = {
+  onEdit: (id: string) => () => void | Promise<void>;
+  onDelete: (id: string) => () => void | Promise<void>;
+  works: any[];
+  loading: boolean;
+};
 
-  useEffect(() => {
-    const fetch = async () => {
-      try {
-        setLoading(true);
-        const { data } = await listWork();
-        setWorks([...works, ...data.works]);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetch();
-  }, []);
+export const WorkList: FC<WorkListProps> = (props) => {
+  const { onDelete, onEdit, works, loading } = props;
   return (
     <>
       <LoadingOverlay visible={loading} />
@@ -197,10 +184,9 @@ export const WorkList = () => {
             <th>titleJp</th>
             <th>body</th>
             <th>bodyJp</th>
-            <th>organization</th>
-            <th>location</th>
-            <th>startDate</th>
-            <th>endDate</th>
+            <th>link</th>
+            <th>stacks</th>
+            <th />
           </tr>
         </thead>
         <tbody>
@@ -210,10 +196,18 @@ export const WorkList = () => {
               <td>{work.titleJp}</td>
               <td>{work.body}</td>
               <td>{work.bodyJp}</td>
-              <td>{work.organization}</td>
-              <td>{work.location}</td>
-              <td>{work.startDate}</td>
-              <td>{work.endDate}</td>
+              <td>{work.link}</td>
+              <td>stacks</td>
+              <Box component="td" sx={{ width: '20px' }}>
+                <Box sx={{ display: 'flex', gap: '5px' }}>
+                  <ActionIcon onClick={onEdit(work.id)}>
+                    <IconEdit />
+                  </ActionIcon>
+                  <ActionIcon onClick={onDelete(work.id)} color="red">
+                    <IconTrash />
+                  </ActionIcon>
+                </Box>
+              </Box>
             </tr>
           ))}
         </tbody>

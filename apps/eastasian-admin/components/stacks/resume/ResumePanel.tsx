@@ -9,16 +9,21 @@ import {
   createEducation,
   updateEducation,
   deleteEducation,
-  createStack,
-  deleteStack,
+  listWork,
+  createWork,
+  updateWork,
+  deleteWork,
   listStack,
+  createStack,
   updateStack,
+  deleteStack,
 } from '@admin/api';
 import { showNotification } from '@admin/libs/mantine';
 import {
   useStackInputStore,
   useExperienceInputStore,
   useEducationInputStore,
+  useWorkInputStore,
 } from '@admin/store';
 
 import {
@@ -252,10 +257,87 @@ const EducationPanel = () => {
 };
 
 const WorksPanel = () => {
+  const { workInput, setWorkInput, resetWorkInput } = useWorkInputStore(
+    (store) => store
+  );
+  const [works, setWorks] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        setLoading(true);
+        const { data } = await listWork();
+        setWorks([...works, ...data.works]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetch();
+  }, []);
+
+  useEffect(() => {
+    resetWorkInput();
+  }, []);
+
+  const onSubmitCreate = async (d) => {
+    try {
+      const { data } = await createWork({ ...d });
+      setWorks((prevWorks) => [...prevWorks, data.work]);
+      showNotification({ message: 'work created' });
+      resetWorkInput();
+    } catch (e) {
+      showNotification({ message: e });
+    }
+  };
+
+  const onSubmitEdit = async (d) => {
+    try {
+      const { data } = await updateWork(workInput.id, { ...d });
+      setWorks((prevWorks) =>
+        prevWorks.map((work) => (work.id !== data.work.id ? work : data.work))
+      );
+      showNotification({ message: 'work updated' });
+      resetWorkInput();
+    } catch (e) {
+      showNotification({ message: e });
+    }
+  };
+
+  const onEdit = (id: string) => () => {
+    const work = works.find((work) => work.id === id);
+    setWorkInput(work);
+  };
+
+  const onSubmitDelete = (id: string) => async () => {
+    try {
+      await deleteWork(id);
+      setWorks((prevWorks) => prevWorks.filter((work) => work.id !== id));
+      showNotification({ message: 'work deleted' });
+      resetWorkInput();
+    } catch (e) {
+      showNotification({ message: e });
+    }
+  };
+
+  const onCancel = () => {
+    resetWorkInput();
+  };
+
   return (
     <PanelLayout title="Works">
-      <WorkForm />
-      <WorkList />
+      {workInput.id}
+      <WorkForm
+        workInput={workInput}
+        onCancel={onCancel}
+        onSubmit={workInput.id ? onSubmitEdit : onSubmitCreate}
+      />
+      <WorkList
+        onEdit={onEdit}
+        onDelete={onSubmitDelete}
+        works={works}
+        loading={loading}
+      />
     </PanelLayout>
   );
 };
