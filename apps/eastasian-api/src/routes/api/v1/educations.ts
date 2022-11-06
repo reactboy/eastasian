@@ -30,15 +30,13 @@ router.get('/educations/:educationId', async (req, res) => {
 
 router.post('/educations', verifyToken, async (req, res) => {
   try {
-    const { title, body, profileId } = req.body;
     const education = await prisma.education.create({
       data: {
-        title,
-        body,
-        profileId,
+        ...req.body,
+        profileId: req.user.id,
       },
     });
-    return { education };
+    return res.send({ education });
   } catch (e) {
     return res.status(500).send({ e });
   }
@@ -47,15 +45,14 @@ router.post('/educations', verifyToken, async (req, res) => {
 router.put('/educations/:educationId', verifyToken, async (req, res) => {
   try {
     const { educationId } = req.params;
-    const { title, body } = req.body;
 
     const education = await prisma.education.update({
       where: {
         id: educationId,
       },
       data: {
-        title,
-        body,
+        ...req.body,
+        profileId: req.user.id,
       },
     });
     return res.send({ education });

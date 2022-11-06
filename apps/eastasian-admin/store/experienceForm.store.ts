@@ -9,7 +9,7 @@ export type ExperienceInput = {
   organization: string;
   location: string;
   startDate: string;
-  endDate: '';
+  endDate: string;
 };
 
 const initExperienceInput = (): ExperienceInput => ({

@@ -115,22 +115,15 @@ export const ExperienceList: FC<ExperienceListProps> = (props) => {
   );
 };
 
-export const EducationList = () => {
-  const [educations, setEducations] = useState([]);
-  const [loading, setLoading] = useState(false);
+type EducationListProps = {
+  onEdit: (id: string) => () => void | Promise<void>;
+  onDelete: (id: string) => () => void | Promise<void>;
+  educations: any[];
+  loading: boolean;
+};
 
-  useEffect(() => {
-    const fetch = async () => {
-      try {
-        setLoading(true);
-        const { data } = await listEducation();
-        setEducations([...educations, ...data.educations]);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetch();
-  }, []);
+export const EducationList: FC<EducationListProps> = (props) => {
+  const { onEdit, onDelete, educations, loading } = props;
 
   return (
     <>
@@ -146,11 +139,12 @@ export const EducationList = () => {
             <th>location</th>
             <th>startDate</th>
             <th>endDate</th>
+            <th />
           </tr>
         </thead>
         <tbody>
           {educations.map((education, i) => (
-            <tr key={i}>
+            <tr key={education.id}>
               <td>{education.title}</td>
               <td>{education.titleJp}</td>
               <td>{education.body}</td>
@@ -159,6 +153,16 @@ export const EducationList = () => {
               <td>{education.location}</td>
               <td>{education.startDate}</td>
               <td>{education.endDate}</td>
+              <Box component="td" sx={{ width: '20px' }}>
+                <Box sx={{ display: 'flex', gap: '5px' }}>
+                  <ActionIcon onClick={onEdit(education.id)}>
+                    <IconEdit />
+                  </ActionIcon>
+                  <ActionIcon onClick={onDelete(education.id)} color="red">
+                    <IconTrash />
+                  </ActionIcon>
+                </Box>
+              </Box>
             </tr>
           ))}
         </tbody>

@@ -2,7 +2,7 @@ import { FC, useEffect } from 'react';
 import { Box, TextInput, Button, Textarea } from '@mantine/core';
 import { useForm } from 'react-hook-form';
 import { format } from 'date-fns';
-import { StackInput, ExperienceInput } from '@admin/store';
+import { StackInput, ExperienceInput, EducationInput } from '@admin/store';
 
 const getDefaultDateInput = (date: string) => {
   return date ? format(new Date(date), 'yyyy-MM-dd') : '';
@@ -155,22 +155,34 @@ export const ExperienceForm: FC<ExperienceFormProps> = (props) => {
   );
 };
 
-export const EducationForm = () => {
-  const { handleSubmit, register } = useForm({
-    defaultValues: {
-      title: '',
-      titleJp: '',
-      body: '',
-      bodyJp: '',
-      organization: '',
-      location: '',
-      startDate: '',
-      endDate: '',
-    },
-  });
-  const onSubmit = async (d) => {
-    console.log(d);
+type EducationFormProps = {
+  educationInput: EducationInput;
+} & BaseResumeFormProps;
+
+export const EducationForm: FC<EducationFormProps> = (props) => {
+  const { educationInput, onSubmit, onCancel } = props;
+
+  const defaultValues = {
+    title: educationInput.title,
+    titleJp: educationInput.titleJp,
+    body: educationInput.body,
+    bodyJp: educationInput.bodyJp,
+    organization: educationInput.organization,
+    location: educationInput.location,
+    startDate: getDefaultDateInput(educationInput.startDate),
+    endDate: getDefaultDateInput(educationInput.endDate),
   };
+
+  const { reset, handleSubmit, register } = useForm({
+    defaultValues: defaultValues,
+  });
+
+  useEffect(() => {
+    reset({
+      ...defaultValues,
+    });
+  }, [educationInput]);
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Box>
@@ -186,13 +198,13 @@ export const EducationForm = () => {
           placeholder="titleJp"
           {...register('titleJp')}
         />
-        <TextInput
+        <Textarea
           label="body"
           name="body"
           placeholder="body"
           {...register('body')}
         />
-        <TextInput
+        <Textarea
           label="bodyJp"
           name="bodyJp"
           placeholder="bodyJp"
@@ -214,16 +226,19 @@ export const EducationForm = () => {
           label="startDate"
           name="startDate"
           placeholder="startDate"
+          type="date"
           {...register('startDate')}
         />
         <TextInput
           label="endDate"
           name="endDate"
           placeholder="endDate"
+          type="date"
           {...register('endDate')}
         />
       </Box>
-      <Box sx={{ marginTop: '10px' }}>
+      <Box sx={{ marginTop: '10px', display: 'flex' }}>
+        {educationInput.id && <Button onClick={onCancel}>cancel</Button>}
         <Button sx={{ marginLeft: 'auto', display: 'block' }} type="submit">
           submit
         </Button>
