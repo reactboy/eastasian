@@ -107,10 +107,9 @@ const ExperiencePanel = () => {
         endDate: d.endDate ? new Date(d.endDate).toISOString() : null,
       });
       setExperiences((prevExperiences) =>
-        prevExperiences.map((experience) => {
-          if (experience.id !== data.experience.id) return experience;
-          return data.experience;
-        })
+        prevExperiences.map((experience) =>
+          experience.id !== data.experience.id ? experience : data.experience
+        )
       );
       showNotification({ message: 'experience updated' });
       resetExperienceInput();
@@ -143,7 +142,6 @@ const ExperiencePanel = () => {
 
   return (
     <PanelLayout title="Experience">
-      {experienceInput.id}
       <ExperienceForm
         experienceInput={experienceInput}
         onSubmit={experienceInput.id ? onSubmitEdit : onSubmitCreate}
@@ -205,10 +203,9 @@ const EducationPanel = () => {
         endDate: d.endDate ? new Date(d.endDate).toISOString() : null,
       });
       setEducations((prevEducations) =>
-        prevEducations.map((education) => {
-          if (data.education.id !== education.id) return education;
-          return data.education;
-        })
+        prevEducations.map((education) =>
+          data.education.id !== education.id ? education : data.education
+        )
       );
       showNotification({ message: 'education updated' });
       resetEducationInput();
@@ -240,7 +237,6 @@ const EducationPanel = () => {
 
   return (
     <PanelLayout title="Education">
-      {/* {educationInput.id} */}
       <EducationForm
         educationInput={educationInput}
         onSubmit={educationInput.id ? onSubmitEdit : onSubmitCreate}
@@ -326,7 +322,6 @@ const WorksPanel = () => {
 
   return (
     <PanelLayout title="Works">
-      {workInput.id}
       <WorkForm
         workInput={workInput}
         onCancel={onCancel}
@@ -397,10 +392,9 @@ const StacksPanel = () => {
     try {
       const { data } = await updateStack(stackInput.id, { ...d });
       setStacks((prevStacks) =>
-        prevStacks.map((stack) => {
-          if (data.stack.id !== stack.id) return stack;
-          return data.stack;
-        })
+        prevStacks.map((stack) =>
+          data.stack.id !== stack.id ? stack : data.stack
+        )
       );
       resetStackInput();
       showNotification({ message: 'stack updated' });
