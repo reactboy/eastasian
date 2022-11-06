@@ -7,6 +7,7 @@ import {
   ExperienceInput,
   EducationInput,
   WorkInput,
+  ProjectInput,
 } from '@admin/store';
 
 const getDefaultDateInput = (date: string) => {
@@ -321,22 +322,32 @@ export const WorkForm: FC<WorkFormProps> = (props) => {
   );
 };
 
-export const ProjectForm = () => {
-  const { handleSubmit, register } = useForm({
+type ProjectFormProps = {
+  projectInput: ProjectInput;
+} & BaseResumeFormProps;
+
+export const ProjectForm: FC<ProjectFormProps> = (props) => {
+  const { onSubmit, onCancel, projectInput } = props;
+  const { handleSubmit, register, reset } = useForm({
     defaultValues: {
-      title: '',
-      titleJp: '',
-      body: '',
-      bodyJp: '',
-      organization: '',
-      location: '',
-      startDate: '',
-      endDate: '',
+      title: projectInput.title,
+      titleJp: projectInput.titleJp,
+      body: projectInput.body,
+      bodyJp: projectInput.bodyJp,
+      link: projectInput.link,
     },
   });
-  const onSubmit = async (d) => {
-    console.log(d);
-  };
+
+  useEffect(() => {
+    reset({
+      title: projectInput.title,
+      titleJp: projectInput.titleJp,
+      body: projectInput.body,
+      bodyJp: projectInput.bodyJp,
+      link: projectInput.link,
+    });
+  }, [projectInput]);
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Box>
@@ -352,44 +363,27 @@ export const ProjectForm = () => {
           placeholder="titleJp"
           {...register('titleJp')}
         />
-        <TextInput
+        <Textarea
           label="body"
           name="body"
           placeholder="body"
           {...register('body')}
         />
-        <TextInput
+        <Textarea
           label="bodyJp"
           name="bodyJp"
           placeholder="bodyJp"
           {...register('bodyJp')}
         />
         <TextInput
-          label="organization"
-          name="organization"
-          placeholder="organization"
-          {...register('organization')}
-        />
-        <TextInput
-          label="location"
-          name="location"
-          placeholder="location"
-          {...register('location')}
-        />
-        <TextInput
-          label="startDate"
-          name="startDate"
-          placeholder="startDate"
-          {...register('startDate')}
-        />
-        <TextInput
-          label="endDate"
-          name="endDate"
-          placeholder="endDate"
-          {...register('endDate')}
+          label="link"
+          name="link"
+          placeholder="link"
+          {...register('link')}
         />
       </Box>
-      <Box sx={{ marginTop: '10px' }}>
+      <Box sx={{ marginTop: '10px', display: 'flex' }}>
+        {projectInput.id && <Button onClick={onCancel}>cancel</Button>}
         <Button sx={{ marginLeft: 'auto', display: 'block' }} type="submit">
           submit
         </Button>

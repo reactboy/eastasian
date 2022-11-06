@@ -13,6 +13,10 @@ import {
   createWork,
   updateWork,
   deleteWork,
+  listProject,
+  createProject,
+  updateProject,
+  deleteProject,
   listStack,
   createStack,
   updateStack,
@@ -24,6 +28,7 @@ import {
   useExperienceInputStore,
   useEducationInputStore,
   useWorkInputStore,
+  useProjectInputStore,
 } from '@admin/store';
 
 import {
@@ -338,10 +343,88 @@ const WorksPanel = () => {
 };
 
 const ProjectsPanel = () => {
+  const { projectInput, setProjectInput, resetProjectInput } =
+    useProjectInputStore((store) => store);
+  const [projects, setprojects] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        setLoading(true);
+        const { data } = await listProject();
+        setprojects([...projects, ...data.projects]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetch();
+  }, []);
+
+  useEffect(() => {
+    resetProjectInput();
+  }, []);
+
+  const onSubmitCreate = async (d) => {
+    try {
+      const { data } = await createProject({ ...d });
+      setprojects((prevProjects) => [...prevProjects, data.project]);
+      showNotification({ message: 'project created' });
+      resetProjectInput();
+    } catch (e) {
+      showNotification({ message: e });
+    }
+  };
+
+  const onSubmitEdit = async (d) => {
+    try {
+      const { data } = await updateProject(projectInput.id, { ...d });
+      setprojects((prevProjects) =>
+        prevProjects.map((project) =>
+          project.id !== data.project.id ? project : data.project
+        )
+      );
+      showNotification({ message: 'project updated' });
+      resetProjectInput();
+    } catch (e) {
+      showNotification({ message: e });
+    }
+  };
+
+  const onEdit = (id: string) => () => {
+    const project = projects.find((project) => project.id === id);
+    setProjectInput(project);
+  };
+
+  const onSubmitDelete = (id: string) => async () => {
+    try {
+      await deleteProject(id);
+      setprojects((prevProjects) =>
+        prevProjects.filter((project) => project.id !== id)
+      );
+      showNotification({ message: 'project deleted' });
+    } catch (e) {
+      showNotification({ message: e });
+    }
+  };
+
+  const onCancel = () => {
+    resetProjectInput();
+  };
+
   return (
     <PanelLayout title="Projects">
-      <ProjectForm />
-      <ProjectList />
+      <ProjectForm
+        projectInput={projectInput}
+        onCancel={onCancel}
+        onSubmit={projectInput.id ? onSubmitEdit : onSubmitCreate}
+      />
+      <ProjectList
+        projects={projects}
+        loading={loading}
+        onDelete={onSubmitDelete}
+        onEdit={onEdit}
+      />
     </PanelLayout>
   );
 };

@@ -30,14 +30,12 @@ router.get('/projects/:projectId', async (req, res) => {
 
 router.post('/projects', verifyToken, async (req, res) => {
   try {
-    const { title, body, profileId, stackIds } = req.body;
     const project = await prisma.project.create({
       data: {
-        title,
-        body,
-        profileId,
+        ...req.body,
+        profileId: req.user.id,
         stacks: {
-          connect: stackIds.map((stackId) => stackId),
+          connect: (req.body.stackIds || []).map((stackId) => stackId),
         },
       },
     });
@@ -50,17 +48,15 @@ router.post('/projects', verifyToken, async (req, res) => {
 router.put('/projects/:projectId', verifyToken, async (req, res) => {
   try {
     const { projectId } = req.params;
-    const { title, body, profileId, stackIds } = req.body;
     const project = await prisma.project.update({
       where: {
         id: projectId,
       },
       data: {
-        title,
-        body,
-        profileId,
+        ...req.body,
+        profileId: req.user.id,
         stacks: {
-          connect: stackIds.map((stackId) => stackId),
+          connect: (req.body.stackIds || []).map((stackId) => stackId),
         },
       },
     });

@@ -216,22 +216,16 @@ export const WorkList: FC<WorkListProps> = (props) => {
   );
 };
 
-export const ProjectList = () => {
-  const [projects, setprojects] = useState([]);
-  const [loading, setLoading] = useState(false);
+type ProjectListProps = {
+  onEdit: (id: string) => () => void | Promise<void>;
+  onDelete: (id: string) => () => void | Promise<void>;
+  projects: any[];
+  loading: boolean;
+};
 
-  useEffect(() => {
-    const fetch = async () => {
-      try {
-        setLoading(true);
-        const { data } = await listProject();
-        setprojects([...projects, ...data.projects]);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetch();
-  }, []);
+export const ProjectList: FC<ProjectListProps> = (props) => {
+  const { projects, loading, onEdit, onDelete } = props;
+
   return (
     <>
       <LoadingOverlay visible={loading} />
@@ -242,10 +236,7 @@ export const ProjectList = () => {
             <th>titleJp</th>
             <th>body</th>
             <th>bodyJp</th>
-            <th>organization</th>
-            <th>location</th>
-            <th>startDate</th>
-            <th>endDate</th>
+            <th>link</th>
           </tr>
         </thead>
         <tbody>
@@ -255,10 +246,17 @@ export const ProjectList = () => {
               <td>{project.titleJp}</td>
               <td>{project.body}</td>
               <td>{project.bodyJp}</td>
-              <td>{project.organization}</td>
-              <td>{project.location}</td>
-              <td>{project.startDate}</td>
-              <td>{project.endDate}</td>
+              <td>{project.link}</td>
+              <Box component="td" sx={{ width: '20px' }}>
+                <Box sx={{ display: 'flex', gap: '5px' }}>
+                  <ActionIcon onClick={onEdit(project.id)}>
+                    <IconEdit />
+                  </ActionIcon>
+                  <ActionIcon onClick={onDelete(project.id)} color="red">
+                    <IconTrash />
+                  </ActionIcon>
+                </Box>
+              </Box>
             </tr>
           ))}
         </tbody>
