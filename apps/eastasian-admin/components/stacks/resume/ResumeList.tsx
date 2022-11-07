@@ -3,7 +3,7 @@ import { Box, ActionIcon } from '@mantine/core';
 import { Avatar, Table, LoadingOverlay } from '@mantine/core';
 import { IconEdit, IconTrash } from '@tabler/icons';
 
-import { listProfile, listProject } from '@admin/api';
+import { listProfile } from '@admin/api';
 
 export const ProfileList = () => {
   const [profiles, setProfiles] = useState([]);
@@ -289,11 +289,14 @@ export const StackList: FC<StackListProps> = (props) => {
           </tr>
         </thead>
         <tbody>
-          {stacks.map((stack, i) => {
+          {stacks.map((stack) => {
             return (
               <tr key={stack.id}>
                 <td>
-                  <Avatar />
+                  <Avatar
+                    sx={{ img: { objectFit: 'contain' } }}
+                    src={stack.stackImage}
+                  />
                 </td>
                 <td>{stack.name}</td>
                 <td>{stack.displayName}</td>

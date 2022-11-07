@@ -1,5 +1,5 @@
-import { FC, useEffect } from 'react';
-import { Box, TextInput, Button, Textarea } from '@mantine/core';
+import { FC, useEffect, useState } from 'react';
+import { Box, TextInput, Button, Textarea, Avatar } from '@mantine/core';
 import { useForm } from 'react-hook-form';
 import { format } from 'date-fns';
 import {
@@ -392,15 +392,29 @@ export const ProjectForm: FC<ProjectFormProps> = (props) => {
   );
 };
 
+const convertBase64 = (file: File) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      resolve(reader.result);
+    };
+    reader.onerror = (error) => reject(error);
+    reader.readAsDataURL(file);
+  });
+};
+
 type StackFormProps = { stackInput: StackInput } & BaseResumeFormProps;
 
 export const StackForm: FC<StackFormProps> = (props) => {
   const { onSubmit, stackInput, onCancel } = props;
-  const { handleSubmit, register, reset } = useForm({
+  const [stackImage, setStackImage] = useState<string>(stackInput.stackImage);
+
+  const { handleSubmit, register, reset, watch } = useForm({
     defaultValues: {
       name: stackInput.name,
       displayName: stackInput.displayName,
       link: stackInput.link,
+      icon: [],
     },
   });
 
@@ -409,8 +423,21 @@ export const StackForm: FC<StackFormProps> = (props) => {
       name: stackInput.name,
       displayName: stackInput.displayName,
       link: stackInput.link,
+      icon: [],
     });
+    setStackImage(stackInput.stackImage);
   }, [stackInput]);
+
+  useEffect(() => {
+    const subscription = watch(async (value, { name }) => {
+      if (name !== 'icon') return;
+      if (!value.icon.length) return;
+      const file = value.icon[0];
+      const base64 = (await convertBase64(file)) as string;
+      setStackImage(base64);
+    });
+    return () => subscription.unsubscribe();
+  }, [watch]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -433,6 +460,15 @@ export const StackForm: FC<StackFormProps> = (props) => {
           placeholder="link"
           {...register('link')}
         />
+        <Box>
+          <TextInput
+            label="icon"
+            type="file"
+            name="icon"
+            {...register('icon')}
+          />
+          <Avatar src={stackImage} sx={{ img: { objectFit: 'contain' } }} />
+        </Box>
       </Box>
       <Box
         sx={{

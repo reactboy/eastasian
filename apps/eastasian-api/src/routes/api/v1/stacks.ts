@@ -34,12 +34,13 @@ router.get('/stacks/:stackId', async (req, res) => {
 
 router.post('/stacks', verifyToken, async (req, res) => {
   try {
-    const { name, displayName, link = '' } = req.body;
+    const { name, displayName, link = '', stackImage = '' } = req.body;
     const stack = await prisma.stack.create({
       data: {
         name,
         displayName,
         link,
+        stackImage,
       },
     });
     return res.send({
@@ -53,7 +54,7 @@ router.post('/stacks', verifyToken, async (req, res) => {
 router.put('/stacks/:stackId', verifyToken, async (req, res) => {
   try {
     const { stackId } = req.params;
-    const { name, displayName, link = '' } = req.body;
+    const { name, displayName, link = '', stackImage = '' } = req.body;
     const stack = await prisma.stack.update({
       where: {
         id: stackId,
@@ -62,6 +63,7 @@ router.put('/stacks/:stackId', verifyToken, async (req, res) => {
         name,
         displayName,
         link,
+        stackImage,
       },
     });
     return res.send({ stack });

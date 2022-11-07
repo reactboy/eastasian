@@ -30,6 +30,7 @@ import {
   useWorkInputStore,
   useProjectInputStore,
 } from '@admin/store';
+import { uploadFile } from '@admin/libs/supabase';
 
 import {
   AboutForm,
@@ -456,8 +457,15 @@ const StacksPanel = () => {
 
   const onSubmitCreate = async (d) => {
     try {
-      const { data } = await createStack({ ...d });
-      showNotification({ message: 'stack created' });
+      const { icon, ...payload } = d;
+
+      if (icon.length) {
+        const file = icon[0];
+        const publicUrl = await uploadFile('stacks', file);
+        payload.stackImage = publicUrl;
+      }
+
+      const { data } = await createStack(payload);
       setStacks((prevStacks) => [...prevStacks, data.stack]);
       resetStackInput();
     } catch (e) {
@@ -473,7 +481,15 @@ const StacksPanel = () => {
 
   const onSubmitEdit = async (d) => {
     try {
-      const { data } = await updateStack(stackInput.id, { ...d });
+      const { icon, ...payload } = d;
+
+      if (icon.length) {
+        const file = icon[0];
+        const publicUrl = await uploadFile('stacks', file);
+        payload.stackImage = publicUrl;
+      }
+
+      const { data } = await updateStack(stackInput.id, { ...payload });
       setStacks((prevStacks) =>
         prevStacks.map((stack) =>
           data.stack.id !== stack.id ? stack : data.stack
