@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, ReactNode, useEffect, useState } from 'react';
 import { Box, TextInput, Button, Textarea, Avatar } from '@mantine/core';
 import { useForm } from 'react-hook-form';
 import { format } from 'date-fns';
@@ -10,6 +10,7 @@ import {
   ProjectInput,
 } from '@admin/store';
 
+//TODO(eastasian) extract to utils
 const getDefaultDateInput = (date: string) => {
   return date ? format(new Date(date), 'yyyy-MM-dd') : '';
 };
@@ -255,9 +256,11 @@ export const EducationForm: FC<EducationFormProps> = (props) => {
 
 type WorkFormProps = {
   workInput: WorkInput;
+  children?: ReactNode;
 } & BaseResumeFormProps;
+
 export const WorkForm: FC<WorkFormProps> = (props) => {
-  const { workInput, onSubmit, onCancel } = props;
+  const { workInput, onSubmit, onCancel, children } = props;
   const { handleSubmit, register, reset } = useForm({
     defaultValues: {
       title: workInput.title,
@@ -312,6 +315,7 @@ export const WorkForm: FC<WorkFormProps> = (props) => {
           {...register('link')}
         />
       </Box>
+      {children}
       <Box sx={{ marginTop: '10px', display: 'flex' }}>
         {workInput.id && <Button onClick={onCancel}>cancel</Button>}
         <Button sx={{ marginLeft: 'auto', display: 'block' }} type="submit">
@@ -324,10 +328,11 @@ export const WorkForm: FC<WorkFormProps> = (props) => {
 
 type ProjectFormProps = {
   projectInput: ProjectInput;
+  children?: ReactNode;
 } & BaseResumeFormProps;
 
 export const ProjectForm: FC<ProjectFormProps> = (props) => {
-  const { onSubmit, onCancel, projectInput } = props;
+  const { onSubmit, onCancel, projectInput, children } = props;
   const { handleSubmit, register, reset } = useForm({
     defaultValues: {
       title: projectInput.title,
@@ -382,6 +387,7 @@ export const ProjectForm: FC<ProjectFormProps> = (props) => {
           {...register('link')}
         />
       </Box>
+      {children}
       <Box sx={{ marginTop: '10px', display: 'flex' }}>
         {projectInput.id && <Button onClick={onCancel}>cancel</Button>}
         <Button sx={{ marginLeft: 'auto', display: 'block' }} type="submit">
@@ -392,6 +398,7 @@ export const ProjectForm: FC<ProjectFormProps> = (props) => {
   );
 };
 
+//TODO(eastasian) extract to utils
 const convertBase64 = (file: File) => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();

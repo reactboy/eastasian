@@ -45,6 +45,8 @@ import {
   WorkList,
   ProjectList,
   StackList,
+  StackSelect,
+  useStackSelect,
 } from '.';
 
 const PanelLayout: FC<{ title: string; children: ReactNode }> = (props) => {
@@ -264,6 +266,7 @@ const WorksPanel = () => {
   );
   const [works, setWorks] = useState([]);
   const [loading, setLoading] = useState(false);
+  const { stacks, selectedStacks, onClickStack } = useStackSelect();
 
   useEffect(() => {
     const fetch = async () => {
@@ -332,7 +335,13 @@ const WorksPanel = () => {
         workInput={workInput}
         onCancel={onCancel}
         onSubmit={workInput.id ? onSubmitEdit : onSubmitCreate}
-      />
+      >
+        <StackSelect
+          stacks={stacks}
+          onClickStack={onClickStack}
+          selectedStacks={selectedStacks}
+        />
+      </WorkForm>
       <WorkList
         onEdit={onEdit}
         onDelete={onSubmitDelete}
@@ -348,6 +357,7 @@ const ProjectsPanel = () => {
     useProjectInputStore((store) => store);
   const [projects, setprojects] = useState([]);
   const [loading, setLoading] = useState(false);
+  const { stacks, selectedStacks, onClickStack } = useStackSelect();
 
   useEffect(() => {
     const fetch = async () => {
@@ -419,7 +429,13 @@ const ProjectsPanel = () => {
         projectInput={projectInput}
         onCancel={onCancel}
         onSubmit={projectInput.id ? onSubmitEdit : onSubmitCreate}
-      />
+      >
+        <StackSelect
+          stacks={stacks}
+          onClickStack={onClickStack}
+          selectedStacks={selectedStacks}
+        />
+      </ProjectForm>
       <ProjectList
         projects={projects}
         loading={loading}
