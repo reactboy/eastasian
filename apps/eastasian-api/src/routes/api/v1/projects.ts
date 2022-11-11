@@ -7,7 +7,17 @@ const router = express.Router();
 
 router.get('/projects', async (_req, res) => {
   try {
-    const projects = await prisma.project.findMany();
+    const projects = await prisma.project.findMany({
+      include: {
+        stacks: {
+          select: {
+            id: true,
+            stackImage: true,
+            displayName: true,
+          },
+        },
+      },
+    });
     return res.send({ projects });
   } catch (e) {
     return res.status(500).send({ e });
@@ -21,6 +31,15 @@ router.get('/projects/:projectId', async (req, res) => {
       where: {
         id: projectId,
       },
+      include: {
+        stacks: {
+          select: {
+            id: true,
+            stackImage: true,
+            displayName: true,
+          },
+        },
+      },
     });
     return res.send({ project });
   } catch (e) {
@@ -30,12 +49,22 @@ router.get('/projects/:projectId', async (req, res) => {
 
 router.post('/projects', verifyToken, async (req, res) => {
   try {
+    const { stackIds, ...payload } = req.body;
     const project = await prisma.project.create({
       data: {
-        ...req.body,
+        ...payload,
         profileId: req.user.id,
         stacks: {
-          connect: (req.body.stackIds || []).map((stackId) => stackId),
+          connect: (stackIds || []).map((id) => ({ id })),
+        },
+      },
+      include: {
+        stacks: {
+          select: {
+            id: true,
+            stackImage: true,
+            displayName: true,
+          },
         },
       },
     });
@@ -48,15 +77,29 @@ router.post('/projects', verifyToken, async (req, res) => {
 router.put('/projects/:projectId', verifyToken, async (req, res) => {
   try {
     const { projectId } = req.params;
+    const { stackIds, prevStackIds, ...payload } = req.body;
+    const disconnectingStackIds = prevStackIds.filter(
+      (id) => stackIds.indexOf(id) === -1
+    );
     const project = await prisma.project.update({
       where: {
         id: projectId,
       },
       data: {
-        ...req.body,
+        ...payload,
         profileId: req.user.id,
         stacks: {
-          connect: (req.body.stackIds || []).map((stackId) => stackId),
+          connect: (stackIds || []).map((id) => ({ id })),
+          disconnect: disconnectingStackIds.map((id) => ({ id })),
+        },
+      },
+      include: {
+        stacks: {
+          select: {
+            id: true,
+            stackImage: true,
+            displayName: true,
+          },
         },
       },
     });
@@ -72,6 +115,15 @@ router.delete('/projects/:projectId', verifyToken, async (req, res) => {
     const project = await prisma.project.delete({
       where: {
         id: projectId,
+      },
+      include: {
+        stacks: {
+          select: {
+            id: true,
+            stackImage: true,
+            displayName: true,
+          },
+        },
       },
     });
     return res.send({ project });

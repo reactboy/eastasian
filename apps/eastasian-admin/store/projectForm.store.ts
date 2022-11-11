@@ -7,6 +7,7 @@ export type ProjectInput = {
   body: string;
   bodyJp: string;
   link: string;
+  stackIds: string[];
 };
 
 const initProjectInput = (): ProjectInput => ({
@@ -16,6 +17,7 @@ const initProjectInput = (): ProjectInput => ({
   body: '',
   bodyJp: '',
   link: '',
+  stackIds: [],
 });
 
 type ProjectState = {

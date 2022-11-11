@@ -368,7 +368,8 @@ const ProjectsPanel = () => {
     useProjectInputStore((store) => store);
   const [projects, setprojects] = useState([]);
   const [loading, setLoading] = useState(false);
-  const { stacks, selectedStacks, onClickStack } = useStackSelect();
+  const { stacks, selectedStacks, onClickStack, initSelectedStack } =
+    useStackSelect();
 
   useEffect(() => {
     const fetch = async () => {
@@ -389,10 +390,11 @@ const ProjectsPanel = () => {
 
   const onSubmitCreate = async (d) => {
     try {
-      const { data } = await createProject({ ...d });
+      const { data } = await createProject({ ...d, stackIds: selectedStacks });
       setprojects((prevProjects) => [...prevProjects, data.project]);
       showNotification({ message: 'project created' });
       resetProjectInput();
+      initSelectedStack();
     } catch (e) {
       showNotification({ message: e });
     }
@@ -400,7 +402,11 @@ const ProjectsPanel = () => {
 
   const onSubmitEdit = async (d) => {
     try {
-      const { data } = await updateProject(projectInput.id, { ...d });
+      const { data } = await updateProject(projectInput.id, {
+        ...d,
+        stackIds: selectedStacks,
+        prevStackIds: projectInput.stackIds,
+      });
       setprojects((prevProjects) =>
         prevProjects.map((project) =>
           project.id !== data.project.id ? project : data.project
@@ -408,6 +414,7 @@ const ProjectsPanel = () => {
       );
       showNotification({ message: 'project updated' });
       resetProjectInput();
+      initSelectedStack();
     } catch (e) {
       showNotification({ message: e });
     }
@@ -415,7 +422,11 @@ const ProjectsPanel = () => {
 
   const onEdit = (id: string) => () => {
     const project = projects.find((project) => project.id === id);
-    setProjectInput(project);
+    setProjectInput({
+      ...project,
+      stackIds: project.stacks.map((stack) => stack.id),
+    });
+    initSelectedStack(project.stacks.map((stack) => stack.id));
   };
 
   const onSubmitDelete = (id: string) => async () => {
@@ -432,6 +443,7 @@ const ProjectsPanel = () => {
 
   const onCancel = () => {
     resetProjectInput();
+    initSelectedStack();
   };
 
   return (

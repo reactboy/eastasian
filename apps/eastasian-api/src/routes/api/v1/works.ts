@@ -50,7 +50,6 @@ router.get('/works/:workId', async (req, res) => {
 router.post('/works', verifyToken, async (req, res) => {
   try {
     const { stackIds, ...payload } = req.body;
-    //TODO(eastasian) remove all the duplicates
     const work = await prisma.work.create({
       data: {
         ...payload,
@@ -80,7 +79,7 @@ router.put('/works/:workId', verifyToken, async (req, res) => {
     const { workId } = req.params;
     const { stackIds, prevStackIds, ...payload } = req.body;
     const disconnectingStackIds = prevStackIds.filter(
-      (id) => stackIds.indexOf(id) == -1
+      (id) => stackIds.indexOf(id) === -1
     );
     const work = await prisma.work.update({
       where: {

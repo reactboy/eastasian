@@ -259,6 +259,7 @@ export const ProjectList: FC<ProjectListProps> = (props) => {
             <th>body</th>
             <th>bodyJp</th>
             <th>link</th>
+            <th>stack</th>
           </tr>
         </thead>
         <tbody>
@@ -269,6 +270,29 @@ export const ProjectList: FC<ProjectListProps> = (props) => {
               <td>{project.body}</td>
               <td>{project.bodyJp}</td>
               <td>{project.link}</td>
+              <td>
+                <Box
+                  sx={{
+                    display: 'grid',
+                    gridTemplateColumns: '1fr 1fr 1fr 1fr',
+                    gap: '5px',
+                  }}
+                >
+                  {project.stacks.map((stack) => (
+                    <Avatar
+                      sx={{
+                        width: 24,
+                        height: 24,
+                        img: { objectFit: 'contain' },
+                      }}
+                      key={stack.id}
+                      src={stack.stackImage}
+                    >
+                      {stack.displayName}
+                    </Avatar>
+                  ))}
+                </Box>
+              </td>
               <Box component="td" sx={{ width: '20px' }}>
                 <Box sx={{ display: 'flex', gap: '5px' }}>
                   <ActionIcon onClick={onEdit(project.id)}>
