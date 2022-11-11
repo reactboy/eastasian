@@ -1,6 +1,7 @@
 import { ReactNode, FC, useEffect, useState } from 'react';
 import { Tabs, Title, Box } from '@mantine/core';
 import {
+  listProfile,
   listExperience,
   createExperience,
   updateExperience,
@@ -21,6 +22,7 @@ import {
   createStack,
   updateStack,
   deleteStack,
+  updateProfile,
 } from '@admin/api';
 import { showNotification } from '@admin/libs/mantine';
 import {
@@ -29,6 +31,7 @@ import {
   useEducationInputStore,
   useWorkInputStore,
   useProjectInputStore,
+  useProfileInputStore,
 } from '@admin/store';
 import { uploadFile } from '@admin/libs/supabase';
 
@@ -60,10 +63,66 @@ const PanelLayout: FC<{ title: string; children: ReactNode }> = (props) => {
 };
 
 const AboutPanel = () => {
+  const { profileInput, setProfileInput, resetProfileInput } =
+    useProfileInputStore();
+  const [profiles, setProfiles] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    resetProfileInput();
+  }, []);
+
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        setLoading(true);
+        const { data } = await listProfile();
+        setProfiles([...profiles, ...data.profiles]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetch();
+  }, []);
+
+  const onSubmitEdit = async (d) => {
+    try {
+      const { profileImageFile, ...payload } = d;
+      if (profileImageFile.length) {
+        const file = profileImageFile[0];
+        const publicUrl = await uploadFile('profiles', file);
+        payload.profileImage = publicUrl;
+      }
+      const { data } = await updateProfile(profileInput.id, { ...payload });
+      setProfiles((prevProfiles) =>
+        prevProfiles.map((profile) =>
+          profile.id !== data.profile.id ? profile : data.profile
+        )
+      );
+      resetProfileInput();
+      showNotification({ message: 'profile updated' });
+    } catch (e) {
+      showNotification({ message: e.message });
+    }
+  };
+
+  const onEdit = (id) => () => {
+    const profile = profiles.find((profile) => profile.id === id);
+    setProfileInput(profile);
+  };
+
+  const onCancel = () => {
+    resetProfileInput();
+  };
+
   return (
     <PanelLayout title="About">
-      <AboutForm />
-      <ProfileList />
+      <AboutForm
+        profileInput={profileInput}
+        onSubmit={onSubmitEdit}
+        onCancel={onCancel}
+      />
+      <ProfileList profiles={profiles} loading={loading} onEdit={onEdit} />
     </PanelLayout>
   );
 };

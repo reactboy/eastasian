@@ -15,6 +15,10 @@ model Profile {
     name String
     nameJp String @default("")
     profileImage String? @default("")
+    description String? @default("")
+    descriptionJp String? @default("")
+    snsInstagram String? @default("")
+    snsGithub String? @default("")
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
     experiences Experience[]

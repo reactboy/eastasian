@@ -1,26 +1,15 @@
-import { FC, useEffect, useState } from 'react';
+import { FC } from 'react';
 import { Box, ActionIcon } from '@mantine/core';
 import { Avatar, Table, LoadingOverlay } from '@mantine/core';
 import { IconEdit, IconTrash } from '@tabler/icons';
 
-import { listProfile } from '@admin/api';
-
-export const ProfileList = () => {
-  const [profiles, setProfiles] = useState([]);
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    const fetch = async () => {
-      try {
-        setLoading(true);
-        const { data } = await listProfile();
-        setProfiles([...profiles, ...data.profiles]);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetch();
-  }, []);
+type ProflieListProps = {
+  onEdit: (id: string) => () => void | Promise<void>;
+  loading: boolean;
+  profiles: any[];
+};
+export const ProfileList: FC<ProflieListProps> = (props) => {
+  const { onEdit, loading, profiles } = props;
 
   return (
     <>
@@ -32,6 +21,10 @@ export const ProfileList = () => {
             <th>name</th>
             <th>nameJp</th>
             <th>desciption</th>
+            <th>desciptionJp</th>
+            <th>instagram</th>
+            <th>github</th>
+            <th />
           </tr>
         </thead>
         <tbody>
@@ -44,6 +37,16 @@ export const ProfileList = () => {
                 <td>{profile.name}</td>
                 <td>{profile.nameJp}</td>
                 <td>{profile.description}</td>
+                <td>{profile.descriptionJp}</td>
+                <td>{profile.snsInstagram}</td>
+                <td>{profile.snsGithub}</td>
+                <Box component="td" sx={{ width: '20px' }}>
+                  <Box sx={{ display: 'flex', gap: '5px' }}>
+                    <ActionIcon onClick={onEdit(profile.id)}>
+                      <IconEdit />
+                    </ActionIcon>
+                  </Box>
+                </Box>
               </tr>
             );
           })}

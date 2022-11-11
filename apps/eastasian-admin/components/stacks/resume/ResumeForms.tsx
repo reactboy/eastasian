@@ -8,11 +8,24 @@ import {
   EducationInput,
   WorkInput,
   ProjectInput,
+  ProfileInput,
 } from '@admin/store';
 
 //TODO(eastasian) extract to utils
 const getDefaultDateInput = (date: string) => {
   return date ? format(new Date(date), 'yyyy-MM-dd') : '';
+};
+
+//TODO(eastasian) extract to utils
+const convertBase64 = (file: File) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      resolve(reader.result);
+    };
+    reader.onerror = (error) => reject(error);
+    reader.readAsDataURL(file);
+  });
 };
 
 type BaseResumeFormProps = {
@@ -21,18 +34,54 @@ type BaseResumeFormProps = {
   onCancel?: () => void;
 };
 
-export const AboutForm = () => {
-  const { handleSubmit, register } = useForm({
+type AboutFormProps = {
+  profileInput: ProfileInput;
+} & BaseResumeFormProps;
+
+export const AboutForm: FC<AboutFormProps> = (props) => {
+  const { profileInput, onSubmit, onCancel } = props;
+  const [profileImage, setProfileImage] = useState<string>(
+    profileInput.profileImage
+  );
+
+  console.log(profileInput, profileImage);
+
+  const { handleSubmit, register, reset, watch } = useForm({
     defaultValues: {
-      name: '',
-      nameJp: '',
-      profileImage: '',
-      description: '',
+      name: profileInput.name,
+      nameJp: profileInput.nameJp,
+      description: profileInput.description,
+      descriptionJp: profileInput.descriptionJp,
+      snsInstagram: profileInput.snsInstagram,
+      snsGithub: profileInput.snsGithub,
+      profileImageFile: [],
     },
   });
-  const onSubmit = async (d) => {
-    console.log(d);
-  };
+
+  useEffect(() => {
+    reset({
+      name: profileInput.name,
+      nameJp: profileInput.nameJp,
+      description: profileInput.description,
+      descriptionJp: profileInput.descriptionJp,
+      snsInstagram: profileInput.snsInstagram,
+      snsGithub: profileInput.snsGithub,
+      profileImageFile: [],
+    });
+    setProfileImage(profileInput.profileImage);
+  }, [profileInput]);
+
+  useEffect(() => {
+    const subscription = watch(async (value, { name }) => {
+      if (name !== 'profileImageFile') return;
+      if (!value.profileImageFile.length) return;
+      const file = value.profileImageFile[0];
+      const base64 = (await convertBase64(file)) as string;
+      setProfileImage(base64);
+    });
+    return () => subscription.unsubscribe();
+  }, [watch]);
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Box>
@@ -48,23 +97,46 @@ export const AboutForm = () => {
           placeholder="nameJp"
           {...register('nameJp')}
         />
-        <TextInput
-          label="profileImage"
-          name="profileImage"
-          placeholder="profileImage"
-          {...register('profileImage')}
-        />
-        <TextInput
+        <Textarea
           label="description"
           name="description"
           placeholder="about me"
           {...register('description')}
         />
+        <Textarea
+          label="descriptionJp"
+          name="descriptionJp"
+          placeholder="about me"
+          {...register('descriptionJp')}
+        />
+        <TextInput
+          label="github"
+          name="snsGithub"
+          placeholder="github"
+          {...register('snsGithub')}
+        />
+        <TextInput
+          label="instagram"
+          name="snsInstagram"
+          placeholder="instagram"
+          {...register('snsInstagram')}
+        />
+        <TextInput
+          label="profileImage"
+          name="profileImageFile"
+          placeholder="profileImage"
+          type="file"
+          {...register('profileImageFile')}
+        />
+        <Avatar src={profileImage} sx={{ img: { objectFit: 'contain' } }} />
       </Box>
-      <Box sx={{ marginTop: '10px' }}>
-        <Button sx={{ marginLeft: 'auto', display: 'block' }} type="submit">
-          submit
-        </Button>
+      <Box sx={{ marginTop: '10px', display: 'flex' }}>
+        {profileInput.id && <Button onClick={onCancel}>cancel</Button>}
+        {profileInput.id && (
+          <Button sx={{ marginLeft: 'auto', display: 'block' }} type="submit">
+            submit
+          </Button>
+        )}
       </Box>
     </form>
   );
@@ -396,18 +468,6 @@ export const ProjectForm: FC<ProjectFormProps> = (props) => {
       </Box>
     </form>
   );
-};
-
-//TODO(eastasian) extract to utils
-const convertBase64 = (file: File) => {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      resolve(reader.result);
-    };
-    reader.onerror = (error) => reject(error);
-    reader.readAsDataURL(file);
-  });
 };
 
 type StackFormProps = { stackInput: StackInput } & BaseResumeFormProps;

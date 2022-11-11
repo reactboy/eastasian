@@ -34,12 +34,9 @@ router.get('/profiles/:profileId', async (req, res) => {
 
 router.post('/profiles', verifyToken, async (req, res) => {
   try {
-    const { name, nameJp, profileImage = '' } = req.body;
     const profile = await prisma.profile.create({
       data: {
-        name,
-        nameJp,
-        profileImage,
+        ...req.body,
       },
     });
     return res.send({
@@ -53,15 +50,12 @@ router.post('/profiles', verifyToken, async (req, res) => {
 router.put('/profiles/:profileId', verifyToken, async (req, res) => {
   try {
     const { profileId } = req.params;
-    const { name, nameJp, profileImage = '' } = req.body;
     const profile = await prisma.profile.update({
       where: {
         id: profileId,
       },
       data: {
-        name,
-        nameJp,
-        profileImage,
+        ...req.body,
       },
     });
     return res.send({
