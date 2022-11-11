@@ -5,7 +5,7 @@ export type StackInput = {
   name: string;
   displayName: string;
   link: string;
-  stackImage: '';
+  stackImage: string;
 };
 
 const initStackInput = (): StackInput => ({

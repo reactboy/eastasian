@@ -197,7 +197,29 @@ export const WorkList: FC<WorkListProps> = (props) => {
               <td>{work.body}</td>
               <td>{work.bodyJp}</td>
               <td>{work.link}</td>
-              <td>stacks</td>
+              <td>
+                <Box
+                  sx={{
+                    display: 'grid',
+                    gridTemplateColumns: '1fr 1fr 1fr 1fr',
+                    gap: '5px',
+                  }}
+                >
+                  {work.stacks.map((stack) => (
+                    <Avatar
+                      sx={{
+                        width: 24,
+                        height: 24,
+                        img: { objectFit: 'contain' },
+                      }}
+                      key={stack.id}
+                      src={stack.stackImage}
+                    >
+                      {stack.displayName}
+                    </Avatar>
+                  ))}
+                </Box>
+              </td>
               <Box component="td" sx={{ width: '20px' }}>
                 <Box sx={{ display: 'flex', gap: '5px' }}>
                   <ActionIcon onClick={onEdit(work.id)}>

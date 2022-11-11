@@ -8,10 +8,9 @@ type Stack = {
   stackImage: string;
 };
 
-export const useStackSelect = (initSelectedStacks: Stack['id'][] = []) => {
+export const useStackSelect = () => {
   const [stacks, setStacks] = useState<Stack[]>([]);
-  const [selectedStacks, setSelectedStacks] =
-    useState<Stack['id'][]>(initSelectedStacks);
+  const [selectedStacks, setSelectedStacks] = useState<Stack['id'][]>([]);
 
   useEffect(() => {
     (async () => {
@@ -23,6 +22,7 @@ export const useStackSelect = (initSelectedStacks: Stack['id'][] = []) => {
       }
     })();
   }, []);
+
   const onClickStack = (id: string) => () => {
     if (!selectedStacks.includes(id))
       return setSelectedStacks((prevSelectedStacks) => [
@@ -34,10 +34,15 @@ export const useStackSelect = (initSelectedStacks: Stack['id'][] = []) => {
     );
   };
 
+  const initSelectedStack = (initialStacks: Stack['id'][] = []) => {
+    setSelectedStacks(initialStacks);
+  };
+
   return {
     stacks,
     selectedStacks,
     onClickStack,
+    initSelectedStack,
   };
 };
 

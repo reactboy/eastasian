@@ -7,7 +7,17 @@ const router = express.Router();
 
 router.get('/works', async (_req, res) => {
   try {
-    const works = await prisma.work.findMany();
+    const works = await prisma.work.findMany({
+      include: {
+        stacks: {
+          select: {
+            id: true,
+            stackImage: true,
+            displayName: true,
+          },
+        },
+      },
+    });
     return res.send({ works });
   } catch (e) {
     return res.status(500).send({ e });
@@ -21,6 +31,15 @@ router.get('/works/:workId', async (req, res) => {
       where: {
         id: workId,
       },
+      include: {
+        stacks: {
+          select: {
+            id: true,
+            stackImage: true,
+            displayName: true,
+          },
+        },
+      },
     });
     return res.send({ work });
   } catch (e) {
@@ -30,12 +49,23 @@ router.get('/works/:workId', async (req, res) => {
 
 router.post('/works', verifyToken, async (req, res) => {
   try {
+    const { stackIds, ...payload } = req.body;
+    //TODO(eastasian) remove all the duplicates
     const work = await prisma.work.create({
       data: {
-        ...req.body,
+        ...payload,
         profileId: req.user.id,
         stacks: {
-          connect: (req.body.stackIds || []).map((stackId) => stackId),
+          connect: (stackIds || []).map((id) => ({ id })),
+        },
+      },
+      include: {
+        stacks: {
+          select: {
+            id: true,
+            stackImage: true,
+            displayName: true,
+          },
         },
       },
     });
@@ -48,15 +78,29 @@ router.post('/works', verifyToken, async (req, res) => {
 router.put('/works/:workId', verifyToken, async (req, res) => {
   try {
     const { workId } = req.params;
+    const { stackIds, prevStackIds, ...payload } = req.body;
+    const disconnectingStackIds = prevStackIds.filter(
+      (id) => stackIds.indexOf(id) == -1
+    );
     const work = await prisma.work.update({
       where: {
         id: workId,
       },
       data: {
-        ...req.body,
+        ...payload,
         profileId: req.user.id,
         stacks: {
-          connect: (req.body.stackIds || []).map((stackId) => stackId),
+          connect: (stackIds || []).map((id) => ({ id })),
+          disconnect: disconnectingStackIds.map((id) => ({ id })),
+        },
+      },
+      include: {
+        stacks: {
+          select: {
+            id: true,
+            stackImage: true,
+            displayName: true,
+          },
         },
       },
     });
@@ -72,6 +116,15 @@ router.delete('/works/:workId', verifyToken, async (req, res) => {
     const work = await prisma.work.delete({
       where: {
         id: workId,
+      },
+      include: {
+        stacks: {
+          select: {
+            id: true,
+            stackImage: true,
+            displayName: true,
+          },
+        },
       },
     });
     return res.send({ work });

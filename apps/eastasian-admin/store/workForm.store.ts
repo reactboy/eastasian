@@ -7,6 +7,7 @@ export type WorkInput = {
   body: string;
   bodyJp: string;
   link: string;
+  stackIds: string[];
 };
 
 const initWorkInput = (): WorkInput => ({
@@ -16,6 +17,7 @@ const initWorkInput = (): WorkInput => ({
   body: '',
   bodyJp: '',
   link: '',
+  stackIds: [],
 });
 
 type WorkState = {

@@ -266,7 +266,8 @@ const WorksPanel = () => {
   );
   const [works, setWorks] = useState([]);
   const [loading, setLoading] = useState(false);
-  const { stacks, selectedStacks, onClickStack } = useStackSelect();
+  const { stacks, selectedStacks, onClickStack, initSelectedStack } =
+    useStackSelect();
 
   useEffect(() => {
     const fetch = async () => {
@@ -283,14 +284,16 @@ const WorksPanel = () => {
 
   useEffect(() => {
     resetWorkInput();
+    initSelectedStack();
   }, []);
 
   const onSubmitCreate = async (d) => {
     try {
-      const { data } = await createWork({ ...d });
+      const { data } = await createWork({ ...d, stackIds: selectedStacks });
       setWorks((prevWorks) => [...prevWorks, data.work]);
       showNotification({ message: 'work created' });
       resetWorkInput();
+      initSelectedStack();
     } catch (e) {
       showNotification({ message: e });
     }
@@ -298,12 +301,17 @@ const WorksPanel = () => {
 
   const onSubmitEdit = async (d) => {
     try {
-      const { data } = await updateWork(workInput.id, { ...d });
+      const { data } = await updateWork(workInput.id, {
+        ...d,
+        stackIds: selectedStacks,
+        prevStackIds: workInput.stackIds,
+      });
       setWorks((prevWorks) =>
         prevWorks.map((work) => (work.id !== data.work.id ? work : data.work))
       );
       showNotification({ message: 'work updated' });
       resetWorkInput();
+      initSelectedStack();
     } catch (e) {
       showNotification({ message: e });
     }
@@ -311,7 +319,8 @@ const WorksPanel = () => {
 
   const onEdit = (id: string) => () => {
     const work = works.find((work) => work.id === id);
-    setWorkInput(work);
+    setWorkInput({ ...work, stackIds: work.stacks.map((stack) => stack.id) });
+    initSelectedStack(work.stacks.map((stack) => stack.id));
   };
 
   const onSubmitDelete = (id: string) => async () => {
@@ -320,6 +329,7 @@ const WorksPanel = () => {
       setWorks((prevWorks) => prevWorks.filter((work) => work.id !== id));
       showNotification({ message: 'work deleted' });
       resetWorkInput();
+      initSelectedStack();
     } catch (e) {
       showNotification({ message: e });
     }
@@ -327,6 +337,7 @@ const WorksPanel = () => {
 
   const onCancel = () => {
     resetWorkInput();
+    initSelectedStack();
   };
 
   return (
