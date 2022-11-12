@@ -25,7 +25,7 @@ const baseCss = css`
   }
 `;
 
-function Eastasian({ Component, pageProps }: AppProps) {
+const Eastasian = ({ Component, pageProps }: AppProps) => {
   return (
     <ReduxProvider store={store}>
       <Head>
@@ -39,6 +39,6 @@ function Eastasian({ Component, pageProps }: AppProps) {
       </main>
     </ReduxProvider>
   );
-}
+};
 
 export default Eastasian;

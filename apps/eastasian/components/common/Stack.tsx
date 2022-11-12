@@ -2,63 +2,7 @@ import { FC } from 'react';
 import styled from '@emotion/styled';
 import Image from 'next/image';
 
-const getStackIconPath = (name: string) => {
-  return `/assets/stacks/${name}.svg`;
-};
-
-const STACKS = {
-  amplify: getStackIconPath('amplify'),
-  angular: getStackIconPath('angular'),
-  apollo: getStackIconPath('apollo'),
-  aws: getStackIconPath('aws'),
-  capacitor: getStackIconPath('capacitor'),
-  css: getStackIconPath('css'),
-  deno: getStackIconPath('deno'),
-  django: getStackIconPath('django'),
-  excel: getStackIconPath('excel'),
-  fastify: getStackIconPath('fastify'),
-  figma: getStackIconPath('figma'),
-  firebase: getStackIconPath('firebase'),
-  gatsby: getStackIconPath('gatsby'),
-  gcp: getStackIconPath('gcp'),
-  git: getStackIconPath('git'),
-  go: getStackIconPath('go'),
-  graphql: getStackIconPath('graphql'),
-  hasura: getStackIconPath('hasura'),
-  html: getStackIconPath('html'),
-  illustrator: getStackIconPath('illustrator'),
-  javascript: getStackIconPath('javascript'),
-  jira: getStackIconPath('jira'),
-  jquery: getStackIconPath('jquery'),
-  laravel: getStackIconPath('laravel'),
-  materialUi: getStackIconPath('material-ui'),
-  meteor: getStackIconPath('meteor'),
-  mongodb: getStackIconPath('mongodb'),
-  nest: getStackIconPath('nest'),
-  next: getStackIconPath('next'),
-  node: getStackIconPath('node'),
-  nx: getStackIconPath('nx'),
-  photoshop: getStackIconPath('photoshop'),
-  php: getStackIconPath('php'),
-  prisma: getStackIconPath('prisma'),
-  python: getStackIconPath('python'),
-  react: getStackIconPath('react'),
-  redis: getStackIconPath('redis'),
-  redux: getStackIconPath('redux'),
-  ruby: getStackIconPath('ruby'),
-  sass: getStackIconPath('sass'),
-  semanticUi: getStackIconPath('semantic-ui'),
-  solidity: getStackIconPath('solidity'),
-  socketio: getStackIconPath('socket-io'),
-  supabase: getStackIconPath('supabase'),
-  spreadsheet: getStackIconPath('spreadsheet'),
-  tailwind: getStackIconPath('tailwind'),
-  threejs: getStackIconPath('threejs'),
-  typescript: getStackIconPath('typescript'),
-  vue: getStackIconPath('vue'),
-  wordpress: getStackIconPath('wordpress'),
-  xd: getStackIconPath('xd'),
-};
+import { Stack as StackType } from '@resume/types';
 
 const StyledStack = styled.div`
   display: flex;
@@ -68,20 +12,14 @@ const StyledStack = styled.div`
   }
 `;
 
-type StackProps = {
-  name: string;
-  displayName: string;
-  link?: string;
-};
+type StackProps = Partial<StackType>;
 
 export const Stack: FC<StackProps> = (props) => {
-  //TODO(eastasian) stacksのマスタを作成したらpropsのインターフェースを更新する
-  const { name, displayName } = props;
-  const iconPath = STACKS[name];
+  const { name, displayName, stackImage } = props;
   return (
     <StyledStack>
-      {!!iconPath && (
-        <Image src={iconPath} width="16px" height="16px" alt={name} />
+      {!!stackImage && (
+        <Image src={stackImage} width="16px" height="16px" alt={name} />
       )}
       <p className="stack__name">{displayName}</p>
     </StyledStack>

@@ -1,14 +1,18 @@
+import { NextPage } from 'next';
 import styled from '@emotion/styled';
 
 import { LanguageSwitch } from '@resume/components/common';
 import { Header, Footer } from '@resume/components/layout';
 import {
-  AboutMe,
-  WorkExperience,
-  Education,
-  Works,
-  ExperiencedStacks,
+  AboutMeSection,
+  WorkExperienceSection,
+  EducationSection,
+  WorksSection,
+  ExperiencedStacksSection,
+  ProjectsSection,
 } from '@resume/components/stack/resume';
+import { readResume } from '@resume/api';
+import { Resume } from '@resume/types';
 
 const StyledPage = styled.div`
   .resume-content {
@@ -17,7 +21,7 @@ const StyledPage = styled.div`
     margin: 0 auto;
     margin-top: -20px;
     padding: 0 8px;
-    & > *:not(:first-child) {
+    & > *:not(:first-of-type) {
       margin-top: 24px;
     }
   }
@@ -28,23 +32,50 @@ const StyledPage = styled.div`
   }
 `;
 
-export function Index() {
+export const getServerSideProps = async (_context) => {
+  const profileId = process.env['PROFILE_ID'];
+  try {
+    const {
+      data: { resume },
+    } = await readResume(profileId);
+    return {
+      props: {
+        resume,
+      },
+    };
+  } catch (error) {
+    return {
+      props: { error: error.message },
+    };
+  }
+};
+
+type Props = {
+  resume: Resume;
+};
+
+export const Index: NextPage<Props> = (props) => {
+  const {
+    resume: { experiences, education, projects, works, stacks, ...profile },
+  } = props;
+  console.log(props.resume);
   return (
     <StyledPage>
-      <Header />
+      <Header profile={profile} />
       <div className="language-switch-wrapper">
         <LanguageSwitch />
       </div>
       <div className="resume-content">
-        <AboutMe />
-        <WorkExperience />
-        <Education />
-        <Works />
-        <ExperiencedStacks />
+        <AboutMeSection profile={profile} />
+        <WorkExperienceSection experiences={experiences} />
+        <EducationSection education={education} />
+        <ProjectsSection projects={projects} />
+        <WorksSection works={works} />
+        <ExperiencedStacksSection stacks={stacks} />
       </div>
       <Footer />
     </StyledPage>
   );
-}
+};
 
 export default Index;

@@ -10,6 +10,7 @@ import {
   educations,
   experiences,
   auth,
+  resume,
 } from '@api/routes/api/v1';
 
 const app = express();
@@ -32,6 +33,7 @@ app.use(API_ROOT, works);
 app.use(API_ROOT, educations);
 app.use(API_ROOT, experiences);
 app.use(API_ROOT, auth);
+app.use(API_ROOT, resume);
 
 const port = process.env.port || 3333;
 const server = app.listen(port, () => {
