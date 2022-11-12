@@ -58,7 +58,6 @@ export const Index: NextPage<Props> = (props) => {
   const {
     resume: { experiences, education, projects, works, stacks, ...profile },
   } = props;
-  console.log(props.resume);
   return (
     <StyledPage>
       <Header profile={profile} />

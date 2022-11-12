@@ -13,6 +13,7 @@ import {
   Work,
   Stack as StackType,
 } from '@resume/types';
+import { formatDateText } from '@resume/libs/date';
 
 const StyledResumeBlock = styled.section`
   .resume-block__heading {
@@ -127,13 +128,16 @@ const ExperienceCard: FC<ExperienceCardProps> = (props) => {
         <span className="experience-card__location ">{location}</span>
       </p>
       <p className="experience-card__date">
-        <span className="experience-card__startDate">{startDate}</span> -{' '}
+        <span className="experience-card__startDate">
+          {formatDateText(startDate, 'yyyy-MM')}
+        </span>{' '}
+        -{' '}
         <span
           className={`experience-card__endDate ${
             !endDate && 'experience-card__endDate--present'
           }`}
         >
-          {endDate ? endDate : 'present'}
+          {endDate ? formatDateText(endDate, 'yyyy-MM') : 'present'}
         </span>
       </p>
       <div className="experience-card__body">{children}</div>
