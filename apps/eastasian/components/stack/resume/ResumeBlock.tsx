@@ -129,7 +129,7 @@ const ExperienceCard: FC<ExperienceCardProps> = (props) => {
       </p>
       <p className="experience-card__date">
         <span className="experience-card__startDate">
-          {formatDateText(startDate, 'yyyy-MM')}
+          {formatDateText(startDate, 'yyyy')}
         </span>{' '}
         -{' '}
         <span
@@ -137,7 +137,7 @@ const ExperienceCard: FC<ExperienceCardProps> = (props) => {
             !endDate && 'experience-card__endDate--present'
           }`}
         >
-          {endDate ? formatDateText(endDate, 'yyyy-MM') : 'present'}
+          {endDate ? formatDateText(endDate, 'yyyy') : 'present'}
         </span>
       </p>
       <div className="experience-card__body">{children}</div>
