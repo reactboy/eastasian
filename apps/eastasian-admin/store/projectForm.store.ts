@@ -7,6 +7,8 @@ export type ProjectInput = {
   body: string;
   bodyJp: string;
   link: string;
+  startDate: string;
+  endDate: string;
   stackIds: string[];
 };
 
@@ -17,6 +19,8 @@ const initProjectInput = (): ProjectInput => ({
   body: '',
   bodyJp: '',
   link: '',
+  startDate: '',
+  endDate: '',
   stackIds: [],
 });
 

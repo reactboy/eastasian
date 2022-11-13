@@ -59,6 +59,8 @@ export type Project = {
   body: string;
   bodyJp: string;
   link: string;
+  startDate: string;
+  endDate: string | null;
   stacks: Stack[];
   createdAt: string;
   updatedAt: string;
@@ -72,6 +74,7 @@ export type Work = {
   body: string;
   bodyJp: string;
   link: string;
+  github: string;
   stacks: Stack[];
   createdAt: string;
   updatedAt: string;

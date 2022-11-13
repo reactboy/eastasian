@@ -449,7 +449,12 @@ const ProjectsPanel = () => {
 
   const onSubmitCreate = async (d) => {
     try {
-      const { data } = await createProject({ ...d, stackIds: selectedStacks });
+      const { data } = await createProject({
+        ...d,
+        startDate: new Date(d.startDate).toISOString(),
+        endDate: d.endDate ? new Date(d.endDate).toISOString() : null,
+        stackIds: selectedStacks,
+      });
       setprojects((prevProjects) => [...prevProjects, data.project]);
       showNotification({ message: 'project created' });
       resetProjectInput();
@@ -463,6 +468,8 @@ const ProjectsPanel = () => {
     try {
       const { data } = await updateProject(projectInput.id, {
         ...d,
+        startDate: new Date(d.startDate).toISOString(),
+        endDate: d.endDate ? new Date(d.endDate).toISOString() : null,
         stackIds: selectedStacks,
         prevStackIds: projectInput.stackIds,
       });

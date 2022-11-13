@@ -30,8 +30,7 @@ const convertBase64 = (file: File) => {
 
 type BaseResumeFormProps = {
   onSubmit: (d) => Promise<void>;
-  //TODO(eastasian) remove optional
-  onCancel?: () => void;
+  onCancel: () => void;
 };
 
 type AboutFormProps = {
@@ -340,6 +339,7 @@ export const WorkForm: FC<WorkFormProps> = (props) => {
       body: workInput.body,
       bodyJp: workInput.bodyJp,
       link: workInput.link,
+      github: workInput.github,
     },
   });
 
@@ -350,6 +350,7 @@ export const WorkForm: FC<WorkFormProps> = (props) => {
       body: workInput.body,
       bodyJp: workInput.bodyJp,
       link: workInput.link,
+      github: workInput.github,
     });
   }, [workInput]);
 
@@ -386,6 +387,12 @@ export const WorkForm: FC<WorkFormProps> = (props) => {
           placeholder="link"
           {...register('link')}
         />
+        <TextInput
+          label="github"
+          name="github"
+          placeholder="github"
+          {...register('github')}
+        />
       </Box>
       {children}
       <Box sx={{ marginTop: '10px', display: 'flex' }}>
@@ -412,6 +419,8 @@ export const ProjectForm: FC<ProjectFormProps> = (props) => {
       body: projectInput.body,
       bodyJp: projectInput.bodyJp,
       link: projectInput.link,
+      startDate: getDefaultDateInput(projectInput.startDate),
+      endDate: getDefaultDateInput(projectInput.endDate),
     },
   });
 
@@ -422,6 +431,8 @@ export const ProjectForm: FC<ProjectFormProps> = (props) => {
       body: projectInput.body,
       bodyJp: projectInput.bodyJp,
       link: projectInput.link,
+      startDate: getDefaultDateInput(projectInput.startDate),
+      endDate: getDefaultDateInput(projectInput.endDate),
     });
   }, [projectInput]);
 
@@ -457,6 +468,20 @@ export const ProjectForm: FC<ProjectFormProps> = (props) => {
           name="link"
           placeholder="link"
           {...register('link')}
+        />
+        <TextInput
+          label="startDate"
+          name="startDate"
+          placeholder="startDate"
+          type="date"
+          {...register('startDate')}
+        />
+        <TextInput
+          label="endDate"
+          name="endDate"
+          placeholder="endDate"
+          type="date"
+          {...register('endDate')}
         />
       </Box>
       {children}

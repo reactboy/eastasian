@@ -206,6 +206,11 @@ export const EducationSection: FC<EducationSectionProps> = (props) => {
 const StyledWorksCard = styled.div`
   padding: 8px;
 
+  .works-card__header {
+    display: flex;
+    justify-content: space-between;
+  }
+
   .works-card__title {
     font-size: 18px;
     font-weight: 500;
@@ -217,6 +222,13 @@ const StyledWorksCard = styled.div`
     margin-left: 2px;
     display: flex;
     align-items: center;
+  }
+
+  .works-card__date {
+    margin-top: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    color: ${COLOR['sedondary']};
   }
 
   .works-card__body {
@@ -242,26 +254,52 @@ type WorksCardProps = {
   title: string;
   link?: string;
   stacks: StackType[];
+  startDate?: string;
+  endDate?: string;
+  github?: string;
   children: ReactNode;
 };
 
 const WorksCard: FC<WorksCardProps> = (props) => {
-  const { title, link, stacks, children } = props;
+  const { title, link, stacks, startDate, endDate, github, children } = props;
+
   return (
     <StyledWorksCard>
-      <p className="works-card__title">
-        <span>{title}</span>
-        {!!link && (
-          <a
-            className="works-card__link"
-            href={link}
-            target="_blunk"
-            rel="noopener norefferer"
-          >
-            <Icon name="linkDark" width="16px" height="16px" />
+      <div className="works-card__header">
+        <p className="works-card__title">
+          <span>{title}</span>
+          {!!link && (
+            <a
+              className="works-card__link"
+              href={link}
+              target="_blunk"
+              rel="noopener norefferer"
+            >
+              <Icon name="linkDark" width="16px" height="16px" />
+            </a>
+          )}
+        </p>
+        {github && (
+          <a href={github} target="_blunk" rel="noopener norefferer">
+            <Icon name="githubDark" width="20px" height="20px" />
           </a>
         )}
-      </p>
+      </div>
+      {(startDate || endDate) && (
+        <p className="works-card__date">
+          <span className="works-card__startDate">
+            {formatDateText(startDate, 'yyyy.MM')}
+          </span>{' '}
+          -{' '}
+          <span
+            className={`works-card__endDate ${
+              !endDate && 'works-card__endDate--present'
+            }`}
+          >
+            {endDate ? formatDateText(endDate, 'yyyy.MM') : 'present'}
+          </span>
+        </p>
+      )}
       <div className="works-card__body">{children}</div>
       <ul className="works-card__stacks">
         {stacks.map((stack, i) => {
@@ -306,6 +344,7 @@ export const WorksSection: FC<WorksSectionProps> = (props) => {
             title={work.title}
             stacks={work.stacks}
             link={work.link}
+            github={work.github}
           >
             {ln === 'ja' && <p>{work.bodyJp}</p>}
             {ln === 'en' && <p>{work.body}</p>}
@@ -332,6 +371,8 @@ export const ProjectsSection: FC<ProjectsSectionProps> = (props) => {
             title={project.title}
             stacks={project.stacks}
             link={project.link}
+            startDate={project.startDate}
+            endDate={project.endDate}
           >
             {ln === 'ja' && <p>{project.bodyJp}</p>}
             {ln === 'en' && <p>{project.body}</p>}

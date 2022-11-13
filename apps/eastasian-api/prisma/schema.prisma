@@ -77,6 +77,7 @@ model Work {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
     link String @default("")
+    github String @default("")
     profile Profile @relation(fields: [profileId], references: [id])
     profileId String
     stacks Stack[]
@@ -87,6 +88,8 @@ model Project {
     titleJp String @default("")
     body String
     bodyJp String @default("")
+    startDate DateTime @default(now())
+    endDate DateTime?
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
     link String @default("")

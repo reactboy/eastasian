@@ -189,6 +189,7 @@ export const WorkList: FC<WorkListProps> = (props) => {
             <th>bodyJp</th>
             <th>link</th>
             <th>stacks</th>
+            <th>github</th>
             <th />
           </tr>
         </thead>
@@ -200,6 +201,7 @@ export const WorkList: FC<WorkListProps> = (props) => {
               <td>{work.body}</td>
               <td>{work.bodyJp}</td>
               <td>{work.link}</td>
+              <td>{work.github}</td>
               <td>
                 <Box
                   sx={{
@@ -262,6 +264,8 @@ export const ProjectList: FC<ProjectListProps> = (props) => {
             <th>body</th>
             <th>bodyJp</th>
             <th>link</th>
+            <th>startDate</th>
+            <th>endDate</th>
             <th>stack</th>
           </tr>
         </thead>
@@ -273,6 +277,8 @@ export const ProjectList: FC<ProjectListProps> = (props) => {
               <td>{project.body}</td>
               <td>{project.bodyJp}</td>
               <td>{project.link}</td>
+              <td>{project.startDate}</td>
+              <td>{project.endDate}</td>
               <td>
                 <Box
                   sx={{
