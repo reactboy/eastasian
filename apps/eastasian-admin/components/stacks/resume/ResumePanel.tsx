@@ -55,7 +55,7 @@ import {
 const PanelLayout: FC<{ title: string; children: ReactNode }> = (props) => {
   const { children, title } = props;
   return (
-    <Box>
+    <Box sx={{ padding: '8px' }}>
       <Title size="h2">{title}</Title>
       <Box>{children}</Box>
     </Box>

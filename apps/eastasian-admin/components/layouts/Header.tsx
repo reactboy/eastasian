@@ -33,6 +33,7 @@ export const Header = () => {
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
+          padding: '0 8px',
         }}
       >
         <Title>eastasian admin</Title>

@@ -10,7 +10,7 @@ function EastasianAdmin({ Component, pageProps }: AppProps) {
         <title>eastasian admin</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <MantineProvider>
+      <MantineProvider withNormalizeCSS>
         <NotificationsProvider position="top-right" autoClose={3000}>
           <main className="app">
             <Component {...pageProps} />

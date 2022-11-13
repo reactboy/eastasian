@@ -1,7 +1,96 @@
-import { FC } from 'react';
-import { Box, ActionIcon } from '@mantine/core';
-import { Avatar, Table, LoadingOverlay } from '@mantine/core';
+import { FC, ReactNode } from 'react';
+import {
+  Text,
+  Box,
+  ActionIcon,
+  List,
+  Avatar,
+  Table,
+  LoadingOverlay,
+} from '@mantine/core';
 import { IconEdit, IconTrash } from '@tabler/icons';
+
+import { getDefaultDate } from '@admin/libs/date';
+
+const CardLabel: FC<{ children: ReactNode }> = (props) => {
+  const { children } = props;
+  return (
+    <Text
+      sx={{
+        display: 'inline-block',
+        backgroundColor: '#E7F5FF',
+        color: '#1C7ED6',
+        padding: '2px 4px',
+        borderRadius: '12px',
+        fontSize: '12px',
+        fontWeight: 'bold',
+      }}
+    >
+      {children}
+    </Text>
+  );
+};
+
+const CardList: FC<{ children: ReactNode }> = (props) => {
+  const { children } = props;
+  return <List sx={{ listStyle: 'none' }}>{children}</List>;
+};
+
+const CardListItem: FC<{
+  children: ReactNode;
+  onEdit: () => void | Promise<void>;
+  onDelete?: () => void | Promise<void>;
+}> = (props) => {
+  const { children, onEdit, onDelete } = props;
+  return (
+    <List.Item
+      sx={{
+        padding: '12px',
+        boxSizing: 'border-box',
+        border: '2px solid #E9ECEF',
+        borderRadius: '8px',
+        position: 'relative',
+        ':not(:first-of-type)': {
+          marginTop: '8px',
+        },
+      }}
+    >
+      {children}
+      <Box
+        sx={{
+          display: 'flex',
+          gap: '5px',
+          position: 'absolute',
+          top: '0',
+          right: '4px',
+        }}
+      >
+        <ActionIcon onClick={onEdit}>
+          <IconEdit />
+        </ActionIcon>
+        {onDelete && (
+          <ActionIcon onClick={onDelete} color="red">
+            <IconTrash />
+          </ActionIcon>
+        )}
+      </Box>
+    </List.Item>
+  );
+};
+
+const CardListItemTitle: FC<{ children: ReactNode }> = (props) => {
+  const { children } = props;
+  return (
+    <Text sx={{ fontWeight: 'bold', fontSize: '18px', color: '#1864AB' }}>
+      {children}
+    </Text>
+  );
+};
+
+const CardItemBodyText: FC<{ children: ReactNode }> = (props) => {
+  const { children } = props;
+  return <Text sx={{ whiteSpace: 'pre-wrap' }}>{children}</Text>;
+};
 
 type ProflieListProps = {
   onEdit: (id: string) => () => void | Promise<void>;
@@ -14,44 +103,35 @@ export const ProfileList: FC<ProflieListProps> = (props) => {
   return (
     <>
       <LoadingOverlay visible={loading} />
-      <Table>
-        <thead>
-          <tr>
-            <th>profile</th>
-            <th>name</th>
-            <th>nameJp</th>
-            <th>desciption</th>
-            <th>desciptionJp</th>
-            <th>instagram</th>
-            <th>github</th>
-            <th />
-          </tr>
-        </thead>
-        <tbody>
-          {profiles.map((profile, i) => {
-            return (
-              <tr key={i}>
-                <td>
-                  <Avatar src={profile.profileImage} />
-                </td>
-                <td>{profile.name}</td>
-                <td>{profile.nameJp}</td>
-                <td>{profile.description}</td>
-                <td>{profile.descriptionJp}</td>
-                <td>{profile.snsInstagram}</td>
-                <td>{profile.snsGithub}</td>
-                <Box component="td" sx={{ width: '20px' }}>
-                  <Box sx={{ display: 'flex', gap: '5px' }}>
-                    <ActionIcon onClick={onEdit(profile.id)}>
-                      <IconEdit />
-                    </ActionIcon>
-                  </Box>
+
+      <CardList>
+        {profiles.map((profile, i) => {
+          return (
+            <CardListItem key={i} onEdit={onEdit(profile.id)}>
+              <Box sx={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
+                <Avatar src={profile.profileImage} />
+                <CardListItemTitle>
+                  {profile.name} / {profile.nameJp}
+                </CardListItemTitle>
+              </Box>
+              <CardLabel>descriptionJp</CardLabel>
+              <CardItemBodyText>{profile.description}</CardItemBodyText>
+              <CardLabel>descriptionJp</CardLabel>
+              <CardItemBodyText>{profile.descriptionJp}</CardItemBodyText>
+              <Box sx={{ display: 'flex', gap: '20px' }}>
+                <Box>
+                  <CardLabel>instagram</CardLabel>
+                  <Text color="blue">{profile.snsInstagram}</Text>
                 </Box>
-              </tr>
-            );
-          })}
-        </tbody>
-      </Table>
+                <Box>
+                  <CardLabel>github</CardLabel>
+                  <Text color="blue">{profile.snsGithub}</Text>
+                </Box>
+              </Box>
+            </CardListItem>
+          );
+        })}
+      </CardList>
     </>
   );
 };
@@ -69,45 +149,39 @@ export const ExperienceList: FC<ExperienceListProps> = (props) => {
   return (
     <>
       <LoadingOverlay visible={loading} />
-      <Table>
-        <thead>
-          <tr>
-            <th>title</th>
-            <th>titleJp</th>
-            <th>body</th>
-            <th>bodyJp</th>
-            <th>organization</th>
-            <th>location</th>
-            <th>startDate</th>
-            <th>endDate</th>
-            <th />
-          </tr>
-        </thead>
-        <tbody>
-          {experiences.map((experience, i) => (
-            <tr key={experience.id}>
-              <td>{experience.title}</td>
-              <td>{experience.titleJp}</td>
-              <td>{experience.body}</td>
-              <td>{experience.bodyJp}</td>
-              <td>{experience.organization}</td>
-              <td>{experience.location}</td>
-              <td>{experience.startDate}</td>
-              <td>{experience.endDate}</td>
-              <Box component="td" sx={{ width: '20px' }}>
-                <Box sx={{ display: 'flex', gap: '5px' }}>
-                  <ActionIcon onClick={onEdit(experience.id)}>
-                    <IconEdit />
-                  </ActionIcon>
-                  <ActionIcon onClick={onDelete(experience.id)} color="red">
-                    <IconTrash />
-                  </ActionIcon>
-                </Box>
+      <CardList>
+        {experiences.map((experience, i) => (
+          <CardListItem
+            key={experience.id}
+            onEdit={onEdit(experience.id)}
+            onDelete={onDelete(experience.id)}
+          >
+            <CardListItemTitle>
+              {experience.title} / {experience.titleJp}
+            </CardListItemTitle>
+            <Text
+              sx={{ fontSize: '12px', fontWeight: 'bold', color: '#339AF0' }}
+            >
+              {getDefaultDate(experience.startDate)} -{' '}
+              {getDefaultDate(experience.endDate) || 'present'}
+            </Text>
+            <Box sx={{ display: 'flex', gap: '20px' }}>
+              <Box>
+                <CardLabel>organization</CardLabel>
+                <Text>{experience.organization}</Text>
               </Box>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
+              <Box>
+                <CardLabel>location</CardLabel>
+                <Text>{experience.location}</Text>
+              </Box>
+            </Box>
+            <CardLabel>body</CardLabel>
+            <CardItemBodyText>{experience.body}</CardItemBodyText>
+            <CardLabel>bodyJp</CardLabel>
+            <CardItemBodyText>{experience.bodyJp}</CardItemBodyText>
+          </CardListItem>
+        ))}
+      </CardList>
     </>
   );
 };
@@ -125,45 +199,39 @@ export const EducationList: FC<EducationListProps> = (props) => {
   return (
     <>
       <LoadingOverlay visible={loading} />
-      <Table>
-        <thead>
-          <tr>
-            <th>title</th>
-            <th>titleJp</th>
-            <th>body</th>
-            <th>bodyJp</th>
-            <th>organization</th>
-            <th>location</th>
-            <th>startDate</th>
-            <th>endDate</th>
-            <th />
-          </tr>
-        </thead>
-        <tbody>
-          {educations.map((education, i) => (
-            <tr key={education.id}>
-              <td>{education.title}</td>
-              <td>{education.titleJp}</td>
-              <td>{education.body}</td>
-              <td>{education.bodyJp}</td>
-              <td>{education.organization}</td>
-              <td>{education.location}</td>
-              <td>{education.startDate}</td>
-              <td>{education.endDate}</td>
-              <Box component="td" sx={{ width: '20px' }}>
-                <Box sx={{ display: 'flex', gap: '5px' }}>
-                  <ActionIcon onClick={onEdit(education.id)}>
-                    <IconEdit />
-                  </ActionIcon>
-                  <ActionIcon onClick={onDelete(education.id)} color="red">
-                    <IconTrash />
-                  </ActionIcon>
-                </Box>
+      <CardList>
+        {educations.map((education, i) => (
+          <CardListItem
+            onEdit={onEdit(education.id)}
+            onDelete={onDelete(education.id)}
+            key={education.id}
+          >
+            <CardListItemTitle>
+              {education.title} / {education.titleJp}
+            </CardListItemTitle>
+            <Text
+              sx={{ fontSize: '12px', fontWeight: 'bold', color: '#339AF0' }}
+            >
+              {getDefaultDate(education.startDate, 'yyyy.MM.dd')} -
+              {getDefaultDate(education.endDate, 'yyyy.MM.dd')}
+            </Text>
+            <Box sx={{ display: 'flex', gap: '20px' }}>
+              <Box>
+                <CardLabel>organization</CardLabel>
+                <Text>{education.organization}</Text>
               </Box>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
+              <Box>
+                <CardLabel>location</CardLabel>
+                <Text>{education.location}</Text>
+              </Box>
+            </Box>
+            <CardLabel>body</CardLabel>
+            <CardItemBodyText>{education.body}</CardItemBodyText>
+            <CardLabel>bodyJp</CardLabel>
+            <CardItemBodyText>{education.bodyJp}</CardItemBodyText>
+          </CardListItem>
+        ))}
+      </CardList>
     </>
   );
 };
@@ -180,65 +248,54 @@ export const WorkList: FC<WorkListProps> = (props) => {
   return (
     <>
       <LoadingOverlay visible={loading} />
-      <Table>
-        <thead>
-          <tr>
-            <th>title</th>
-            <th>titleJp</th>
-            <th>body</th>
-            <th>bodyJp</th>
-            <th>link</th>
-            <th>stacks</th>
-            <th>github</th>
-            <th />
-          </tr>
-        </thead>
-        <tbody>
-          {works.map((work, i) => (
-            <tr key={i}>
-              <td>{work.title}</td>
-              <td>{work.titleJp}</td>
-              <td>{work.body}</td>
-              <td>{work.bodyJp}</td>
-              <td>{work.link}</td>
-              <td>{work.github}</td>
-              <td>
-                <Box
-                  sx={{
-                    display: 'grid',
-                    gridTemplateColumns: '1fr 1fr 1fr 1fr',
-                    gap: '5px',
-                  }}
-                >
-                  {work.stacks.map((stack) => (
-                    <Avatar
-                      sx={{
-                        width: 24,
-                        height: 24,
-                        img: { objectFit: 'contain' },
-                      }}
-                      key={stack.id}
-                      src={stack.stackImage}
-                    >
-                      {stack.displayName}
-                    </Avatar>
-                  ))}
-                </Box>
-              </td>
-              <Box component="td" sx={{ width: '20px' }}>
-                <Box sx={{ display: 'flex', gap: '5px' }}>
-                  <ActionIcon onClick={onEdit(work.id)}>
-                    <IconEdit />
-                  </ActionIcon>
-                  <ActionIcon onClick={onDelete(work.id)} color="red">
-                    <IconTrash />
-                  </ActionIcon>
-                </Box>
+      <CardList>
+        {works.map((work, i) => (
+          <CardListItem
+            onEdit={onEdit(work.id)}
+            onDelete={onDelete(work.id)}
+            key={i}
+          >
+            <CardListItemTitle>
+              {work.title} / {work.titleJp}
+            </CardListItemTitle>
+            <CardLabel>body</CardLabel>
+            <CardItemBodyText>{work.body}</CardItemBodyText>
+            <CardLabel>bodyJp</CardLabel>
+            <CardItemBodyText>{work.bodyJp}</CardItemBodyText>
+            <Box sx={{ display: 'flex', gap: '20px' }}>
+              <Box>
+                <CardLabel>link</CardLabel>
+                <Text color="blue">{work.link}</Text>
               </Box>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
+              <Box>
+                <CardLabel>github</CardLabel>
+                <Text color="blue">{work.github}</Text>
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                display: 'flex',
+                marginTop: '8px',
+                gap: '8px',
+              }}
+            >
+              {work.stacks.map((stack) => (
+                <Avatar
+                  sx={{
+                    width: 24,
+                    height: 24,
+                    img: { objectFit: 'contain' },
+                  }}
+                  key={stack.id}
+                  src={stack.stackImage}
+                >
+                  {stack.displayName}
+                </Avatar>
+              ))}
+            </Box>
+          </CardListItem>
+        ))}
+      </CardList>
     </>
   );
 };
@@ -256,66 +313,52 @@ export const ProjectList: FC<ProjectListProps> = (props) => {
   return (
     <>
       <LoadingOverlay visible={loading} />
-      <Table>
-        <thead>
-          <tr>
-            <th>title</th>
-            <th>titleJp</th>
-            <th>body</th>
-            <th>bodyJp</th>
-            <th>link</th>
-            <th>startDate</th>
-            <th>endDate</th>
-            <th>stack</th>
-          </tr>
-        </thead>
-        <tbody>
-          {projects.map((project, i) => (
-            <tr key={i}>
-              <td>{project.title}</td>
-              <td>{project.titleJp}</td>
-              <td>{project.body}</td>
-              <td>{project.bodyJp}</td>
-              <td>{project.link}</td>
-              <td>{project.startDate}</td>
-              <td>{project.endDate}</td>
-              <td>
-                <Box
-                  sx={{
-                    display: 'grid',
-                    gridTemplateColumns: '1fr 1fr 1fr 1fr',
-                    gap: '5px',
-                  }}
-                >
-                  {project.stacks.map((stack) => (
-                    <Avatar
-                      sx={{
-                        width: 24,
-                        height: 24,
-                        img: { objectFit: 'contain' },
-                      }}
-                      key={stack.id}
-                      src={stack.stackImage}
-                    >
-                      {stack.displayName}
-                    </Avatar>
-                  ))}
-                </Box>
-              </td>
-              <Box component="td" sx={{ width: '20px' }}>
-                <Box sx={{ display: 'flex', gap: '5px' }}>
-                  <ActionIcon onClick={onEdit(project.id)}>
-                    <IconEdit />
-                  </ActionIcon>
-                  <ActionIcon onClick={onDelete(project.id)} color="red">
-                    <IconTrash />
-                  </ActionIcon>
-                </Box>
+      <CardList>
+        {projects.map((project, i) => (
+          <CardListItem
+            onEdit={onEdit(project.id)}
+            onDelete={onDelete(project.id)}
+            key={i}
+          >
+            <>
+              <CardListItemTitle>
+                {project.title} / {project.titleJp}
+              </CardListItemTitle>
+              <Text
+                sx={{ fontSize: '12px', fontWeight: 'bold', color: '#339AF0' }}
+              >
+                {getDefaultDate(project.startDate, 'yyyy.MM.dd')} -{' '}
+                {getDefaultDate(project.endDate, 'yyyy.MM.dd')}
+              </Text>
+              <CardLabel>body</CardLabel>
+              <CardItemBodyText>{project.body}</CardItemBodyText>
+              <CardLabel>bodyJp</CardLabel>
+              <CardItemBodyText>{project.bodyJp}</CardItemBodyText>
+              <Box
+                sx={{
+                  display: 'flex',
+                  gap: '8px',
+                  marginTop: '8px',
+                }}
+              >
+                {project.stacks.map((stack) => (
+                  <Avatar
+                    sx={{
+                      width: 24,
+                      height: 24,
+                      img: { objectFit: 'contain' },
+                    }}
+                    key={stack.id}
+                    src={stack.stackImage}
+                  >
+                    {stack.displayName}
+                  </Avatar>
+                ))}
               </Box>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
+            </>
+          </CardListItem>
+        ))}
+      </CardList>
     </>
   );
 };

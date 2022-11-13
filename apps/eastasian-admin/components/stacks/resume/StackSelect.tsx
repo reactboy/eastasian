@@ -58,7 +58,7 @@ export const StackSelect: FC<StackSelectProps> = (props) => {
     <Box
       sx={{
         display: 'grid',
-        gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr 1fr 1fr',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))',
         gap: '10px',
         padding: '12px 8px',
       }}

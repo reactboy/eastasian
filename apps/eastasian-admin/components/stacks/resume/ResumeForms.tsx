@@ -1,7 +1,6 @@
 import { FC, ReactNode, useEffect, useState } from 'react';
 import { Box, TextInput, Button, Textarea, Avatar } from '@mantine/core';
 import { useForm } from 'react-hook-form';
-import { format } from 'date-fns';
 import {
   StackInput,
   ExperienceInput,
@@ -11,10 +10,7 @@ import {
   ProfileInput,
 } from '@admin/store';
 
-//TODO(eastasian) extract to utils
-const getDefaultDateInput = (date: string) => {
-  return date ? format(new Date(date), 'yyyy-MM-dd') : '';
-};
+import { getDefaultDate } from '@admin/libs/date';
 
 //TODO(eastasian) extract to utils
 const convertBase64 = (file: File) => {
@@ -42,8 +38,6 @@ export const AboutForm: FC<AboutFormProps> = (props) => {
   const [profileImage, setProfileImage] = useState<string>(
     profileInput.profileImage
   );
-
-  console.log(profileInput, profileImage);
 
   const { handleSubmit, register, reset, watch } = useForm({
     defaultValues: {
@@ -155,8 +149,8 @@ export const ExperienceForm: FC<ExperienceFormProps> = (props) => {
     bodyJp: experienceInput.bodyJp,
     organization: experienceInput.organization,
     location: experienceInput.location,
-    startDate: getDefaultDateInput(experienceInput.startDate),
-    endDate: getDefaultDateInput(experienceInput.endDate),
+    startDate: getDefaultDate(experienceInput.startDate),
+    endDate: getDefaultDate(experienceInput.endDate),
   };
 
   const { reset, handleSubmit, register } = useForm({
@@ -247,8 +241,8 @@ export const EducationForm: FC<EducationFormProps> = (props) => {
     bodyJp: educationInput.bodyJp,
     organization: educationInput.organization,
     location: educationInput.location,
-    startDate: getDefaultDateInput(educationInput.startDate),
-    endDate: getDefaultDateInput(educationInput.endDate),
+    startDate: getDefaultDate(educationInput.startDate),
+    endDate: getDefaultDate(educationInput.endDate),
   };
 
   const { reset, handleSubmit, register } = useForm({
@@ -419,8 +413,8 @@ export const ProjectForm: FC<ProjectFormProps> = (props) => {
       body: projectInput.body,
       bodyJp: projectInput.bodyJp,
       link: projectInput.link,
-      startDate: getDefaultDateInput(projectInput.startDate),
-      endDate: getDefaultDateInput(projectInput.endDate),
+      startDate: getDefaultDate(projectInput.startDate),
+      endDate: getDefaultDate(projectInput.endDate),
     },
   });
 
@@ -431,8 +425,8 @@ export const ProjectForm: FC<ProjectFormProps> = (props) => {
       body: projectInput.body,
       bodyJp: projectInput.bodyJp,
       link: projectInput.link,
-      startDate: getDefaultDateInput(projectInput.startDate),
-      endDate: getDefaultDateInput(projectInput.endDate),
+      startDate: getDefaultDate(projectInput.startDate),
+      endDate: getDefaultDate(projectInput.endDate),
     });
   }, [projectInput]);
 
