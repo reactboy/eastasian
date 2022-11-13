@@ -162,8 +162,8 @@ export const ExperienceList: FC<ExperienceListProps> = (props) => {
             <Text
               sx={{ fontSize: '12px', fontWeight: 'bold', color: '#339AF0' }}
             >
-              {getDefaultDate(experience.startDate)} -{' '}
-              {getDefaultDate(experience.endDate) || 'present'}
+              {getDefaultDate(experience.startDate, 'yyyy.MM.dd')} -{' '}
+              {getDefaultDate(experience.endDate, 'yyyy.MM.dd') || 'present'}
             </Text>
             <Box sx={{ display: 'flex', gap: '20px' }}>
               <Box>
