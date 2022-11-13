@@ -1,5 +1,5 @@
 import { ReactNode, FC, useEffect, useState } from 'react';
-import { Tabs, Title, Box } from '@mantine/core';
+import { Tabs, Title, Box, Button } from '@mantine/core';
 import {
   listProfile,
   listExperience,
@@ -36,6 +36,8 @@ import {
 import { uploadFile } from '@admin/libs/supabase';
 
 import {
+  FormModal,
+  useFormModal,
   AboutForm,
   ExperienceForm,
   EducationForm,
@@ -52,12 +54,19 @@ import {
   useStackSelect,
 } from '.';
 
-const PanelLayout: FC<{ title: string; children: ReactNode }> = (props) => {
-  const { children, title } = props;
+const PanelLayout: FC<{
+  title: string;
+  children: ReactNode;
+  headerSide?: ReactNode;
+}> = (props) => {
+  const { children, title, headerSide } = props;
   return (
     <Box sx={{ padding: '8px' }}>
-      <Title size="h2">{title}</Title>
-      <Box>{children}</Box>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Title size="h2">{title}</Title>
+        {headerSide && headerSide}
+      </Box>
+      <Box sx={{ padding: '8px 0' }}>{children}</Box>
     </Box>
   );
 };
@@ -67,6 +76,7 @@ const AboutPanel = () => {
     useProfileInputStore();
   const [profiles, setProfiles] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [isFormModalOpen, setIsFormModalOpen] = useFormModal();
 
   useEffect(() => {
     resetProfileInput();
@@ -100,6 +110,7 @@ const AboutPanel = () => {
         )
       );
       resetProfileInput();
+      setIsFormModalOpen(false);
       showNotification({ message: 'profile updated' });
     } catch (e) {
       showNotification({ message: e.message });
@@ -109,19 +120,23 @@ const AboutPanel = () => {
   const onEdit = (id) => () => {
     const profile = profiles.find((profile) => profile.id === id);
     setProfileInput(profile);
+    setIsFormModalOpen(true);
   };
 
   const onCancel = () => {
     resetProfileInput();
+    setIsFormModalOpen(false);
   };
 
   return (
     <PanelLayout title="About">
-      <AboutForm
-        profileInput={profileInput}
-        onSubmit={onSubmitEdit}
-        onCancel={onCancel}
-      />
+      <FormModal isOpen={isFormModalOpen} onClose={onCancel} title="About">
+        <AboutForm
+          profileInput={profileInput}
+          onSubmit={onSubmitEdit}
+          onCancel={onCancel}
+        />
+      </FormModal>
       <ProfileList profiles={profiles} loading={loading} onEdit={onEdit} />
     </PanelLayout>
   );
@@ -132,6 +147,7 @@ const ExperiencePanel = () => {
   const [loading, setLoading] = useState(false);
   const { resetExperienceInput, experienceInput, setExperienceInput } =
     useExperienceInputStore();
+  const [isFormModalOpen, setIsFormModalOpen] = useFormModal();
 
   useEffect(() => {
     const fetch = async () => {
@@ -161,6 +177,7 @@ const ExperiencePanel = () => {
       setExperiences((prevState) => [...prevState, data.experience]);
       showNotification({ message: 'experience created' });
       resetExperienceInput();
+      setIsFormModalOpen(false);
     } catch (e) {
       showNotification({ message: e.message });
     }
@@ -180,6 +197,7 @@ const ExperiencePanel = () => {
       );
       showNotification({ message: 'experience updated' });
       resetExperienceInput();
+      setIsFormModalOpen(false);
     } catch (e) {
       showNotification({ message: e.message });
     }
@@ -188,6 +206,7 @@ const ExperiencePanel = () => {
   const onEdit = (id: string) => () => {
     const experience = experiences.find((experience) => experience.id === id);
     setExperienceInput(experience);
+    setIsFormModalOpen(true);
   };
 
   const onSubmitDelete = (id: string) => async () => {
@@ -205,15 +224,23 @@ const ExperiencePanel = () => {
 
   const onCancel = () => {
     resetExperienceInput();
+    setIsFormModalOpen(false);
   };
 
   return (
-    <PanelLayout title="Experience">
-      <ExperienceForm
-        experienceInput={experienceInput}
-        onSubmit={experienceInput.id ? onSubmitEdit : onSubmitCreate}
-        onCancel={onCancel}
-      />
+    <PanelLayout
+      title="Experience"
+      headerSide={
+        <Button onClick={() => setIsFormModalOpen(true)}>create</Button>
+      }
+    >
+      <FormModal isOpen={isFormModalOpen} onClose={onCancel} title="Experience">
+        <ExperienceForm
+          experienceInput={experienceInput}
+          onSubmit={experienceInput.id ? onSubmitEdit : onSubmitCreate}
+          onCancel={onCancel}
+        />
+      </FormModal>
       <ExperienceList
         loading={loading}
         experiences={experiences}
@@ -229,6 +256,7 @@ const EducationPanel = () => {
     useEducationInputStore((store) => store);
   const [educations, setEducations] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [isFormModalOpen, setIsFormModalOpen] = useFormModal();
 
   useEffect(() => {
     const fetch = async () => {
@@ -257,6 +285,7 @@ const EducationPanel = () => {
       setEducations((prevEducations) => [...prevEducations, data.education]);
       showNotification({ message: 'education created' });
       resetEducationInput();
+      setIsFormModalOpen(false);
     } catch (e) {
       showNotification({ message: e });
     }
@@ -276,6 +305,7 @@ const EducationPanel = () => {
       );
       showNotification({ message: 'education updated' });
       resetEducationInput();
+      setIsFormModalOpen(false);
     } catch (e) {
       showNotification({ message: e });
     }
@@ -296,19 +326,28 @@ const EducationPanel = () => {
   const onEdit = (id: string) => () => {
     const education = educations.find((education) => education.id === id);
     setEducationInput(education);
+    setIsFormModalOpen(true);
   };
 
   const onCancel = () => {
     resetEducationInput();
+    setIsFormModalOpen(false);
   };
 
   return (
-    <PanelLayout title="Education">
-      <EducationForm
-        educationInput={educationInput}
-        onSubmit={educationInput.id ? onSubmitEdit : onSubmitCreate}
-        onCancel={onCancel}
-      />
+    <PanelLayout
+      title="Education"
+      headerSide={
+        <Button onClick={() => setIsFormModalOpen(true)}>create</Button>
+      }
+    >
+      <FormModal isOpen={isFormModalOpen} onClose={onCancel} title="Education">
+        <EducationForm
+          educationInput={educationInput}
+          onSubmit={educationInput.id ? onSubmitEdit : onSubmitCreate}
+          onCancel={onCancel}
+        />
+      </FormModal>
       <EducationList
         onDelete={onSubmitDelete}
         onEdit={onEdit}
@@ -327,6 +366,7 @@ const WorksPanel = () => {
   const [loading, setLoading] = useState(false);
   const { stacks, selectedStacks, onClickStack, initSelectedStack } =
     useStackSelect();
+  const [isFormModalOpen, setIsFormModalOpen] = useFormModal();
 
   useEffect(() => {
     const fetch = async () => {
@@ -353,6 +393,7 @@ const WorksPanel = () => {
       showNotification({ message: 'work created' });
       resetWorkInput();
       initSelectedStack();
+      setIsFormModalOpen(false);
     } catch (e) {
       showNotification({ message: e });
     }
@@ -371,6 +412,7 @@ const WorksPanel = () => {
       showNotification({ message: 'work updated' });
       resetWorkInput();
       initSelectedStack();
+      setIsFormModalOpen(false);
     } catch (e) {
       showNotification({ message: e });
     }
@@ -380,6 +422,7 @@ const WorksPanel = () => {
     const work = works.find((work) => work.id === id);
     setWorkInput({ ...work, stackIds: work.stacks.map((stack) => stack.id) });
     initSelectedStack(work.stacks.map((stack) => stack.id));
+    setIsFormModalOpen(true);
   };
 
   const onSubmitDelete = (id: string) => async () => {
@@ -397,21 +440,29 @@ const WorksPanel = () => {
   const onCancel = () => {
     resetWorkInput();
     initSelectedStack();
+    setIsFormModalOpen(false);
   };
 
   return (
-    <PanelLayout title="Works">
-      <WorkForm
-        workInput={workInput}
-        onCancel={onCancel}
-        onSubmit={workInput.id ? onSubmitEdit : onSubmitCreate}
-      >
-        <StackSelect
-          stacks={stacks}
-          onClickStack={onClickStack}
-          selectedStacks={selectedStacks}
-        />
-      </WorkForm>
+    <PanelLayout
+      title="Works"
+      headerSide={
+        <Button onClick={() => setIsFormModalOpen(true)}>create</Button>
+      }
+    >
+      <FormModal isOpen={isFormModalOpen} onClose={onCancel} title="Work">
+        <WorkForm
+          workInput={workInput}
+          onCancel={onCancel}
+          onSubmit={workInput.id ? onSubmitEdit : onSubmitCreate}
+        >
+          <StackSelect
+            stacks={stacks}
+            onClickStack={onClickStack}
+            selectedStacks={selectedStacks}
+          />
+        </WorkForm>
+      </FormModal>
       <WorkList
         onEdit={onEdit}
         onDelete={onSubmitDelete}
@@ -429,6 +480,7 @@ const ProjectsPanel = () => {
   const [loading, setLoading] = useState(false);
   const { stacks, selectedStacks, onClickStack, initSelectedStack } =
     useStackSelect();
+  const [isFormModalOpen, setIsFormModalOpen] = useFormModal();
 
   useEffect(() => {
     const fetch = async () => {
@@ -459,6 +511,7 @@ const ProjectsPanel = () => {
       showNotification({ message: 'project created' });
       resetProjectInput();
       initSelectedStack();
+      setIsFormModalOpen(false);
     } catch (e) {
       showNotification({ message: e });
     }
@@ -481,6 +534,7 @@ const ProjectsPanel = () => {
       showNotification({ message: 'project updated' });
       resetProjectInput();
       initSelectedStack();
+      setIsFormModalOpen(false);
     } catch (e) {
       showNotification({ message: e });
     }
@@ -493,6 +547,7 @@ const ProjectsPanel = () => {
       stackIds: project.stacks.map((stack) => stack.id),
     });
     initSelectedStack(project.stacks.map((stack) => stack.id));
+    setIsFormModalOpen(true);
   };
 
   const onSubmitDelete = (id: string) => async () => {
@@ -510,21 +565,29 @@ const ProjectsPanel = () => {
   const onCancel = () => {
     resetProjectInput();
     initSelectedStack();
+    setIsFormModalOpen(false);
   };
 
   return (
-    <PanelLayout title="Projects">
-      <ProjectForm
-        projectInput={projectInput}
-        onCancel={onCancel}
-        onSubmit={projectInput.id ? onSubmitEdit : onSubmitCreate}
-      >
-        <StackSelect
-          stacks={stacks}
-          onClickStack={onClickStack}
-          selectedStacks={selectedStacks}
-        />
-      </ProjectForm>
+    <PanelLayout
+      title="Projects"
+      headerSide={
+        <Button onClick={() => setIsFormModalOpen(true)}>create</Button>
+      }
+    >
+      <FormModal isOpen={isFormModalOpen} onClose={onCancel} title="Project">
+        <ProjectForm
+          projectInput={projectInput}
+          onCancel={onCancel}
+          onSubmit={projectInput.id ? onSubmitEdit : onSubmitCreate}
+        >
+          <StackSelect
+            stacks={stacks}
+            onClickStack={onClickStack}
+            selectedStacks={selectedStacks}
+          />
+        </ProjectForm>
+      </FormModal>
       <ProjectList
         projects={projects}
         loading={loading}
@@ -541,6 +604,7 @@ const StacksPanel = () => {
   );
   const [stacks, setStacks] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [isFormModalOpen, setIsFormModalOpen] = useFormModal();
 
   useEffect(() => {
     const fetch = async () => {
@@ -573,6 +637,7 @@ const StacksPanel = () => {
       const { data } = await createStack(payload);
       setStacks((prevStacks) => [...prevStacks, data.stack]);
       resetStackInput();
+      setIsFormModalOpen(false);
     } catch (e) {
       console.log(e);
       showNotification({ message: e.message });
@@ -582,6 +647,7 @@ const StacksPanel = () => {
   const onEdit = (id: string) => () => {
     const stack = stacks.find((stack) => stack.id === id);
     setStackInput(stack);
+    setIsFormModalOpen(true);
   };
 
   const onSubmitEdit = async (d) => {
@@ -602,6 +668,7 @@ const StacksPanel = () => {
       );
       resetStackInput();
       showNotification({ message: 'stack updated' });
+      setIsFormModalOpen(false);
     } catch (e) {
       showNotification({ message: e.message });
     }
@@ -620,15 +687,23 @@ const StacksPanel = () => {
 
   const onCancel = () => {
     resetStackInput();
+    setIsFormModalOpen(false);
   };
 
   return (
-    <PanelLayout title="Stacks">
-      <StackForm
-        stackInput={stackInput}
-        onSubmit={stackInput.id ? onSubmitEdit : onSubmitCreate}
-        onCancel={onCancel}
-      />
+    <PanelLayout
+      title="Stacks"
+      headerSide={
+        <Button onClick={() => setIsFormModalOpen(true)}>create</Button>
+      }
+    >
+      <FormModal isOpen={isFormModalOpen} onClose={onCancel} title="stack">
+        <StackForm
+          stackInput={stackInput}
+          onSubmit={stackInput.id ? onSubmitEdit : onSubmitCreate}
+          onCancel={onCancel}
+        />
+      </FormModal>
       <StackList
         onDelete={onSubmitDelete}
         onEdit={onEdit}

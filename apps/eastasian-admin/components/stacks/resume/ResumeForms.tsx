@@ -1,5 +1,5 @@
 import { FC, ReactNode, useEffect, useState } from 'react';
-import { Box, TextInput, Button, Textarea, Avatar } from '@mantine/core';
+import { Box, TextInput, Button, Textarea, Avatar, Modal } from '@mantine/core';
 import { useForm } from 'react-hook-form';
 import {
   StackInput,
@@ -11,18 +11,7 @@ import {
 } from '@admin/store';
 
 import { getDefaultDate } from '@admin/libs/date';
-
-//TODO(eastasian) extract to utils
-const convertBase64 = (file: File) => {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      resolve(reader.result);
-    };
-    reader.onerror = (error) => reject(error);
-    reader.readAsDataURL(file);
-  });
-};
+import { convertBase64 } from '@admin/libs/file';
 
 type BaseResumeFormProps = {
   onSubmit: (d) => Promise<void>;
@@ -218,7 +207,7 @@ export const ExperienceForm: FC<ExperienceFormProps> = (props) => {
         />
       </Box>
       <Box sx={{ marginTop: '10px', display: 'flex' }}>
-        {experienceInput.id && <Button onClick={onCancel}>cancel</Button>}
+        <Button onClick={onCancel}>cancel</Button>
         <Button sx={{ marginLeft: 'auto', display: 'block' }} type="submit">
           submit
         </Button>
@@ -310,7 +299,7 @@ export const EducationForm: FC<EducationFormProps> = (props) => {
         />
       </Box>
       <Box sx={{ marginTop: '10px', display: 'flex' }}>
-        {educationInput.id && <Button onClick={onCancel}>cancel</Button>}
+        <Button onClick={onCancel}>cancel</Button>
         <Button sx={{ marginLeft: 'auto', display: 'block' }} type="submit">
           submit
         </Button>
@@ -390,7 +379,7 @@ export const WorkForm: FC<WorkFormProps> = (props) => {
       </Box>
       {children}
       <Box sx={{ marginTop: '10px', display: 'flex' }}>
-        {workInput.id && <Button onClick={onCancel}>cancel</Button>}
+        <Button onClick={onCancel}>cancel</Button>
         <Button sx={{ marginLeft: 'auto', display: 'block' }} type="submit">
           submit
         </Button>
@@ -480,7 +469,7 @@ export const ProjectForm: FC<ProjectFormProps> = (props) => {
       </Box>
       {children}
       <Box sx={{ marginTop: '10px', display: 'flex' }}>
-        {projectInput.id && <Button onClick={onCancel}>cancel</Button>}
+        <Button onClick={onCancel}>cancel</Button>
         <Button sx={{ marginLeft: 'auto', display: 'block' }} type="submit">
           submit
         </Button>
@@ -563,11 +552,46 @@ export const StackForm: FC<StackFormProps> = (props) => {
           marginTop: '10px',
         }}
       >
-        {stackInput.id && <Button onClick={onCancel}>cancel</Button>}
+        <Button onClick={onCancel}>cancel</Button>
         <Button sx={{ marginLeft: 'auto' }} type="submit">
           submit
         </Button>
       </Box>
     </form>
   );
+};
+
+type FormModalProps = {
+  isOpen: boolean;
+  onClose: () => void | Promise<void>;
+  title: string;
+  children: ReactNode;
+};
+
+export const FormModal: FC<FormModalProps> = (props) => {
+  const { isOpen, onClose, title, children } = props;
+
+  return (
+    <Modal
+      opened={isOpen}
+      onClose={onClose}
+      title={title}
+      size="100%"
+      overflow="inside"
+      sx={{
+        '.mantine-Modal-title': {
+          color: '#1864AB',
+          fontSize: '20px',
+          fontWeight: 'bold',
+        },
+      }}
+    >
+      {children}
+    </Modal>
+  );
+};
+
+export const useFormModal = () => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  return [isOpen, setIsOpen] as const;
 };
