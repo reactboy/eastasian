@@ -1,0 +1,16 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../dist/out-tsc",
+    "module": "commonjs",
+    "types": ["node", "express"],
+    "baseUrl": ".",
+    "paths": {
+      "@api/configs/*": ["src/configs/*"],
+      "@api/routes/*": ["src/routes/*"],
+      "@api/middleware": ["src/middleware/index.ts"]
+    }
+  },
+  "exclude": ["jest.config.ts", "**/*.spec.ts", "**/*.test.ts"],
+  "include": ["**/*.ts"]
+}

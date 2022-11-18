@@ -15,14 +15,16 @@
     "types": ["jest", "node"],
     "baseUrl": ".",
     "paths": {
-      "@resume/libs/styles": ["libs/styles/index.ts"],
+      "@resume/libs/*": ["libs/*"],
       "@resume/components/common": ["components/common/index.ts"],
       "@resume/components/layout": ["components/layout/index.ts"],
       "@resume/components/stack/resume": ["components/stack/resume/index.ts"],
       "@resume/components/stack/coding": ["components/stack/coding/index.ts"],
       "@resume/redux/app": ["redux/app/index.ts"],
       "@resume/redux/feature": ["redux/feature/index.ts"],
-      "@resume/redux/selector": ["redux/selector/index.ts"]
+      "@resume/redux/selector": ["redux/selector/index.ts"],
+      "@resume/api": ["api/index.ts"],
+      "@resume/types": ["types/index.ts"]
     }
   },
   "include": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "next-env.d.ts"],

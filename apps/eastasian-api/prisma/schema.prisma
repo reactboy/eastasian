@@ -1,0 +1,104 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("SUPABASE_DB_CONNECTION_STRING")
+}
+
+model Profile {
+    id String @id @default(uuid())
+    name String
+    nameJp String @default("")
+    profileImage String? @default("")
+    description String? @default("")
+    descriptionJp String? @default("")
+    snsInstagram String? @default("")
+    snsGithub String? @default("")
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    experiences Experience[]
+    education Education[]
+    works Work[]
+    projects Project[]
+}
+
+model Stack {
+    id String @id @default(uuid())
+    name String
+    displayName String
+    link String? @default("")
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    stackImage String? @default("")
+    works Work[]
+    projects Project[]
+}
+model Experience {
+    id String @id @default(uuid())
+    title String
+    titleJp String @default("")
+    body String
+    bodyJp String @default("")
+    organization String @default("")
+    location String @default("")
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    startDate DateTime @default(now())
+    endDate DateTime?
+    profile Profile @relation(fields: [profileId], references: [id])
+    profileId String
+}
+model Education {
+    id String @id @default(uuid())
+    title String
+    titleJp String @default("")
+    body String
+    bodyJp String @default("")
+    organization String @default("")
+    location String @default("")
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    startDate DateTime @default(now())
+    endDate DateTime?
+    profile Profile @relation(fields: [profileId], references: [id])
+    profileId String
+}
+model Work {
+    id String @id @default(uuid())
+    title String
+    titleJp String @default("")
+    body String
+    bodyJp String @default("")
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    link String @default("")
+    github String @default("")
+    profile Profile @relation(fields: [profileId], references: [id])
+    profileId String
+    stacks Stack[]
+}
+model Project {
+    id String @id @default(uuid())
+    title String
+    titleJp String @default("")
+    body String
+    bodyJp String @default("")
+    startDate DateTime @default(now())
+    endDate DateTime?
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    link String @default("")
+    profile Profile @relation(fields: [profileId], references: [id])
+    profileId String
+    stacks Stack[]
+}
+model Coding {
+    id String @id @default(uuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}

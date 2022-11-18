@@ -1,8 +1,10 @@
+import { FC } from 'react';
 import styled from '@emotion/styled';
 import Image from 'next/image';
 
 import { Icon } from '@resume/components/common';
 import { COLOR } from '@resume/libs/styles';
+import { Profile } from '@resume/types';
 
 const StyledHeader = styled.header`
   .header__container {
@@ -53,7 +55,15 @@ const StyledHeader = styled.header`
   }
 `;
 
-export const Header = () => {
+type HeaderProps = {
+  profile: Profile;
+};
+
+export const Header: FC<HeaderProps> = (props) => {
+  const {
+    profile: { name, nameJp, snsInstagram, snsGithub },
+  } = props;
+  const displayName = `${name} / ${nameJp}`;
   return (
     <StyledHeader>
       <div className="header__container">
@@ -63,26 +73,18 @@ export const Header = () => {
             <Image
               src="/assets/profile/profile.jpg"
               layout="fill"
-              alt="Jun Aida / 會田 純"
+              alt={displayName}
             />
           </p>
-          <h1 className="header__profile-name">Jun Aida / 會田 純</h1>
+          <h1 className="header__profile-name">{displayName}</h1>
           <p className="header__profile-link">
-            <a
-              href="https://www.instagram.com/eastasiann/"
-              rel="noreferrer noopener"
-              target="_blunk"
-            >
+            <a href={snsInstagram} rel="noreferrer noopener" target="_blunk">
               @eastasiann
             </a>
           </p>
           <ul className="header__profile-sns-list">
             <li className="header__profile-sns-item">
-              <a
-                href="https://github.com/reactboy"
-                rel="noreferrer noopener"
-                target="_blunk"
-              >
+              <a href={snsGithub} rel="noreferrer noopener" target="_blunk">
                 <Icon name="githubDark" layout="fill" />
               </a>
             </li>
