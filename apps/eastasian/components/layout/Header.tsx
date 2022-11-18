@@ -61,7 +61,7 @@ type HeaderProps = {
 
 export const Header: FC<HeaderProps> = (props) => {
   const {
-    profile: { name, nameJp, snsInstagram, snsGithub },
+    profile: { name, nameJp, snsInstagram, snsGithub, profileImage },
   } = props;
   const displayName = `${name} / ${nameJp}`;
   return (
@@ -70,11 +70,7 @@ export const Header: FC<HeaderProps> = (props) => {
         <div className="header__back"></div>
         <div className="header__profile-container">
           <p className="header__profile-picture">
-            <Image
-              src="/assets/profile/profile.jpg"
-              layout="fill"
-              alt={displayName}
-            />
+            <Image src={profileImage} layout="fill" alt={displayName} />
           </p>
           <h1 className="header__profile-name">{displayName}</h1>
           <p className="header__profile-link">
