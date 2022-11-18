@@ -19,6 +19,9 @@ router.get('/resume/:profileId', async (req, res) => {
           },
         },
         projects: {
+          orderBy: {
+            startDate: 'asc',
+          },
           include: {
             stacks: true,
           },

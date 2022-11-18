@@ -194,8 +194,8 @@ export const EducationSection: FC<EducationSectionProps> = (props) => {
             startDate={education.startDate}
             endDate={education.endDate}
           >
-            {ln === 'ja' && education.bodyJp}
-            {ln === 'en' && education.body}
+            {ln === 'ja' && <p>{education.bodyJp}</p>}
+            {ln === 'en' && <p>{education.body}</p>}
           </ExperienceCard>
         );
       })}
@@ -235,6 +235,9 @@ const StyledWorksCard = styled.div`
     font-size: 16px;
     margin-top: 8px;
     font-weight: 100;
+    & > p {
+      white-space: pre-wrap;
+    }
   }
   .works-card__stacks {
     display: flex;

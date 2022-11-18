@@ -654,6 +654,8 @@ const StacksPanel = () => {
     try {
       const { icon, ...payload } = d;
 
+      if (stackInput.stackImage) payload.stackImage = stackInput.stackImage;
+
       if (icon.length) {
         const file = icon[0];
         const publicUrl = await uploadFile('stacks', file);

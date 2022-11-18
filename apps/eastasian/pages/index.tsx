@@ -52,27 +52,32 @@ export const getServerSideProps = async (_context) => {
 
 type Props = {
   resume: Resume;
+  error?: string;
 };
 
 export const Index: NextPage<Props> = (props) => {
-  const {
-    resume: { experiences, education, projects, works, stacks, ...profile },
-  } = props;
+  const { resume, error } = props;
+
+  if (error) return <>error</>;
+
+  const { experiences, education, projects, works, stacks, ...profile } =
+    resume;
+
   return (
     <StyledPage>
       <Header profile={profile} />
-      <div className="language-switch-wrapper">
-        <LanguageSwitch />
-      </div>
-      <div className="resume-content">
+      <main className="resume-content">
         <AboutMeSection profile={profile} />
         <WorkExperienceSection experiences={experiences} />
         <EducationSection education={education} />
         <ProjectsSection projects={projects} />
         <WorksSection works={works} />
         <ExperiencedStacksSection stacks={stacks} />
-      </div>
+      </main>
       <Footer />
+      <div className="language-switch-wrapper">
+        <LanguageSwitch />
+      </div>
     </StyledPage>
   );
 };

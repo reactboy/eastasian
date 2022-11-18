@@ -36,7 +36,7 @@ export const Header = () => {
           padding: '0 8px',
         }}
       >
-        <Title>eastasian admin</Title>
+        <Title>eastasian</Title>
         <Box>
           <Button onClick={onClickSignout}>signout</Button>
         </Box>
