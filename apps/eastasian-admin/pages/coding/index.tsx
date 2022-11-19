@@ -1,15 +1,17 @@
 import { NextPage } from 'next';
+import { Box, Title } from '@mantine/core';
 
 import { AppLayout, Header } from '@admin/components/layouts';
-import { ResumePanel } from 'components/stacks';
 
-export const Index: NextPage = (_props) => {
+const Coding: NextPage = (_props) => {
   return (
     <AppLayout>
       <Header />
-      <ResumePanel />
+      <Box>
+        <Title>Coding</Title>
+      </Box>
     </AppLayout>
   );
 };
 
-export default Index;
+export default Coding;

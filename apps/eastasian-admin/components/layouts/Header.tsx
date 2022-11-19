@@ -1,10 +1,28 @@
 import { useState } from 'react';
 import { useUserStore } from '@admin/store';
 import { useRouter } from 'next/router';
-import { Button, Box, Title, Divider, LoadingOverlay } from '@mantine/core';
+import Link from 'next/link';
+import {
+  Box,
+  Title,
+  Divider,
+  LoadingOverlay,
+  ActionIcon,
+  ActionIconProps,
+} from '@mantine/core';
+import { IconCode, IconFile, IconDoorExit } from '@tabler/icons';
 
 import { axios } from '@admin/libs/axios';
 import { useCookiesToken } from '@admin/utils/hooks';
+
+const activeValue = (
+  currentPath: string,
+  path: string,
+  active: string,
+  deactive: string
+): string => {
+  return currentPath === path ? active : deactive;
+};
 
 export const Header = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -37,8 +55,48 @@ export const Header = () => {
         }}
       >
         <Title>eastasian</Title>
-        <Box>
-          <Button onClick={onClickSignout}>signout</Button>
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '20px',
+          }}
+        >
+          <Box sx={{ display: 'flex', gap: '8px' }}>
+            <ActionIcon
+              variant={
+                activeValue(
+                  router.pathname,
+                  '/',
+                  'light',
+                  'subtle'
+                ) as ActionIconProps['variant']
+              }
+              color={activeValue(router.pathname, '/', 'blue', 'gray')}
+            >
+              <Link href="/">
+                <IconFile />
+              </Link>
+            </ActionIcon>
+            <ActionIcon
+              variant={
+                activeValue(
+                  router.pathname,
+                  '/coding',
+                  'light',
+                  'subtle'
+                ) as ActionIconProps['variant']
+              }
+              color={activeValue(router.pathname, '/coding', 'blue', 'gray')}
+            >
+              <Link href="/coding">
+                <IconCode />
+              </Link>
+            </ActionIcon>
+          </Box>
+          <ActionIcon color="red" onClick={onClickSignout}>
+            <IconDoorExit />
+          </ActionIcon>
         </Box>
       </Box>
       <Divider />

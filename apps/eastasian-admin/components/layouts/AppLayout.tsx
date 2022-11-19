@@ -8,6 +8,7 @@ type AppLayoutProps = {
 
 export const AppLayout: FC<AppLayoutProps> = (props) => {
   const { children } = props;
+  //TODO(eastasian) call this again page active
   useRedirectUnauthorize('/auth/signin');
 
   return <>{children}</>;
