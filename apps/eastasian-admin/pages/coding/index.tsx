@@ -1,15 +1,13 @@
 import { NextPage } from 'next';
-import { Box, Title } from '@mantine/core';
 
 import { AppLayout, Header } from '@admin/components/layouts';
+import { CodingPanel } from '@admin/components/stacks';
 
 const Coding: NextPage = (_props) => {
   return (
     <AppLayout>
       <Header />
-      <Box>
-        <Title>Coding</Title>
-      </Box>
+      <CodingPanel />
     </AppLayout>
   );
 };

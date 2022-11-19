@@ -9,8 +9,9 @@ import {
   LoadingOverlay,
   ActionIcon,
   ActionIconProps,
+  Button,
 } from '@mantine/core';
-import { IconCode, IconFile, IconDoorExit } from '@tabler/icons';
+import { IconCode, IconFile } from '@tabler/icons';
 
 import { axios } from '@admin/libs/axios';
 import { useCookiesToken } from '@admin/utils/hooks';
@@ -54,7 +55,7 @@ export const Header = () => {
           padding: '0 8px',
         }}
       >
-        <Title>eastasian</Title>
+        <Title>eastasian🔮</Title>
         <Box
           sx={{
             display: 'flex',
@@ -94,9 +95,9 @@ export const Header = () => {
               </Link>
             </ActionIcon>
           </Box>
-          <ActionIcon color="red" onClick={onClickSignout}>
-            <IconDoorExit />
-          </ActionIcon>
+          <Button color="red" onClick={onClickSignout}>
+            Signout
+          </Button>
         </Box>
       </Box>
       <Divider />

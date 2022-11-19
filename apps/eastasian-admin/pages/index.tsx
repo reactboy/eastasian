@@ -1,7 +1,7 @@
 import { NextPage } from 'next';
 
 import { AppLayout, Header } from '@admin/components/layouts';
-import { ResumePanel } from 'components/stacks';
+import { ResumePanel } from '@admin/components/stacks';
 
 export const Index: NextPage = (_props) => {
   return (
