@@ -36,6 +36,7 @@ export const AboutForm: FC<AboutFormProps> = (props) => {
       descriptionJp: profileInput.descriptionJp,
       snsInstagram: profileInput.snsInstagram,
       snsGithub: profileInput.snsGithub,
+      snsLinkedin: profileInput.snsLinkedin,
       profileImageFile: [],
     },
   });
@@ -48,6 +49,7 @@ export const AboutForm: FC<AboutFormProps> = (props) => {
       descriptionJp: profileInput.descriptionJp,
       snsInstagram: profileInput.snsInstagram,
       snsGithub: profileInput.snsGithub,
+      snsLinkedin: profileInput.snsLinkedin,
       profileImageFile: [],
     });
     setProfileImage(profileInput.profileImage);
@@ -102,6 +104,12 @@ export const AboutForm: FC<AboutFormProps> = (props) => {
           name="snsInstagram"
           placeholder="instagram"
           {...register('snsInstagram')}
+        />
+        <TextInput
+          label="linkedin"
+          name="snsLinkedin"
+          placeholder="linkedin"
+          {...register('snsLinkedin')}
         />
         <TextInput
           label="profileImage"

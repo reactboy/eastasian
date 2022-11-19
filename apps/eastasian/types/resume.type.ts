@@ -9,6 +9,7 @@ export type Profile = {
   updatedAt: string;
   snsGithub: string;
   snsInstagram: string;
+  snsLinkedin: string;
 };
 
 export type Experience = {

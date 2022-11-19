@@ -5,9 +5,13 @@ const ICON = {
   //Dark
   githubDark: '/assets/icons/dark/github.svg',
   linkDark: '/assets/icons/dark/link.svg',
+  linkedinDark: '/assets/icons/dark/linkedin.svg',
+  instagramDark: '/assets/icons/dark/instagram.svg',
   //Light
   githubLight: '/assets/icons/light/github.svg',
   linkLight: '/assets/icons/light/link.svg',
+  linkedinLight: '/assets/icons/light/linkedin.svg',
+  instagramLight: '/assets/icons/light/instagram.svg',
 };
 
 type IconName = keyof typeof ICON;
