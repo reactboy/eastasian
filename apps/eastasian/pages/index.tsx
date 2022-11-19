@@ -32,7 +32,7 @@ const StyledPage = styled.div`
   }
 `;
 
-export const getServerSideProps = async (_context) => {
+export const getStaticProps = async (_context) => {
   const profileId = process.env['PROFILE_ID'];
   try {
     const {
@@ -42,10 +42,12 @@ export const getServerSideProps = async (_context) => {
       props: {
         resume,
       },
+      revalidate: 10,
     };
   } catch (error) {
     return {
       props: { error: error.message },
+      ravalidate: 10,
     };
   }
 };
