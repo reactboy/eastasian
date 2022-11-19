@@ -18,6 +18,7 @@ model Profile {
     description String? @default("")
     descriptionJp String? @default("")
     snsInstagram String? @default("")
+    snsLinkedin String? @default("")
     snsGithub String? @default("")
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
