@@ -1,8 +1,9 @@
-import React from 'react';
 import { render } from '@testing-library/react';
 import { Provider as ReduxProvider } from 'react-redux';
 
 import { store } from '@resume/redux/app';
+import { Resume } from '@resume/types';
+
 import Index from '../pages/index';
 
 const stubResume = {
@@ -14,6 +15,7 @@ const stubResume = {
   description: 'Web developer from Tokyo, Japan',
   descriptionJp: '東京出身のWebエンジニア。',
   snsInstagram: 'https://www.instagram.com/eastasiann/',
+  snsLinkedin: 'https://www.instagram.com/eastasiann/',
   snsGithub: 'https://github.com/reactboy',
   createdAt: '2022-10-26T04:11:57.754Z',
   updatedAt: '2022-11-11T11:11:51.080Z',
@@ -125,7 +127,7 @@ const stubResume = {
       },
     ],
   },
-};
+} as Resume;
 
 describe('Index', () => {
   it('should render successfully', () => {

@@ -34,21 +34,17 @@ const StyledHeader = styled.header`
     margin-top: 16px;
     font-size: 24px;
   }
-  .header__profile-link {
-    margin-top: 8px;
-    text-align: center;
-    color: ${COLOR['primary']};
-  }
   .header__profile-sns-list {
     margin-top: 8px;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: center;
+    gap: 8px;
   }
   .header__profile-sns-item {
     position: relative;
     width: 100%;
-    max-width: 24px;
-    min-height: 24px;
+    max-width: 20px;
+    min-height: 20px;
     img {
       object-fit: contain;
     }
@@ -61,7 +57,14 @@ type HeaderProps = {
 
 export const Header: FC<HeaderProps> = (props) => {
   const {
-    profile: { name, nameJp, snsInstagram, snsGithub, profileImage },
+    profile: {
+      name,
+      nameJp,
+      snsLinkedin,
+      snsInstagram,
+      snsGithub,
+      profileImage,
+    },
   } = props;
   const displayName = `${name} / ${nameJp}`;
   return (
@@ -73,17 +76,32 @@ export const Header: FC<HeaderProps> = (props) => {
             <Image src={profileImage} layout="fill" alt={displayName} />
           </p>
           <h1 className="header__profile-name">{displayName}</h1>
-          <p className="header__profile-link">
-            <a href={snsInstagram} rel="noreferrer noopener" target="_blunk">
-              @eastasiann
-            </a>
-          </p>
           <ul className="header__profile-sns-list">
-            <li className="header__profile-sns-item">
-              <a href={snsGithub} rel="noreferrer noopener" target="_blunk">
-                <Icon name="githubDark" layout="fill" />
-              </a>
-            </li>
+            {snsLinkedin && (
+              <li className="header__profile-sns-item">
+                <a href={snsLinkedin} rel="noreferrer noopener" target="_blunk">
+                  <Icon name="linkedinDark" layout="fill" />
+                </a>
+              </li>
+            )}
+            {snsGithub && (
+              <li className="header__profile-sns-item">
+                <a href={snsGithub} rel="noreferrer noopener" target="_blunk">
+                  <Icon name="githubDark" layout="fill" />
+                </a>
+              </li>
+            )}
+            {snsInstagram && (
+              <li className="header__profile-sns-item">
+                <a
+                  href={snsInstagram}
+                  rel="noreferrer noopener"
+                  target="_blunk"
+                >
+                  <Icon name="instagramDark" layout="fill" />
+                </a>
+              </li>
+            )}
           </ul>
         </div>
       </div>

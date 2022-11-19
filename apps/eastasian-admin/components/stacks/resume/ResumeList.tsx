@@ -127,6 +127,10 @@ export const ProfileList: FC<ProflieListProps> = (props) => {
                   <CardLabel>github</CardLabel>
                   <Text color="blue">{profile.snsGithub}</Text>
                 </Box>
+                <Box>
+                  <CardLabel>linkedin</CardLabel>
+                  <Text color="blue">{profile.snsLinkedin}</Text>
+                </Box>
               </Box>
             </CardListItem>
           );

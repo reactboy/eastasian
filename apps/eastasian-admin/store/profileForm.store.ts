@@ -8,6 +8,7 @@ export type ProfileInput = {
   descriptionJp: string;
   snsInstagram: string;
   snsGithub: string;
+  snsLinkedin: string;
   profileImage: string;
 };
 
@@ -19,6 +20,7 @@ const initProfileInput = (): ProfileInput => ({
   descriptionJp: '',
   snsInstagram: '',
   snsGithub: '',
+  snsLinkedin: '',
   profileImage: '',
 });
 
