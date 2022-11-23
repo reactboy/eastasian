@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import Link from 'next/link';
 import { ActionIcon, Box, Button, Flex, Text, Divider } from '@mantine/core';
 import { IconArrowLeft } from '@tabler/icons';
@@ -5,15 +6,21 @@ import { IconArrowLeft } from '@tabler/icons';
 import { CodingDraft } from './CodingDraft';
 
 export const CodingDraftPanel = () => {
+  const [html, setHtml] = useState<string>('');
+
+  const codingDraftListener = (html: string) => {
+    setHtml(html);
+  };
+
   return (
     <Box>
       <Box sx={{ padding: '8px' }}>
         <Flex justify="space-between" align="center">
-          <ActionIcon variant="light">
-            <Link href="/coding">
+          <Link href="/coding">
+            <ActionIcon variant="light">
               <IconArrowLeft />
-            </Link>
-          </ActionIcon>
+            </ActionIcon>
+          </Link>
           {/* TODO(eastasian) タイトルが入るようにする */}
           <Text color="gray.5" weight="bolder">
             New Draft
@@ -26,7 +33,8 @@ export const CodingDraftPanel = () => {
       </Box>
       <Divider />
       <Box sx={{ maxWidth: '980px', margin: '0 auto', padding: '0 16px' }}>
-        <CodingDraft />
+        <CodingDraft listener={codingDraftListener} />
+        {html}
       </Box>
     </Box>
   );

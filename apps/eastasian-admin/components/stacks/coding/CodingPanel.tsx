@@ -8,11 +8,11 @@ export const CodingPanel = () => {
       <Box sx={{ padding: '8px' }}>
         <Flex justify="space-between" align="center">
           <Title size="h2">Coding-collection</Title>
-          <ActionIcon variant="light" color="gray.9">
-            <Link href="/coding/draft">
+          <Link href="/coding/draft">
+            <ActionIcon variant="light" color="gray.9">
               <IconFeather />
-            </Link>
-          </ActionIcon>
+            </ActionIcon>
+          </Link>
         </Flex>
       </Box>
       <Divider />

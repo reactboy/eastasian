@@ -64,36 +64,36 @@ export const Header = () => {
           }}
         >
           <Box sx={{ display: 'flex', gap: '8px' }}>
-            <ActionIcon
-              variant={
-                activeValue(
-                  router.pathname,
-                  '/',
-                  'light',
-                  'subtle'
-                ) as ActionIconProps['variant']
-              }
-              color={activeValue(router.pathname, '/', 'blue', 'gray')}
-            >
-              <Link href="/">
+            <Link href="/">
+              <ActionIcon
+                variant={
+                  activeValue(
+                    router.pathname,
+                    '/',
+                    'light',
+                    'subtle'
+                  ) as ActionIconProps['variant']
+                }
+                color={activeValue(router.pathname, '/', 'blue', 'gray')}
+              >
                 <IconFile />
-              </Link>
-            </ActionIcon>
-            <ActionIcon
-              variant={
-                activeValue(
-                  router.pathname,
-                  '/coding',
-                  'light',
-                  'subtle'
-                ) as ActionIconProps['variant']
-              }
-              color={activeValue(router.pathname, '/coding', 'blue', 'gray')}
-            >
-              <Link href="/coding">
+              </ActionIcon>
+            </Link>
+            <Link href="/coding">
+              <ActionIcon
+                variant={
+                  activeValue(
+                    router.pathname,
+                    '/coding',
+                    'light',
+                    'subtle'
+                  ) as ActionIconProps['variant']
+                }
+                color={activeValue(router.pathname, '/coding', 'blue', 'gray')}
+              >
                 <IconCode />
-              </Link>
-            </ActionIcon>
+              </ActionIcon>
+            </Link>
           </Box>
           <Button color="red" onClick={onClickSignout}>
             Signout

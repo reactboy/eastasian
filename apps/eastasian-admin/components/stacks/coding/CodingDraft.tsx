@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect, FC } from 'react';
 import styled from '@emotion/styled';
 import { EditorThemeClasses } from 'lexical';
 
@@ -30,8 +30,12 @@ const AutoFocusPlugin = () => {
   return null;
 };
 
-export const CodingDraft = () => {
-  const [html, setHtml] = useState<string>('');
+type CodingDraftProps = {
+  listener: (html: string) => void;
+};
+
+export const CodingDraft: FC<CodingDraftProps> = (props) => {
+  const { listener } = props;
 
   const onError = (error) => {
     console.error(error);
@@ -41,10 +45,6 @@ export const CodingDraft = () => {
     namespace: 'CodingDraft',
     onError,
     theme,
-  };
-
-  const listener = (html: string) => {
-    setHtml(html);
   };
 
   return (
@@ -68,7 +68,6 @@ export const CodingDraft = () => {
           <AutoFocusPlugin />
           <TreeViewPlugin />
         </LexicalComposer>
-        {html}
       </div>
     </StyledEditor>
   );
