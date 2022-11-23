@@ -95,10 +95,10 @@ const StyledEditor = styled('div')`
       pointer-events: none;
     }
     &__toolbar {
-      position: absolute;
-      top: 0;
-      left: 0;
-      transform: translate(-150%, 25%);
+      /* position: absolute; */
+      /* top: 0; */
+      /* left: 0; */
+      /* transform: translate(-150%, 25%); */
     }
   }
 `;
