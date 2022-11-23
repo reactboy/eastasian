@@ -2,6 +2,8 @@ import Link from 'next/link';
 import { ActionIcon, Box, Button, Flex, Text, Divider } from '@mantine/core';
 import { IconArrowLeft } from '@tabler/icons';
 
+import { CodingDraft } from './CodingDraft';
+
 export const CodingDraftPanel = () => {
   return (
     <Box>
@@ -23,6 +25,9 @@ export const CodingDraftPanel = () => {
         </Flex>
       </Box>
       <Divider />
+      <Box sx={{ maxWidth: '980px', margin: '0 auto', padding: '0 16px' }}>
+        <CodingDraft />
+      </Box>
     </Box>
   );
 };
