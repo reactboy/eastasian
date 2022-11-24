@@ -189,7 +189,7 @@ export const EducationSection: FC<EducationSectionProps> = (props) => {
           <ExperienceCard
             key={i}
             title={education.title}
-            organization={education.location}
+            organization={education.organization}
             location={education.location}
             startDate={education.startDate}
             endDate={education.endDate}
