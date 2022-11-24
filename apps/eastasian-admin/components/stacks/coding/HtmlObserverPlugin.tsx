@@ -16,23 +16,23 @@ export const HtmlObserverPlugin = ({
   const debaunce = useDebounce(interval);
 
   useLayoutEffect(() => {
-    if (listener) {
-      return editor.registerUpdateListener(
-        ({ editorState, dirtyElements, dirtyLeaves, prevEditorState }) => {
-          if (dirtyElements.size === 0 && dirtyLeaves.size === 0) return;
-          if (prevEditorState.isEmpty()) return;
+    if (!listener) return;
 
-          debaunce(() => {
-            editorState.read(() => {
-              const root = $getRoot();
-              const isEmptyText = root.getTextContent() === '';
-              const html = isEmptyText ? '' : $generateHtmlFromNodes(editor);
-              listener(html);
-            });
+    return editor.registerUpdateListener(
+      ({ editorState, dirtyElements, dirtyLeaves, prevEditorState }) => {
+        if (dirtyElements.size === 0 && dirtyLeaves.size === 0) return;
+        if (prevEditorState.isEmpty()) return;
+
+        debaunce(() => {
+          editorState.read(() => {
+            const root = $getRoot();
+            const isEmptyText = root.getTextContent() === '';
+            const html = isEmptyText ? '' : $generateHtmlFromNodes(editor);
+            listener(html);
           });
-        }
-      );
-    }
+        });
+      }
+    );
   }, [editor, listener, debaunce]);
 
   return null;

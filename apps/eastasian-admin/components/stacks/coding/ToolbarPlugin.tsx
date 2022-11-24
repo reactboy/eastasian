@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, FC, useEffect, useCallback, ReactNode } from 'react';
 import { Box, ActionIcon, Menu } from '@mantine/core';
 import {
   IconLink,
@@ -9,33 +9,65 @@ import {
   IconAlignJustified,
 } from '@tabler/icons';
 
-type Text = 'h1' | 'h2' | 'h3' | 'p';
-const textMeunIndex: Text[] = ['h1', 'h2', 'h3', 'p'];
+import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
+import {
+  $createHeadingNode,
+  $isHeadingNode,
+  HeadingTagType,
+} from '@lexical/rich-text';
+import { $wrapNodes } from '@lexical/selection';
+import { $findMatchingParent } from '@lexical/utils';
+import {
+  $isRangeSelection,
+  $createParagraphNode,
+  LexicalEditor,
+  SELECTION_CHANGE_COMMAND,
+  COMMAND_PRIORITY_CRITICAL,
+  $getSelection,
+  $isRootOrShadowRoot,
+} from 'lexical';
+
+type Heading = HeadingTagType;
+type Paragraph = 'paragraph';
+type TextFormat = Heading | Paragraph;
+const textMeunIndex: TextFormat[] = ['h1', 'h2', 'h3', 'paragraph'];
 const textMenu = {
   h1: <IconH1 />,
   h2: <IconH2 />,
   h3: <IconH3 />,
-  p: <IconAlignJustified />,
+  paragraph: <IconAlignJustified />,
+};
+type TextFormatSelectProps = {
+  editor: LexicalEditor;
+  textFormat: TextFormat;
 };
 
-const TextSelect = () => {
-  const [text, setText] = useState<Text>('p');
+const TextFormatSelect: FC<TextFormatSelectProps> = (props) => {
+  const { editor, textFormat } = props;
 
-  const onChangeText = (textValue: Text) => () => setText(textValue);
+  const formatText = (textFormat: TextFormat) => () => {
+    editor.update(() => {
+      const selection = $getSelection();
+      if (!$isRangeSelection(selection)) return;
+      textFormat === 'paragraph'
+        ? $wrapNodes(selection, () => $createParagraphNode())
+        : $wrapNodes(selection, () => $createHeadingNode(textFormat));
+    });
+  };
 
   return (
     <Menu>
       <Menu.Target>
         <ActionIcon variant="light" color="gray.6">
-          {textMenu[text]}
+          {textMenu[textFormat]}
         </ActionIcon>
       </Menu.Target>
       <Menu.Dropdown>
         {textMeunIndex.map((key, i) => (
           <Menu.Item
             key={i}
-            color={text === key ? 'gray.9' : 'gray.6'}
-            onClick={onChangeText(key)}
+            color={textFormat === key ? 'gray.9' : 'gray.6'}
+            onClick={formatText(key)}
           >
             {textMenu[key]}
           </Menu.Item>
@@ -46,6 +78,42 @@ const TextSelect = () => {
 };
 
 export const ToolbarPlugin = () => {
+  const [editor] = useLexicalComposerContext();
+  const [activeEditor, setActiveEditor] = useState<LexicalEditor>(editor);
+  const [textFromat, setTextFormat] = useState<TextFormat>('paragraph');
+
+  const updateToolbar = useCallback(() => {
+    const selection = $getSelection();
+    if (!$isRangeSelection(selection)) return;
+    const anchorNode = selection.anchor.getNode();
+
+    let element =
+      anchorNode.getKey() === 'root'
+        ? anchorNode
+        : $findMatchingParent(anchorNode, (e) => {
+            const parent = e.getParent();
+            return parent !== null && $isRootOrShadowRoot(parent);
+          });
+
+    if (element === null) element = anchorNode.getTopLevelElementOrThrow();
+
+    //NOTE(eastasian) updating textFormat Menu by getting Tag info from element
+    const type = $isHeadingNode(element) ? element.getTag() : element.getType();
+    if (type in textMenu) setTextFormat(type as TextFormat);
+  }, []);
+
+  useEffect(() => {
+    return editor.registerCommand(
+      SELECTION_CHANGE_COMMAND,
+      (_payload, newEditor) => {
+        updateToolbar();
+        setActiveEditor(newEditor);
+        return false;
+      },
+      COMMAND_PRIORITY_CRITICAL
+    );
+  }, [editor, updateToolbar]);
+
   return (
     <Box
       sx={{
@@ -57,7 +125,7 @@ export const ToolbarPlugin = () => {
         borderRadius: '12px',
       }}
     >
-      <TextSelect />
+      <TextFormatSelect editor={activeEditor} textFormat={textFromat} />
       <ActionIcon variant="light" color="gray.6">
         <IconLink />
       </ActionIcon>

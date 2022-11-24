@@ -8,6 +8,7 @@ import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary';
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
+import { HeadingNode } from '@lexical/rich-text';
 
 import { ToolbarPlugin } from './ToolbarPlugin';
 import { TreeViewPlugin } from './TreeViewPlugin';
@@ -45,6 +46,7 @@ export const CodingDraft: FC<CodingDraftProps> = (props) => {
     namespace: 'CodingDraft',
     onError,
     theme,
+    nodes: [HeadingNode],
   };
 
   return (
@@ -81,7 +83,10 @@ const StyledEditor = styled('div')`
       min-height: 150px;
       padding: 8px;
       outline: none;
-      & > p {
+      & > h1,
+      h2,
+      h3,
+      p {
         margin: 0;
       }
     }
@@ -95,10 +100,10 @@ const StyledEditor = styled('div')`
       pointer-events: none;
     }
     &__toolbar {
-      /* position: absolute; */
-      /* top: 0; */
-      /* left: 0; */
-      /* transform: translate(-150%, 25%); */
+      position: absolute;
+      top: 0;
+      left: 0;
+      transform: translate(-150%, 25%);
     }
   }
 `;
