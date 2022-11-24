@@ -31,7 +31,7 @@ type Heading = HeadingTagType;
 type Paragraph = 'paragraph';
 type TextFormat = Heading | Paragraph;
 const textMeunIndex: TextFormat[] = ['h1', 'h2', 'h3', 'paragraph'];
-const textMenu = {
+const textMenu: Omit<Record<TextFormat, ReactNode>, 'h4' | 'h5' | 'h6'> = {
   h1: <IconH1 />,
   h2: <IconH2 />,
   h3: <IconH3 />,
