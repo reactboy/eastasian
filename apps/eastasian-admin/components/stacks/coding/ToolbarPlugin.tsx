@@ -1,5 +1,13 @@
-import { useState, FC, useEffect, useCallback, ReactNode } from 'react';
+import {
+  useState,
+  FC,
+  useEffect,
+  useCallback,
+  ReactNode,
+  FormEvent,
+} from 'react';
 import { Box, ActionIcon, Menu } from '@mantine/core';
+import { useClickOutside } from '@mantine/hooks';
 import {
   IconLink,
   IconPhoto,
@@ -27,6 +35,8 @@ import {
   $isRootOrShadowRoot,
 } from 'lexical';
 
+import { LinkInput } from './Toolbar';
+
 type Heading = HeadingTagType;
 type Paragraph = 'paragraph';
 type TextFormat = Heading | Paragraph;
@@ -37,12 +47,12 @@ const textMenu: Omit<Record<TextFormat, ReactNode>, 'h4' | 'h5' | 'h6'> = {
   h3: <IconH3 />,
   paragraph: <IconAlignJustified />,
 };
-type TextFormatSelectProps = {
+type TextFormatToolProps = {
   editor: LexicalEditor;
   textFormat: TextFormat;
 };
 
-const TextFormatSelect: FC<TextFormatSelectProps> = (props) => {
+const TextFormatTool: FC<TextFormatToolProps> = (props) => {
   const { editor, textFormat } = props;
 
   const formatText = (textFormat: TextFormat) => () => {
@@ -74,6 +84,45 @@ const TextFormatSelect: FC<TextFormatSelectProps> = (props) => {
         ))}
       </Menu.Dropdown>
     </Menu>
+  );
+};
+
+const LinkTool = () => {
+  const initLinkValue = '';
+  const [isLinkInputOpen, setIsLinkInputOpen] = useState<boolean>();
+  const [linkValue, setLinkValue] = useState<string>(initLinkValue);
+
+  const linkInputRef = useClickOutside(() => {
+    setLinkValue(initLinkValue);
+    setIsLinkInputOpen(false);
+  });
+
+  const onLinkIconClick = () => {
+    setIsLinkInputOpen((prevState) => !prevState);
+  };
+
+  const onSubmitLink = (e: FormEvent) => {
+    e.preventDefault();
+    console.log(e.target[0].value);
+    setIsLinkInputOpen(false);
+    setLinkValue('');
+  };
+
+  return (
+    <>
+      <ActionIcon variant="light" color="gray.6" onClick={onLinkIconClick}>
+        <IconLink />
+      </ActionIcon>
+      {/* TODO(eastasian) consider Portals */}
+      {isLinkInputOpen && (
+        <LinkInput
+          ref={linkInputRef}
+          position={{ x: 50, y: 50 }}
+          onSubmitLink={onSubmitLink}
+          value={linkValue}
+        />
+      )}
+    </>
   );
 };
 
@@ -125,10 +174,8 @@ export const ToolbarPlugin = () => {
         borderRadius: '12px',
       }}
     >
-      <TextFormatSelect editor={activeEditor} textFormat={textFromat} />
-      <ActionIcon variant="light" color="gray.6">
-        <IconLink />
-      </ActionIcon>
+      <TextFormatTool editor={activeEditor} textFormat={textFromat} />
+      <LinkTool />
       <ActionIcon variant="light" color="gray.6">
         <IconPhoto />
       </ActionIcon>
