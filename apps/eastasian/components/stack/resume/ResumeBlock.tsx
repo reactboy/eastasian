@@ -17,6 +17,7 @@ import { formatDateText } from '@resume/libs/date';
 
 const StyledResumeBlock = styled.section`
   .resume-block__heading {
+    color: ${COLOR['heading']};
     font-family: futura;
     font-style: italic;
     font-size: 24px;
@@ -51,8 +52,8 @@ const StyledAboutMe = styled.div`
     margin-top: 8px;
   }
   p {
-    font-weight: 100;
     white-space: pre-wrap;
+    line-height: 1.4;
   }
 `;
 
@@ -75,10 +76,12 @@ export const AboutMeSection: FC<AboutMeSectionProps> = (props) => {
 
 const StyledExperiendCard = styled.div`
   .experience-card__title {
+    color: ${COLOR['heading']};
     font-size: 20px;
     font-weight: 500;
   }
   .experience-card__info {
+    color: ${COLOR['heading']};
     margin-top: 4px;
     font-size: 18px;
   }
@@ -87,8 +90,9 @@ const StyledExperiendCard = styled.div`
   .experience-card__location {
   }
   .experience-card__date {
+    color: ${COLOR['heading']};
     margin-top: 8px;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 500;
     color: ${COLOR['sedondary']};
   }
@@ -101,8 +105,8 @@ const StyledExperiendCard = styled.div`
   }
   .experience-card__body {
     margin-top: 8px;
-    font-weight: 100;
     font-size: 16px;
+    line-height: 1.4;
     & > p {
       white-space: pre-wrap;
     }
@@ -212,6 +216,7 @@ const StyledWorksCard = styled.div`
   }
 
   .works-card__title {
+    color: ${COLOR['heading']};
     font-size: 18px;
     font-weight: 500;
     display: flex;
@@ -225,8 +230,9 @@ const StyledWorksCard = styled.div`
   }
 
   .works-card__date {
+    color: ${COLOR['heading']};
     margin-top: 8px;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 500;
     color: ${COLOR['sedondary']};
   }
@@ -234,7 +240,7 @@ const StyledWorksCard = styled.div`
   .works-card__body {
     font-size: 16px;
     margin-top: 8px;
-    font-weight: 100;
+    line-height: 1.4;
     & > p {
       white-space: pre-wrap;
     }
@@ -242,7 +248,7 @@ const StyledWorksCard = styled.div`
   .works-card__stacks {
     display: flex;
     flex-wrap: wrap;
-    padding-top: 8px;
+    padding-top: 16px;
     margin-left: -12px;
     margin-top: -8px;
   }
@@ -388,6 +394,7 @@ export const ProjectsSection: FC<ProjectsSectionProps> = (props) => {
 
 const StyledStacksCard = styled.div`
   .stacks-card__heading {
+    color: ${COLOR['heading']};
     font-size: 24px;
     font-style: italic;
   }

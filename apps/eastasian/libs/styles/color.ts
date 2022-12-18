@@ -6,5 +6,5 @@ export const COLOR = {
   light: '#FFFFFE',
   gray: '#E4E4E4',
   heading: '#094067',
-  text: '#094067',
+  text: '#5f6c7b',
 };
