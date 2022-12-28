@@ -1,10 +1,29 @@
 import { useState } from 'react';
 import { useUserStore } from '@admin/store';
 import { useRouter } from 'next/router';
-import { Button, Box, Title, Divider, LoadingOverlay } from '@mantine/core';
+import Link from 'next/link';
+import {
+  Box,
+  Title,
+  Divider,
+  LoadingOverlay,
+  ActionIcon,
+  ActionIconProps,
+  Button,
+} from '@mantine/core';
+import { IconCode, IconFile } from '@tabler/icons';
 
 import { axios } from '@admin/libs/axios';
 import { useCookiesToken } from '@admin/utils/hooks';
+
+const activeValue = (
+  currentPath: string,
+  path: string,
+  active: string,
+  deactive: string
+): string => {
+  return currentPath === path ? active : deactive;
+};
 
 export const Header = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -36,9 +55,49 @@ export const Header = () => {
           padding: '0 8px',
         }}
       >
-        <Title>eastasian</Title>
-        <Box>
-          <Button onClick={onClickSignout}>signout</Button>
+        <Title>eastasian🔮</Title>
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '20px',
+          }}
+        >
+          <Box sx={{ display: 'flex', gap: '8px' }}>
+            <Link href="/">
+              <ActionIcon
+                variant={
+                  activeValue(
+                    router.pathname,
+                    '/',
+                    'light',
+                    'subtle'
+                  ) as ActionIconProps['variant']
+                }
+                color={activeValue(router.pathname, '/', 'blue', 'gray')}
+              >
+                <IconFile />
+              </ActionIcon>
+            </Link>
+            <Link href="/coding">
+              <ActionIcon
+                variant={
+                  activeValue(
+                    router.pathname,
+                    '/coding',
+                    'light',
+                    'subtle'
+                  ) as ActionIconProps['variant']
+                }
+                color={activeValue(router.pathname, '/coding', 'blue', 'gray')}
+              >
+                <IconCode />
+              </ActionIcon>
+            </Link>
+          </Box>
+          <Button color="red" onClick={onClickSignout}>
+            Signout
+          </Button>
         </Box>
       </Box>
       <Divider />
