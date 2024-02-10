@@ -5,7 +5,7 @@ type Language = 'en' | 'ja';
 type State = Language;
 
 const initState = (): State => {
-  return 'en';
+  return 'ja';
 };
 
 const languageSlice = createSlice({
