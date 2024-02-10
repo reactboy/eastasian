@@ -7,7 +7,13 @@ const router = express.Router();
 
 router.get('/experiences', async (_req, res) => {
   try {
-    const experiences = await prisma.experience.findMany();
+    const experiences = await prisma.experience.findMany({
+      orderBy: [
+        {
+          startDate: 'desc',
+        },
+      ],
+    });
     return res.send({ experiences });
   } catch (e) {
     return res.status(500).send({ e });
