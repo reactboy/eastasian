@@ -11,7 +11,9 @@ router.get('/resume/:profileId', async (req, res) => {
         id: profileId,
       },
       include: {
-        experiences: true,
+        experiences: {
+          orderBy: [{ startDate: 'desc' }],
+        },
         education: true,
         works: {
           include: {
