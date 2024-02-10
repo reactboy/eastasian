@@ -6,6 +6,20 @@ import { verifyToken } from '@api/middleware';
 
 const router = express.Router();
 
+// router.get('/auth/forceChangePassword', async (_req, res) => {
+//   try {
+//     const userId = '552357d4-a772-409a-a849-fa3a6216cdd1';
+//     const password = '0yak0d0n';
+//     const { data } = await supabaseAdmin.auth.admin.updateUserById(userId, {
+//       password,
+//     });
+
+//     return res.status(200).send({ data });
+//   } catch (e) {
+//     return res.status(500).send({ e });
+//   }
+// });
+
 router.post('/auth/signup', async (req, res) => {
   try {
     const { email, password, name, nameJp } = req.body;
@@ -51,6 +65,7 @@ router.post('/auth/signin', async (req, res) => {
     });
     return res.send({ profile, authUser });
   } catch (e) {
+    console.log(e);
     return res.status(500).send({ e });
   }
 });

@@ -19,7 +19,7 @@ export const Stack: FC<StackProps> = (props) => {
   return (
     <StyledStack>
       {!!stackImage && (
-        <Image src={stackImage} width="16px" height="16px" alt={name} />
+        <Image src={stackImage} width="16" height="16" alt={name} />
       )}
       <p className="stack__name">{displayName}</p>
     </StyledStack>

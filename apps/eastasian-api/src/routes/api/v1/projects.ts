@@ -8,6 +8,11 @@ const router = express.Router();
 router.get('/projects', async (_req, res) => {
   try {
     const projects = await prisma.project.findMany({
+      orderBy: [
+        {
+          startDate: 'desc',
+        },
+      ],
       include: {
         stacks: {
           select: {

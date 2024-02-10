@@ -284,13 +284,13 @@ const WorksCard: FC<WorksCardProps> = (props) => {
               target="_blunk"
               rel="noopener norefferer"
             >
-              <Icon name="linkDark" width="16px" height="16px" />
+              <Icon name="linkDark" width="16" height="16" />
             </a>
           )}
         </p>
         {github && (
           <a href={github} target="_blunk" rel="noopener norefferer">
-            <Icon name="githubDark" width="20px" height="20px" />
+            <Icon name="githubDark" width="20" height="20" />
           </a>
         )}
       </div>
