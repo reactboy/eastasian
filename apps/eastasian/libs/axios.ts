@@ -4,7 +4,8 @@ const axiosInstance = axios.create({
   baseURL: process.env['NEXT_PUBLIC_API_HOST'],
 });
 
-axiosInstance.interceptors.request.use((config) => {
+// TODO fix any
+axiosInstance.interceptors.request.use((config: any) => {
   return {
     ...config,
     headers: {
