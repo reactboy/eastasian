@@ -15,6 +15,12 @@ import {
 } from '@resume/types';
 import { formatDateText } from '@resume/libs/date';
 
+const textPicker = <T,>(ln: 'en' | 'ja', obj: T, key: keyof T): string => {
+  if (ln == 'en') return obj[`${String(key)}`];
+  if (ln == 'ja') return obj[`${String(key)}Jp`];
+  return '';
+};
+
 const StyledResumeBlock = styled.section`
   .resume-block__heading {
     color: ${COLOR['heading']};
@@ -67,8 +73,7 @@ export const AboutMeSection: FC<AboutMeSectionProps> = (props) => {
   return (
     <ResumeBlock heading="About Me">
       <StyledAboutMe>
-        {ln === 'ja' && <p>{profile.descriptionJp}</p>}
-        {ln === 'en' && <p>{profile.description}</p>}
+        <p>{textPicker<typeof profile>(ln, profile, 'description')}</p>
       </StyledAboutMe>
     </ResumeBlock>
   );
@@ -170,8 +175,7 @@ export const WorkExperienceSection: FC<WorkExperienceSectionProps> = (
             startDate={experience.startDate}
             endDate={experience.endDate}
           >
-            {ln === 'en' && <p>{experience.body}</p>}
-            {ln === 'ja' && <p>{experience.bodyJp}</p>}
+            <p>{textPicker<typeof experience>(ln, experience, 'body')}</p>
           </ExperienceCard>
         );
       })}
@@ -198,8 +202,7 @@ export const EducationSection: FC<EducationSectionProps> = (props) => {
             startDate={education.startDate}
             endDate={education.endDate}
           >
-            {ln === 'ja' && <p>{education.bodyJp}</p>}
-            {ln === 'en' && <p>{education.body}</p>}
+            <p>{textPicker<typeof education>(ln, education, 'body')}</p>
           </ExperienceCard>
         );
       })}
@@ -350,13 +353,12 @@ export const WorksSection: FC<WorksSectionProps> = (props) => {
         return (
           <WorksCard
             key={i}
-            title={work.title}
+            title={textPicker<typeof work>(ln, work, 'title')}
             stacks={work.stacks}
             link={work.link}
             github={work.github}
           >
-            {ln === 'ja' && <p>{work.bodyJp}</p>}
-            {ln === 'en' && <p>{work.body}</p>}
+            <p>{textPicker<typeof work>(ln, work, 'body')}</p>
           </WorksCard>
         );
       })}
@@ -377,14 +379,13 @@ export const ProjectsSection: FC<ProjectsSectionProps> = (props) => {
         return (
           <WorksCard
             key={i}
-            title={project.title}
+            title={textPicker<typeof project>(ln, project, 'title')}
             stacks={project.stacks}
             link={project.link}
             startDate={project.startDate}
             endDate={project.endDate}
           >
-            {ln === 'ja' && <p>{project.bodyJp}</p>}
-            {ln === 'en' && <p>{project.body}</p>}
+            <p>{textPicker<typeof project>(ln, project, 'body')}</p>
           </WorksCard>
         );
       })}
