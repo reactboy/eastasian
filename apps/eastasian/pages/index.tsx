@@ -47,7 +47,7 @@ export const getStaticProps = async (_context) => {
   } catch (error) {
     return {
       props: { error: error.message },
-      ravalidate: 10,
+      revalidate: 10,
     };
   }
 };
